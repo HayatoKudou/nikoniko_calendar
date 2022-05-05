@@ -30,10 +30,19 @@ const MenuListIcon = (props: { name: string }) => {
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
 
+  const colorModeName = () => {
+    if (theme.palette.mode === "dark") {
+      return "ダークモード";
+    } else if (theme.palette.mode === "light") {
+      return "ライトモード";
+    }
+  };
+  const name = colorModeName();
+
   const menuList = [
     { name: "dashboard", title: "ダッシュボード" },
     { name: "profile", title: "プロフィール" },
-    { name: "paletteMode", title: theme.palette.mode + " mode" },
+    { name: "paletteMode", title: name },
   ];
 
   return (

@@ -4,6 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
@@ -15,6 +16,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
 import * as React from "react";
 import MenuList from "./menuList";
 
@@ -46,7 +48,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -91,6 +92,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -118,9 +120,15 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            にこにこカレンダー
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            MUI DEMO
           </Typography>
+          <Button color="inherit" onClick={() => router.push("/signUp")}>
+            新規登録
+          </Button>
+          <Button color="inherit" onClick={() => router.push("/signIn")}>
+            ログイン
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

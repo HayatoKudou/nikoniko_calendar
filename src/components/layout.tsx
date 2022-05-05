@@ -12,9 +12,9 @@ const Layout = ({ children }: any) => {
       mode,
     },
   });
+
   const colorMode = {
     toggleColorMode: () => {
-      console.log("toggleColorMode");
       setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
     },
   };
