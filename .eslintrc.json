@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+  "plugins": [
+    "unused-imports",
+    "@typescript-eslint"
+  ],
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": "error",
+    "unused-imports/no-unused-imports": "error",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    /* @see https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md */
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        "newlines-between": "never",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ]
+  }
 }
