@@ -2,6 +2,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -32,9 +33,9 @@ const MenuList = (props: { open: boolean }) => {
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
-      return "ダークモード";
-    } else if (theme.palette.mode === "light") {
       return "ライトモード";
+    } else if (theme.palette.mode === "light") {
+      return "ダークモード";
     }
   };
   const name = colorModeName();
@@ -46,7 +47,7 @@ const MenuList = (props: { open: boolean }) => {
   ];
 
   return (
-    <>
+    <List>
       {menuList.map((menu, index) => (
         <ListItemButton
           key={index}
@@ -71,7 +72,7 @@ const MenuList = (props: { open: boolean }) => {
           />
         </ListItemButton>
       ))}
-    </>
+    </List>
   );
 };
 
