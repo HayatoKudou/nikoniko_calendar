@@ -9,6 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import * as React from "react";
 import ColorModeContext from "../../context/colorModeContext";
+import { useRouter } from "next/router";
 
 const MenuListIcon = (props: { name: string }) => {
   const theme = useTheme();
@@ -30,6 +31,7 @@ const MenuListIcon = (props: { name: string }) => {
 
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
+  const router = useRouter();
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
@@ -41,15 +43,16 @@ const MenuList = (props: { open: boolean }) => {
   const name = colorModeName();
 
   const menuList = [
-    { name: "dashboard", title: "ダッシュボード" },
-    { name: "profile", title: "プロフィール" },
-    { name: "paletteMode", title: name },
+    { name: "dashboard", title: "ダッシュボード", path: "/" },
+    { name: "profile", title: "プロフィール", path: "/profile"},
+    { name: "paletteMode", title: name, path: "/" },
   ];
 
   return (
     <List>
       {menuList.map((menu, index) => (
         <ListItemButton
+          onClick={() => router.push(menu.path)}
           key={index}
           sx={{
             minHeight: 48,
