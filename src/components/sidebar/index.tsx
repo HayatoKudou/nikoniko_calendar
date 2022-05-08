@@ -86,7 +86,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
+export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
@@ -141,6 +141,9 @@ export default function MiniDrawer() {
         <Divider />
         <MenuList2 open={open} />
       </Drawer>
+      <Box sx={{ width: "80%", margin: "96px auto 0 auto" }}>
+        {props.children}
+      </Box>
     </Box>
   );
 }

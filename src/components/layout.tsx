@@ -1,5 +1,4 @@
-import Box from "@mui/material/Box";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import { useState } from "react";
 import ColorModeContext from "../context/colorModeContext";
 import Sidebar from "./sidebar";
@@ -14,6 +13,14 @@ const Layout = ({ children }: any) => {
     },
   });
 
+  const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+  }));
+
   const colorMode = {
     toggleColorMode: () => {
       setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
@@ -23,10 +30,7 @@ const Layout = ({ children }: any) => {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <Sidebar />
-        <Box sx={{ width: "90%", margin: "0 auto" }}>
-          <Box sx={{ margin: "96px 0 0 64px" }}>{children}</Box>
-        </Box>
+        <Sidebar>{children}</Sidebar>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
