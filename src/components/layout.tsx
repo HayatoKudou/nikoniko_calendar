@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import ColorModeContext from "../context/colorModeContext";
@@ -23,7 +24,9 @@ const Layout = ({ children }: any) => {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <Sidebar />
-        {children}
+        <Box sx={{ width: "90%", margin: "0 auto" }}>
+          <Box sx={{ margin: "96px 0 0 64px" }}>{children}</Box>
+        </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

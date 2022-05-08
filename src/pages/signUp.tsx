@@ -1,7 +1,7 @@
 import SignUp from "../components/auth/signUp";
 import Layout from "../components/layout";
 
-const SignUpPage = () => {
+const Index = () => {
   return (
     <Layout>
       <SignUp />
@@ -9,4 +9,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default Index;
