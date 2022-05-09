@@ -7,11 +7,11 @@ const FormField = (props: { errors?: Array<string>; children: any }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        padding: 2,
+        // padding: 1,
         minWidth: "50%",
       }}
     >
-      <Box sx={{ marginLeft: 1, flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1 }}>
         {props.children}
         {props.errors?.map((error: string, key: number) => {
           return (

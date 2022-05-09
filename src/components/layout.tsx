@@ -1,4 +1,4 @@
-import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import ColorModeContext from "../context/colorModeContext";
 import Sidebar from "./sidebar";
