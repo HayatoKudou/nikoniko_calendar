@@ -24,10 +24,7 @@ const MenuList2 = (props: { open: boolean }) => {
         >
           <LogoutIcon />
         </ListItemIcon>
-        <ListItemText
-          primary={"ログアウト"}
-          sx={{ opacity: props.open ? 1 : 0 }}
-        />
+        <ListItemText primary={"ログアウト"} sx={{ opacity: props.open ? 1 : 0 }} />
       </ListItemButton>
     </List>
   );

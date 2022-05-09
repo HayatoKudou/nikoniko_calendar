@@ -14,9 +14,7 @@ const Profile = () => {
     email: "",
     password: "",
   });
-  const [createRequestErrors, setCreateRequestErrors] = React.useState<
-    Partial<any>
-  >({});
+  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<any>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -26,69 +24,63 @@ const Profile = () => {
   };
 
   return (
-    <Grid container sx={{ alignItems: "center" }}>
+    <Grid container sx={{ display: "block", width: "70%", margin: "0 auto" }}>
       <Grid item xl={12}>
         <Paper>
           <Box sx={{ padding: 2 }}>
             <Box sx={{ display: "flex" }}>
-              <FormField name={"性"} errors={createRequestErrors["lastName"]}>
+              <FormField errors={createRequestErrors["lastName"]}>
                 <TextField
                   value={formValues.lastName}
                   fullWidth
                   onChange={handleChange}
                   name={"lastName"}
+                  label={"性"}
                   required
                   inputProps={{ minLength: 1, maxLength: 100 }}
                 />
               </FormField>
 
-              <FormField name={"名"} errors={createRequestErrors["firstName"]}>
+              <FormField errors={createRequestErrors["firstName"]}>
                 <TextField
                   value={formValues.firstName}
                   fullWidth
                   onChange={handleChange}
                   name={"firstName"}
+                  label={"名"}
                   required
                   inputProps={{ minLength: 1, maxLength: 100 }}
                 />
               </FormField>
             </Box>
 
-            <FormField
-              name={"メールアドレス"}
-              errors={createRequestErrors["email"]}
-            >
+            <FormField errors={createRequestErrors["email"]}>
               <TextField
                 value={formValues.email}
                 fullWidth
                 onChange={handleChange}
                 name={"email"}
+                label={"メールアドレス"}
                 required
                 inputProps={{ minLength: 1, maxLength: 100 }}
               />
             </FormField>
 
-            <FormField
-              name={"パスワード"}
-              errors={createRequestErrors["password"]}
-            >
+            <FormField errors={createRequestErrors["password"]}>
               <TextField
                 type={"password"}
                 value={formValues.password}
                 fullWidth
                 onChange={handleChange}
                 name={"password"}
+                label={"パスワード"}
                 required
                 inputProps={{ minLength: 1, maxLength: 100 }}
               />
             </FormField>
 
             <Box sx={{ textAlign: "right", margin: 2 }}>
-              <Button
-                type={"submit"}
-                startIcon={<SaveIcon />}
-                variant={"contained"}
-              >
+              <Button type={"submit"} startIcon={<SaveIcon />} variant={"contained"}>
                 作成
               </Button>
             </Box>

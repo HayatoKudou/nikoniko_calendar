@@ -1,11 +1,7 @@
 import { Box, FormHelperText } from "@mui/material";
 import * as React from "react";
 
-const FormField = (props: {
-  name: string;
-  errors?: Array<string>;
-  children: any;
-}) => {
+const FormField = (props: { errors?: Array<string>; children: any }) => {
   return (
     <Box
       sx={{
@@ -15,9 +11,6 @@ const FormField = (props: {
         minWidth: "50%",
       }}
     >
-      <Box sx={{ width: "120px", flexShirk: 0, textAlign: "right" }}>
-        {props.name}
-      </Box>
       <Box sx={{ marginLeft: 1, flexGrow: 1 }}>
         {props.children}
         {props.errors?.map((error: string, key: number) => {

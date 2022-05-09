@@ -1,6 +1,12 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -64,11 +70,7 @@ const Dashboard = () => {
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {tabList.map((tab, index) => (
             <Tab label={tab.label} {...a11yProps(index)} key={index} />
           ))}
@@ -78,11 +80,7 @@ const Dashboard = () => {
             </IconButton>
             {formOpen && (
               <form onSubmit={handleSubmit}>
-                <TextField
-                  value={formValue}
-                  onChange={(e) => setFormValue(e.target.value)}
-                  size="small"
-                />
+                <TextField value={formValue} onChange={(e) => setFormValue(e.target.value)} size="small" />
               </form>
             )}
           </Box>
@@ -90,7 +88,28 @@ const Dashboard = () => {
       </Box>
       {tabList.map((tab, index) => (
         <TabPanel value={value} index={index} key={index}>
-          {"hogehoge"}
+          <Card sx={{ maxWidth: 200 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="200"
+                // image="/public/vercel.svg"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Lizard
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  すごい本だよ
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button size="small" color="primary">
+                Share
+              </Button>
+            </CardActions>
+          </Card>
         </TabPanel>
       ))}
     </>

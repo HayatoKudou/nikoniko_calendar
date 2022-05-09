@@ -13,14 +13,6 @@ const Layout = ({ children }: any) => {
     },
   });
 
-  const DrawerHeader = styled("div")(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-  }));
-
   const colorMode = {
     toggleColorMode: () => {
       setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));

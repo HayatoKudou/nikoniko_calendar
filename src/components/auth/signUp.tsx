@@ -12,12 +12,7 @@ import * as React from "react";
 
 function Copyright(props: any) {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
@@ -43,7 +38,6 @@ export default function SignUp() {
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -55,32 +49,13 @@ export default function SignUp() {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="lastName"
-                label="姓"
-                name="lastName"
-                autoFocus
-              />
+              <TextField required id="lastName" label="姓" name="lastName" autoFocus />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                id="firstName"
-                label="名"
-              />
+              <TextField autoComplete="given-name" name="firstName" required id="firstName" label="名" />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="メールアドレス"
-                name="email"
-                autoComplete="email"
-              />
+              <TextField required fullWidth id="email" label="メールアドレス" name="email" autoComplete="email" />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -94,12 +69,7 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             新規登録
           </Button>
           <Grid container justifyContent="flex-end">

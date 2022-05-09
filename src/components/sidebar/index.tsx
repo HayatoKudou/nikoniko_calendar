@@ -117,7 +117,7 @@ export default function Sidebar(props: { children: any }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            MUI DEMO
+            Read Worth
           </Typography>
           <Button color="inherit" onClick={() => router.push("/signUp")}>
             新規登録
@@ -130,20 +130,14 @@ export default function Sidebar(props: { children: any }) {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
+            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <MenuList open={open} />
         <Divider />
         <MenuList2 open={open} />
       </Drawer>
-      <Box sx={{ width: "80%", margin: "96px auto 0 auto" }}>
-        {props.children}
-      </Box>
+      <Box sx={{ width: "100%", margin: "72px auto 0 auto", padding: 2 }}>{props.children}</Box>
     </Box>
   );
 }

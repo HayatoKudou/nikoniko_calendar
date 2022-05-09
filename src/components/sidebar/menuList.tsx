@@ -75,10 +75,7 @@ const MenuList = (props: { open: boolean }) => {
           >
             <MenuListIcon name={menu.name} />
           </ListItemIcon>
-          <ListItemText
-            primary={menu.title}
-            sx={{ opacity: props.open ? 1 : 0 }}
-          />
+          <ListItemText primary={menu.title} sx={{ opacity: props.open ? 1 : 0 }} />
         </ListItemButton>
       ))}
     </List>
