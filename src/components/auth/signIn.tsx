@@ -9,13 +9,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import * as React from "react";
+import signIn from "../../api/signIn";
 import Copyright from "../copyright";
 import Spinner from "../spinner";
-import {useSnackbar} from "notistack";
-import signIn from "../../api/signIn";
-import { useRouter } from "next/router";
 
 const SignIn = () => {
   const router = useRouter();
@@ -35,7 +34,7 @@ const SignIn = () => {
       email: formValues.email,
       password: formValues.password,
     })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         enqueueSnackbar("ログインしました。", {
           variant: "success",
@@ -112,6 +111,6 @@ const SignIn = () => {
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
-}
+};
 
 export default SignIn;

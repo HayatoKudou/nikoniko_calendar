@@ -7,14 +7,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
+import Copyright from "../copyright";
 import FormField from "../form_field";
 import Spinner from "../spinner";
-import Copyright from "../copyright";
-import { useRouter } from "next/router";
 
 const SignUp = () => {
   const router = useRouter();
