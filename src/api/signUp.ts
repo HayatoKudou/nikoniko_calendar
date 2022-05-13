@@ -22,7 +22,6 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
 
   const res = await fetch(endpoint, {
     method: "POST",
-    credentials: "include",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
   });

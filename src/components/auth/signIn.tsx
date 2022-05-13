@@ -11,27 +11,49 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import Copyright from "../copyright";
+import Spinner from "../spinner";
+import {useSnackbar} from "notistack";
+import signIn from "../../api/signIn";
+import { useRouter } from "next/router";
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+const SignIn = () => {
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
+  const [formValues, setFormValues] = React.useState({
+    email: "",
+    password: "",
+  });
 
-export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+  if (loading) return <Spinner />;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    signIn({
+      email: formValues.email,
+      password: formValues.password,
+    })
+      .then((res) => {
+        setLoading(false);
+        enqueueSnackbar("ログインしました。", {
+          variant: "success",
+        });
+        router.push("/");
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`ログインに失敗しました`, {
+          variant: "error",
+        });
+      });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -50,28 +72,28 @@ export default function SignIn() {
         </Avatar>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
+            onChange={handleChange}
             margin="normal"
             required
             fullWidth
-            id="email"
             label="メールアドレス"
             name="email"
             autoComplete="email"
             autoFocus
           />
           <TextField
+            onChange={handleChange}
             margin="normal"
             required
             fullWidth
-            name="password"
             label="パスワード"
+            name="password"
             type="password"
-            id="password"
             autoComplete="current-password"
           />
           <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="パスワードを記録する" />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            新規登録
+            ログイン
           </Button>
           <Grid container>
             <Grid item xs>
@@ -91,3 +113,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default SignIn;

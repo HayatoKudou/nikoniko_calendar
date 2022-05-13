@@ -12,28 +12,22 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
 import FormField from "../form_field";
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Spinner from "../spinner";
+import Copyright from "../copyright";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
     name: "",
     email: "",
     password: "",
   });
+
+  if (loading) return <Spinner />;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -44,6 +38,7 @@ const SignUp = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     signUp({
       name: formValues.name,
       email: formValues.email,
@@ -52,9 +47,11 @@ const SignUp = () => {
       .then((res) => {
         if (res.succeeded) {
           setSignUpRequestErrors({});
+          setLoading(false);
           enqueueSnackbar("登録に成功しました。", {
             variant: "success",
           });
+          router.push("/");
         } else {
           setSignUpRequestErrors(res.errors);
           enqueueSnackbar(`登録に失敗しました`, {
@@ -63,6 +60,7 @@ const SignUp = () => {
         }
       })
       .catch(() => {
+        setLoading(false);
         enqueueSnackbar(`登録に失敗しました`, {
           variant: "error",
         });
@@ -117,9 +115,9 @@ const SignUp = () => {
                   required
                   fullWidth
                   value={formValues.password}
-                  name="password"
                   label="パスワード"
                   type="password"
+                  name="password"
                   autoComplete="new-password"
                 />
               </FormField>
