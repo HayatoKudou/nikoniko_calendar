@@ -16,6 +16,8 @@ const MenuListIcon = (props: { name: string }) => {
   const colorMode = React.useContext(ColorModeContext);
   return props.name === "dashboard" ? (
     <DashboardIcon />
+  ) : props.name === "users" ? (
+    <AccountBoxIcon />
   ) : props.name === "profile" ? (
     <AccountBoxIcon />
   ) : props.name === "paletteMode" ? (
@@ -44,6 +46,7 @@ const MenuList = (props: { open: boolean }) => {
 
   const menuList = [
     { name: "dashboard", title: "ダッシュボード", path: "/" },
+    { name: "users", title: "ユーザー管理", path: "/users" },
     { name: "profile", title: "プロフィール", path: "/profile" },
     { name: "paletteMode", title: name, path: null },
   ];

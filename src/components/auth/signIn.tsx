@@ -34,11 +34,12 @@ const SignIn = () => {
       email: formValues.email,
       password: formValues.password,
     })
-      .then(() => {
+      .then((res) => {
         setLoading(false);
         enqueueSnackbar("ログインしました。", {
           variant: "success",
         });
+        console.log(res);
         router.push("/");
       })
       .catch(() => {

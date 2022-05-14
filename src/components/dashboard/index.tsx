@@ -13,6 +13,7 @@ import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import BookApplication from "./book_application";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,7 +34,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -49,6 +50,7 @@ function a11yProps(index: number) {
 
 const Dashboard = () => {
   const [value, setValue] = React.useState(0);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
@@ -69,6 +71,10 @@ const Dashboard = () => {
 
   return (
     <>
+      <Button variant="contained" sx={{ float: "right" }} onClick={() => setDialogOpen(true)}>
+        書籍申請
+      </Button>
+      <BookApplication open={dialogOpen} setClose={() => setDialogOpen(false)} />
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {tabList.map((tab, index) => (
@@ -96,7 +102,7 @@ const Dashboard = () => {
                 // image="/public/vercel.svg"
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="h5">
                   Lizard
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

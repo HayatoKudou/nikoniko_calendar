@@ -11,8 +11,8 @@ export interface SignInRequestErrors {
 }
 
 interface SignInResult {
-  succeeded: boolean;
   errors: Partial<SignInRequestErrors>;
+  clientId: number;
 }
 
 const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
