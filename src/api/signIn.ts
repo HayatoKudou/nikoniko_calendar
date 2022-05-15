@@ -12,7 +12,7 @@ export interface SignInRequestErrors {
 
 interface SignInResult {
   errors: Partial<SignInRequestErrors>;
-  clientId: number;
+  user: User;
 }
 
 const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
@@ -28,7 +28,7 @@ const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
     throw new Error("Failed to signIn");
   }
 
-  return res.json();
+  return await res.json();
 };
 
 export default signUp;

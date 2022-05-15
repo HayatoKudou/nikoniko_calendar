@@ -26,7 +26,6 @@ const SignUp = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const clientContext = React.useContext(ClientContext);
-  console.log(clientContext);
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [createClientRequestErrors, setCreateClientRequestErrors] = React.useState<Partial<CreateClientRequestErrors>>(
@@ -95,7 +94,7 @@ const SignUp = () => {
           enqueueSnackbar("登録に成功しました。", {
             variant: "success",
           });
-          router.push("/");
+          router.push(`/${clientContext.client!.id}/dashboard`);
         } else {
           setSignUpRequestErrors(res.errors);
           enqueueSnackbar(`登録に失敗しました`, {

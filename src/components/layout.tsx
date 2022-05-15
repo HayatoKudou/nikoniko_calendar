@@ -1,13 +1,18 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import * as React from "react";
+import useAuthenticatedAccount from "../api/me";
 import ClientContext from "../context/clientContext";
 import ColorModeContext from "../context/colorModeContext";
 import UserContext from "../context/userContext";
 import Sidebar from "./sidebar";
+import Spinner from "./spinner";
 
 type PaletteMode = "light" | "dark";
 
 const Layout = ({ children }: any) => {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [client, setClient] = useState<Client | null>(null);
   const [mode, setMode] = useState<PaletteMode>("dark");
@@ -17,12 +22,23 @@ const Layout = ({ children }: any) => {
     },
   });
 
+  const { loading, error, response } = useAuthenticatedAccount();
+  if (loading) return <Spinner />;
+
+  const pathname = router.pathname;
+  if (pathname !== "/signUp" && pathname !== "/signIn") {
+    if (error) {
+      router.push("/signIn");
+      return <Spinner />;
+    }
+  }
+
   const clientContext = {
     client: client,
     setClient: setClient,
   };
 
-  const userContext = {
+  const userContextValue = {
     user: user,
     setUser: setUser,
   };
@@ -35,7 +51,7 @@ const Layout = ({ children }: any) => {
 
   return (
     <ClientContext.Provider value={clientContext}>
-      <UserContext.Provider value={userContext}>
+      <UserContext.Provider value={userContextValue}>
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
             <Sidebar>{children}</Sidebar>
@@ -46,4 +62,5 @@ const Layout = ({ children }: any) => {
   );
 };
 
+// @ts-ignore
 export default Layout;

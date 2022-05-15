@@ -29,7 +29,6 @@ const AddUser = (props: Props) => {
     });
   };
 
-  console.log(formValues);
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth>
       <DialogTitle>ユーザー追加</DialogTitle>

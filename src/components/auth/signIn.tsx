@@ -13,12 +13,14 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import signIn from "../../api/signIn";
+import useLocalStorage from "../../util/use_local_storage";
 import Copyright from "../copyright";
 import Spinner from "../spinner";
 
 const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [, setUser] = useLocalStorage("user", null);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     email: "",
@@ -39,8 +41,8 @@ const SignIn = () => {
         enqueueSnackbar("ログインしました。", {
           variant: "success",
         });
-        console.log(res);
-        router.push("/");
+        setUser(res.user);
+        router.push(`/${res.user.clientId}/dashboard`);
       })
       .catch(() => {
         setLoading(false);
