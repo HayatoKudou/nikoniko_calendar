@@ -9,7 +9,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import UserContext from "../../context/userContext";
 import AddUser from "./add_user";
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
@@ -25,7 +24,6 @@ const rows = [
 ];
 
 const Users = () => {
-  const userContext = React.useContext(UserContext);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   return (
     <>

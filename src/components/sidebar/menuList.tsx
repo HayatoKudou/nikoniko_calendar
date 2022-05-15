@@ -13,8 +13,17 @@ import ColorModeContext from "../../context/colorModeContext";
 import useLocalStorage from "../../util/use_local_storage";
 
 const MenuListIcon = (props: { name: string }) => {
+  const colorModeContext = React.useContext(ColorModeContext);
+  const [colorMode, setColorMode] = useLocalStorage("colorMode", null);
   const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
+
+  const handleColorMode = () => {
+    const selectedColor = colorMode === "light" ? "dark" : "light";
+    setColorMode(selectedColor);
+    // 強制レンダリング
+    colorModeContext.setColorMode(selectedColor);
+  };
+
   return props.name === "dashboard" ? (
     <DashboardIcon />
   ) : props.name === "users" ? (
@@ -23,9 +32,9 @@ const MenuListIcon = (props: { name: string }) => {
     <AccountBoxIcon />
   ) : props.name === "paletteMode" ? (
     theme.palette.mode === "dark" ? (
-      <Brightness7Icon onClick={colorMode.toggleColorMode} />
+      <Brightness7Icon onClick={handleColorMode} />
     ) : (
-      <Brightness4Icon onClick={colorMode.toggleColorMode} />
+      <Brightness4Icon onClick={handleColorMode} />
     )
   ) : (
     <></>
@@ -35,7 +44,7 @@ const MenuListIcon = (props: { name: string }) => {
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const router = useRouter();
-  const [user, _] = useLocalStorage("user", null);
+  const [user] = useLocalStorage("user", null);
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {

@@ -15,10 +15,15 @@ const Layout = ({ children }: any) => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [client, setClient] = useState<Client | null>(null);
-  const [mode, setMode] = useState<PaletteMode>("dark");
+  const [colorMode, setColorMode] = useState<PaletteMode>("dark");
+  let color = colorMode;
+  // ssr対応
+  if (typeof window !== "undefined") {
+    color = JSON.parse(window!.localStorage.getItem("colorMode") ?? colorMode);
+  }
   const theme = createTheme({
     palette: {
-      mode,
+      mode: color,
     },
   });
 
@@ -43,16 +48,15 @@ const Layout = ({ children }: any) => {
     setUser: setUser,
   };
 
-  const colorMode = {
-    toggleColorMode: () => {
-      setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-    },
+  const colorModeContext = {
+    colorMode: colorMode,
+    setColorMode: setColorMode,
   };
 
   return (
     <ClientContext.Provider value={clientContext}>
       <UserContext.Provider value={userContextValue}>
-        <ColorModeContext.Provider value={colorMode}>
+        <ColorModeContext.Provider value={colorModeContext}>
           <ThemeProvider theme={theme}>
             <Sidebar>{children}</Sidebar>
           </ThemeProvider>
