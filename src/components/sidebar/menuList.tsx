@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
 import ColorModeContext from "../../context/colorModeContext";
+import useLocalStorage from "../../util/use_local_storage";
 
 const MenuListIcon = (props: { name: string }) => {
   const theme = useTheme();
@@ -34,6 +35,7 @@ const MenuListIcon = (props: { name: string }) => {
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const router = useRouter();
+  const [user, _] = useLocalStorage("user", null);
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
@@ -45,9 +47,9 @@ const MenuList = (props: { open: boolean }) => {
   const name = colorModeName();
 
   const menuList = [
-    { name: "dashboard", title: "ダッシュボード", path: "/" },
-    { name: "users", title: "ユーザー管理", path: "/users" },
-    { name: "profile", title: "プロフィール", path: "/profile" },
+    { name: "dashboard", title: "ダッシュボード", path: `/${user.clientId}/dashboard` },
+    { name: "users", title: "ユーザー管理", path: `/${user.clientId}/users` },
+    { name: "profile", title: "プロフィール", path: `/${user.clientId}/profile` },
     { name: "paletteMode", title: name, path: null },
   ];
 
