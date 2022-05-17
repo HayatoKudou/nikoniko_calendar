@@ -13,7 +13,8 @@ import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import BookApplication from "./book_application";
+import BookApply from "./book_apply";
+import BookRegister from "./book_register";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,7 +51,8 @@ function a11yProps(index: number) {
 
 const Dashboard = () => {
   const [value, setValue] = React.useState(0);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
+  const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
@@ -71,10 +73,14 @@ const Dashboard = () => {
 
   return (
     <>
-      <Button variant="contained" sx={{ float: "right" }} onClick={() => setDialogOpen(true)}>
+      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>
         書籍申請
       </Button>
-      <BookApplication open={dialogOpen} setClose={() => setDialogOpen(false)} />
+      <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
+        書籍登録
+      </Button>
+      <BookApply open={applyDialogOpen} setClose={() => setApplyDialogOpen(false)} />
+      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} />
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {tabList.map((tab, index) => (

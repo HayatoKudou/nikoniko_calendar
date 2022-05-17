@@ -16,7 +16,7 @@ interface Props {
   setClose: any;
 }
 
-const BookApplication = (props: Props) => {
+const BookApply = (props: Props) => {
   const [formValues, setFormValues] = React.useState({
     category: "",
     url: "",
@@ -102,4 +102,4 @@ const BookApplication = (props: Props) => {
   );
 };
 
-export default BookApplication;
+export default BookApply;

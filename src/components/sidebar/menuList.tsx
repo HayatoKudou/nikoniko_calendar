@@ -55,18 +55,24 @@ const MenuList = (props: { open: boolean }) => {
   };
   const name = colorModeName();
 
-  const menuList = [
-    { name: "dashboard", title: "ダッシュボード", path: `/${user.clientId}/dashboard` },
-    { name: "users", title: "ユーザー管理", path: `/${user.clientId}/users` },
-    { name: "profile", title: "プロフィール", path: `/${user.clientId}/profile` },
-    { name: "paletteMode", title: name, path: null },
-  ];
-
   const routePush = (path: string | null) => {
     if (path) {
       router.push(path);
     }
   };
+
+  let menuList = [];
+
+  if (user) {
+    menuList = [
+      { name: "dashboard", title: "ダッシュボード", path: `/${user.clientId}/dashboard` },
+      { name: "users", title: "ユーザー管理", path: `/${user.clientId}/users` },
+      { name: "profile", title: "プロフィール", path: `/${user.clientId}/profile` },
+      { name: "paletteMode", title: name, path: null },
+    ];
+  } else {
+    menuList = [{ name: "paletteMode", title: name, path: null }];
+  }
 
   return (
     <List>
