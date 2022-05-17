@@ -17,7 +17,7 @@ import createClient, { CreateClientRequestErrors } from "../../api/createClient"
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
 import ClientContext from "../../context/clientContext";
 import Copyright from "../copyright";
-import FormField from "../form_field";
+import FormError from "../form_error";
 import Spinner from "../spinner";
 
 const steps = ["プラン選択", "チーム設定", "プロフィール設定"];
@@ -58,21 +58,21 @@ const SignUp = () => {
         setLoading(false);
         if (res.succeeded) {
           setCreateClientRequestErrors({});
-          enqueueSnackbar("登録に成功しました。", {
+          enqueueSnackbar("組織の登録に成功しました。", {
             variant: "success",
           });
           setActiveStep(activeStep + 1);
           clientContext.setClient(res.client);
         } else {
           setCreateClientRequestErrors(res.errors);
-          enqueueSnackbar(`登録に失敗しました`, {
+          enqueueSnackbar(`組織の登録に失敗しました`, {
             variant: "error",
           });
         }
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`登録に失敗しました`, {
+        enqueueSnackbar(`組織の登録に失敗しました`, {
           variant: "error",
         });
       });
@@ -101,7 +101,6 @@ const SignUp = () => {
             variant: "error",
           });
         }
-        setActiveStep(activeStep + 1);
       })
       .catch(() => {
         setLoading(false);
@@ -144,17 +143,16 @@ const SignUp = () => {
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <FormField errors={createClientRequestErrors["name"]}>
-                    <TextField
-                      onChange={handleChange}
-                      value={formValues.clientName}
-                      name="clientName"
-                      label="組織名"
-                      autoFocus
-                      fullWidth
-                      required
-                    />
-                  </FormField>
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.clientName}
+                    name="clientName"
+                    label="組織名"
+                    autoFocus
+                    fullWidth
+                    required
+                  />
+                  <FormError errors={createClientRequestErrors["name"]} />
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
@@ -174,43 +172,40 @@ const SignUp = () => {
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <FormField errors={signUpRequestErrors["name"]}>
-                    <TextField
-                      onChange={handleChange}
-                      value={formValues.name}
-                      label="名前"
-                      name="name"
-                      autoFocus
-                      fullWidth
-                      required
-                    />
-                  </FormField>
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.name}
+                    label="名前"
+                    name="name"
+                    autoFocus
+                    fullWidth
+                    required
+                  />
+                  <FormError errors={signUpRequestErrors["name"]} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField errors={signUpRequestErrors["email"]}>
-                    <TextField
-                      onChange={handleChange}
-                      value={formValues.email}
-                      fullWidth
-                      label="メールアドレス"
-                      name="email"
-                      autoComplete="email"
-                      required
-                    />
-                  </FormField>
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.email}
+                    fullWidth
+                    label="メールアドレス"
+                    name="email"
+                    autoComplete="email"
+                    required
+                  />
+                  <FormError errors={signUpRequestErrors["email"]} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField errors={signUpRequestErrors["password"]}>
-                    <TextField
-                      onChange={handleChange}
-                      required
-                      fullWidth
-                      value={formValues.password}
-                      label="パスワード"
-                      type="password"
-                      name="password"
-                    />
-                  </FormField>
+                  <TextField
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    value={formValues.password}
+                    label="パスワード"
+                    type="password"
+                    name="password"
+                  />
+                  <FormError errors={signUpRequestErrors["password"]} />
                 </Grid>
               </Grid>
               <Grid container justifyContent="flex-end">

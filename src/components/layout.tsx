@@ -18,13 +18,11 @@ const Layout = ({ children }: any) => {
   const [colorMode, setColorMode] = useState<PaletteMode>("dark");
   let color = colorMode;
   // ssr対応
-  console.log("test: "+color);
   if (typeof window !== "undefined") {
     color = window.localStorage.getItem("colorMode")
       ? JSON.parse(window.localStorage.getItem("colorMode") || colorMode)
       : colorMode;
   }
-  console.log("test2: "+color);
   const theme = createTheme({
     palette: {
       mode: color,

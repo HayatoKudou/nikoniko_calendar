@@ -2,8 +2,8 @@ import Config from "../../../config";
 
 export interface RegisterBookRequestErrors {
   categoryId: Array<string>;
-  url: Array<string>;
-  reason: Array<string>;
+  title: Array<string>;
+  description: Array<string>;
 }
 
 interface RegisterBookResult {

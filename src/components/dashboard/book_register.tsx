@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import register, { RegisterBookRequestErrors } from "../../api/book/register";
 import useLocalStorage from "../../util/use_local_storage";
+import FormError from "../form_error";
 
 interface Props {
   open: boolean;
@@ -27,7 +28,7 @@ const BookRegister = (props: Props) => {
     {}
   );
   const [formValues, setFormValues] = React.useState({
-    categoryId: null,
+    categoryId: 0,
     title: "",
     description: "",
   });
@@ -47,43 +48,50 @@ const BookRegister = (props: Props) => {
     });
   };
 
+  const handleRegister = (image: string | ArrayBuffer | null) => {
+    register({
+      categoryId: formValues.categoryId,
+      title: formValues.title,
+      description: formValues.description,
+      image: image,
+      apiToken: user.apiToken,
+    })
+      .then((res) => {
+        if (res.succeeded) {
+          setRegisterBookRequestErrors({});
+          setLoading(false);
+          enqueueSnackbar("書籍の登録に成功しました。", {
+            variant: "success",
+          });
+          props.setClose;
+        } else {
+          setRegisterBookRequestErrors(res.errors);
+          enqueueSnackbar(`書籍の登録に失敗しました`, {
+            variant: "error",
+          });
+        }
+      })
+      .catch((e) => {
+        setLoading(false);
+        enqueueSnackbar(`書籍の登録に失敗しました`, {
+          variant: "error",
+        });
+      });
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const reader = new FileReader();
-    // @ts-ignore
-    reader.readAsDataURL(selectedImage);
-    reader.onload = function () {
-      register({
-        categoryId: formValues.categoryId,
-        title: formValues.title,
-        description: formValues.description,
-        image: reader.result,
-        apiToken: user.apiToken,
-      })
-        .then((res) => {
-          if (res.succeeded) {
-            setRegisterBookRequestErrors({});
-            setLoading(false);
-            enqueueSnackbar("登録に成功しました。", {
-              variant: "success",
-            });
-            props.setClose;
-          } else {
-            setRegisterBookRequestErrors(res.errors);
-            enqueueSnackbar(`登録に失敗しました`, {
-              variant: "error",
-            });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          setLoading(false);
-          enqueueSnackbar(`登録に失敗しました`, {
-            variant: "error",
-          });
-        });
-    };
+
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedImage);
+      reader.onload = function () {
+        handleRegister(reader.result);
+      };
+    } else {
+      handleRegister(null);
+    }
   };
 
   return (
@@ -97,10 +105,10 @@ const BookRegister = (props: Props) => {
             type="file"
             id="select-image"
             style={{ display: "none" }}
-            onChange={(e) => setSelectedImage(e.target.files !== null ? e.target.files[0] : null)}
+            onChange={(e) => setSelectedImage(e.target.files ? e.target.files[0] : null)}
           />
           <label htmlFor="select-image">
-            <Button variant="contained" color="primary" component="span">
+            <Button variant="contained" component="span">
               Upload Image
             </Button>
           </label>
@@ -122,6 +130,8 @@ const BookRegister = (props: Props) => {
             variant="standard"
             margin={"dense"}
           />
+          <FormError errors={registerBookRequestErrors["title"]} />
+
           <TextField
             onChange={handleChange}
             value={formValues.description}
