@@ -11,6 +11,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
+import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/register";
 import useLocalStorage from "../../util/use_local_storage";
 import FormError from "../form_error";
@@ -32,6 +33,7 @@ const BookRegister = (props: Props) => {
     categoryId: 0,
     title: "",
     description: "",
+    url: "",
   });
   const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
   const [imageUrl, setImageUrl] = React.useState<string>("/no_image.png");
@@ -98,12 +100,28 @@ const BookRegister = (props: Props) => {
     }
   };
 
+  const fetchBookImage = () => {
+    if (formValues.url) {
+      const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
+      const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
+
+      AmazonImage(dp)
+        .then((blob) => {
+          setImageUrl(URL.createObjectURL(blob));
+        })
+        .catch((e) => {
+          setLoading(false);
+          // enqueueSnackbar(`書籍の登録に失敗しました`, {
+          //   variant: "error",
+          // });
+        });
+    }
+  };
+
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <DialogTitle>書籍登録</DialogTitle>
-      <DialogContent
-        sx={{ display: "flex", padding: "0px 20px", "justify-content": "center", "align-items": "center" }}
-      >
+      <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
           <img src={imageUrl} alt={selectedImage?.name} style={{ maxHeight: "300px", maxWidth: "250px" }} />
           <input
@@ -113,19 +131,7 @@ const BookRegister = (props: Props) => {
             style={{ display: "none" }}
             onChange={(e) => setSelectedImage(e.target.files ? e.target.files[0] : null)}
           />
-          {selectedImage ? (
-            <label
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                left: "13%",
-              }}
-            >
-              <Button variant="contained" component="span">
-                Delete Image
-              </Button>
-            </label>
-          ) : (
+          {imageUrl === "/no_image.png" ? (
             <label
               htmlFor="select-image"
               style={{
@@ -136,6 +142,18 @@ const BookRegister = (props: Props) => {
             >
               <Button variant="contained" component="span">
                 Upload Image
+              </Button>
+            </label>
+          ) : (
+            <label
+              style={{
+                position: "absolute",
+                bottom: "5%",
+                left: "13%",
+              }}
+            >
+              <Button variant="contained" component="span">
+                Delete Image
               </Button>
             </label>
           )}
@@ -167,6 +185,17 @@ const BookRegister = (props: Props) => {
             fullWidth
             variant="standard"
             multiline
+            margin={"dense"}
+          />
+          <TextField
+            onChange={handleChange}
+            onBlur={fetchBookImage}
+            value={formValues.url}
+            name="url"
+            autoFocus
+            label="URL"
+            fullWidth
+            variant="standard"
             margin={"dense"}
           />
         </Box>

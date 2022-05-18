@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
+import AmazonImage from "../../api/book/amazon_image";
 import Spinner from "../spinner";
 
 interface Props {
@@ -43,7 +44,21 @@ const BookApply = (props: Props) => {
   };
 
   const fetchBookImage = () => {
-    console.log("fetchBookImage");
+    if (formValues.url) {
+      const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
+      const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
+
+      AmazonImage(dp)
+        .then((blob) => {
+          setImageUrl(URL.createObjectURL(blob));
+        })
+        .catch((e) => {
+          setLoading(false);
+          // enqueueSnackbar(`書籍の登録に失敗しました`, {
+          //   variant: "error",
+          // });
+        });
+    }
   };
 
   return (

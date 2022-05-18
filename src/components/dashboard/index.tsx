@@ -130,8 +130,8 @@ const Dashboard = () => {
                       sx={{
                         overflow: "hidden",
                         display: "-webkit-box",
-                        "-webkitBoxOrient": "vertical",
-                        "-webkitLineClamp": "4",
+                        webkitBoxOrient: "vertical",
+                        webkitLineClamp: "4",
                       }}
                     >
                       {book.description}
