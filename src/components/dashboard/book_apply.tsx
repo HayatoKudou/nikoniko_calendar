@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
+import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ const BookApply = (props: Props) => {
     url: "",
     reason: "",
   });
+  const [loading, setLoading] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
   const [imageUrl, setImageUrl] = React.useState<string | undefined>("/no_image.png");
 
@@ -30,6 +32,8 @@ const BookApply = (props: Props) => {
       setImageUrl(URL.createObjectURL(selectedImage));
     }
   }, [selectedImage]);
+
+  if (loading) return <Spinner />;
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -43,10 +47,10 @@ const BookApply = (props: Props) => {
   };
 
   return (
-    <Dialog open={props.open} onClose={props.setClose} fullWidth>
+    <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <DialogTitle>書籍申請</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px" }}>
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ textAlign: "center", width: "40%" }}>
           <img src={imageUrl} alt={selectedImage?.name} style={{ maxHeight: "300px", maxWidth: "250px" }} />
           <input
             accept="image/*"
@@ -55,13 +59,20 @@ const BookApply = (props: Props) => {
             style={{ display: "none" }}
             onChange={(e) => setSelectedImage(e.target.files !== null ? e.target.files[0] : null)}
           />
-          <label htmlFor="select-image">
+          <label
+            htmlFor="select-image"
+            style={{
+              position: "absolute",
+              bottom: "5%",
+              left: "13%",
+            }}
+          >
             <Button variant="contained" color="primary" component="span">
               Upload Image
             </Button>
           </label>
         </Box>
-        <Box>
+        <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"}>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.category} name="role" label="role" variant="standard">

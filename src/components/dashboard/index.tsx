@@ -13,6 +13,8 @@ import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import useBooks from "../../api/book/list";
+import Spinner from "../spinner";
 import BookApply from "./book_apply";
 import BookRegister from "./book_register";
 
@@ -35,7 +37,9 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography component="div">{children}</Typography>
+          <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
+            {children}
+          </Typography>
         </Box>
       )}
     </div>
@@ -56,6 +60,13 @@ const Dashboard = () => {
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
+
+  const { loading, error, response } = useBooks();
+  if (loading) return <Spinner />;
+  if (error) {
+    return <Spinner />;
+  }
+  console.log(response);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (newValue !== undefined) {
@@ -100,28 +111,39 @@ const Dashboard = () => {
       </Box>
       {tabList.map((tab, index) => (
         <TabPanel value={value} index={index} key={index}>
-          <Card sx={{ maxWidth: 200 }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="200"
-                // image="/public/vercel.svg"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5">
-                  Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  すごい本だよ
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-            </CardActions>
-          </Card>
+          {response.books.map((book: any, index: number) => {
+            return (
+              <Card sx={{ width: 200, margin: 1 }} key={index}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    // height="250"
+                    src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h6">
+                      {book.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        "-webkitBoxOrient": "vertical",
+                        "-webkitLineClamp": "4",
+                      }}
+                    >
+                      {book.description}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Button size="small">Share</Button>
+                </CardActions>
+              </Card>
+            );
+          })}
         </TabPanel>
       ))}
     </>
