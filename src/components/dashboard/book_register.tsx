@@ -35,7 +35,7 @@ const BookRegister = (props: Props) => {
     description: "",
     url: "",
   });
-  const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = React.useState<File | Blob | null>(null);
   const [imageUrl, setImageUrl] = React.useState<string>("/no_image.png");
 
   React.useEffect(() => {
@@ -107,13 +107,11 @@ const BookRegister = (props: Props) => {
 
       AmazonImage(dp)
         .then((blob) => {
+          setSelectedImage(blob);
           setImageUrl(URL.createObjectURL(blob));
         })
         .catch((e) => {
           setLoading(false);
-          // enqueueSnackbar(`書籍の登録に失敗しました`, {
-          //   variant: "error",
-          // });
         });
     }
   };
@@ -123,7 +121,7 @@ const BookRegister = (props: Props) => {
       <DialogTitle>書籍登録</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} alt={selectedImage?.name} style={{ maxHeight: "300px", maxWidth: "250px" }} />
+          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px" }} />
           <input
             accept="image/*"
             type="file"
@@ -137,22 +135,20 @@ const BookRegister = (props: Props) => {
               style={{
                 position: "absolute",
                 bottom: "5%",
-                left: "13%",
+                left: "15%",
               }}
             >
-              <Button variant="contained" component="span">
-                Upload Image
-              </Button>
+              <Button variant="contained">Upload Image</Button>
             </label>
           ) : (
             <label
               style={{
                 position: "absolute",
                 bottom: "5%",
-                left: "13%",
+                left: "15%",
               }}
             >
-              <Button variant="contained" component="span">
+              <Button variant="contained" onClick={() => setImageUrl("/no_image.png")}>
                 Delete Image
               </Button>
             </label>

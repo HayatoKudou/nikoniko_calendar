@@ -13,10 +13,14 @@ import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useRecoilState } from "recoil";
 import useBooks from "../../api/book/list";
+import { useColorMode } from "../../store/color_mode";
+import { useStyleSetting } from "../../store/style_settings";
 import Spinner from "../spinner";
 import BookApply from "./book_apply";
 import BookRegister from "./book_register";
+import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -60,13 +64,16 @@ const Dashboard = () => {
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
+  const [style, ] = useRecoilState(useStyleSetting);
+  const [colorMode, ] = useRecoilState(useColorMode);
+  console.log(style);
+  console.log(colorMode);
 
   const { loading, error, response } = useBooks();
   if (loading) return <Spinner />;
   if (error) {
     return <Spinner />;
   }
-  console.log(response);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (newValue !== undefined) {
@@ -84,6 +91,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <StyleSetting />
       <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>
         書籍申請
       </Button>
@@ -109,15 +117,16 @@ const Dashboard = () => {
           </Box>
         </Tabs>
       </Box>
+
       {tabList.map((tab, index) => (
         <TabPanel value={value} index={index} key={index}>
           {response.books.map((book: any, index: number) => {
             return (
-              <Card sx={{ width: 200, margin: 1 }} key={index}>
+              <Card sx={{ width: style.imageSize.width, margin: 1 }} key={index}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    // height="250"
+                    height={style.imageSize.height}
                     src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                   />
                   <CardContent>

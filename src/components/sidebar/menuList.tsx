@@ -9,19 +9,16 @@ import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
-import ColorModeContext from "../../context/colorModeContext";
+import { useRecoilState } from "recoil";
+import { useColorMode } from "../../store/color_mode";
 import useLocalStorage from "../../util/use_local_storage";
 
 const MenuListIcon = (props: { name: string }) => {
-  const colorModeContext = React.useContext(ColorModeContext);
-  const [colorMode, setColorMode] = useLocalStorage("colorMode", null);
+  const [colorMode, setColorMode] = useRecoilState(useColorMode);
   const theme = useTheme();
 
   const handleColorMode = () => {
-    const selectedColor = colorMode === "light" ? "dark" : "light";
-    setColorMode(selectedColor);
-    // 強制レンダリング
-    colorModeContext.setColorMode(selectedColor);
+    setColorMode({ color: colorMode.color === "light" ? "dark" : "light" });
   };
 
   return props.name === "dashboard" ? (
