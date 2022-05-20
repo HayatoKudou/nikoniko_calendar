@@ -1,3 +1,4 @@
+import { FormHelperText } from "@mui/material";
 import Box from "@mui/material/BOx";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -29,6 +30,7 @@ const BookRegister = (props: Props) => {
   const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>(
     {}
   );
+  const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
     categoryId: 0,
     title: "",
@@ -57,7 +59,7 @@ const BookRegister = (props: Props) => {
     setLoading(true);
     register({
       categoryId: formValues.categoryId,
-      title: formValues.title,
+      title: title,
       description: formValues.description,
       image: image,
       apiToken: user.apiToken,
@@ -101,7 +103,9 @@ const BookRegister = (props: Props) => {
   };
 
   const fetchBookImage = () => {
-    if (formValues.url) {
+    if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
+      const title = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/)![1];
+      setTitle(title);
       const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
       const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
 
@@ -121,7 +125,7 @@ const BookRegister = (props: Props) => {
       <DialogTitle>書籍登録</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px" }} />
+          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }} />
           <input
             accept="image/*"
             type="file"
@@ -162,8 +166,8 @@ const BookRegister = (props: Props) => {
             </Select>
           </FormControl>
           <TextField
-            onChange={handleChange}
-            value={formValues.title}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
             name="title"
             autoFocus
             label="タイトル"
@@ -194,6 +198,8 @@ const BookRegister = (props: Props) => {
             variant="standard"
             margin={"dense"}
           />
+          <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>
+          <FormHelperText error={true}>* Amazonのみ対応しています</FormHelperText>
         </Box>
       </DialogContent>
       <DialogActions>

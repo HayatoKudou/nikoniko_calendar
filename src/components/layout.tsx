@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import useAuthenticatedAccount from "../api/me";
 import ClientContext from "../context/clientContext";
 import UserContext from "../context/userContext";
-import { useColorMode } from "../store/color_mode";
+import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
 import Spinner from "./spinner";
 
@@ -15,10 +15,9 @@ const Layout = ({ children }: any) => {
   const [colorMode, _] = useRecoilState(useColorMode);
   const [user, setUser] = useState<User | null>(null);
   const [client, setClient] = useState<Client | null>(null);
-  console.log(colorMode);
   const theme = createTheme({
     palette: {
-      mode: colorMode.color,
+      mode: colorMode,
     },
   });
 

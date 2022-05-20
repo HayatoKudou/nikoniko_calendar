@@ -15,8 +15,8 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import useBooks from "../../api/book/list";
-import { useColorMode } from "../../store/color_mode";
-import { useStyleSetting } from "../../store/style_settings";
+import { useBookCardStyle } from "../../store/styles/book_card_style";
+import { useImageSize } from "../../store/styles/image_size";
 import Spinner from "../spinner";
 import BookApply from "./book_apply";
 import BookRegister from "./book_register";
@@ -64,10 +64,8 @@ const Dashboard = () => {
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
-  const [style, ] = useRecoilState(useStyleSetting);
-  const [colorMode, ] = useRecoilState(useColorMode);
-  console.log(style);
-  console.log(colorMode);
+  const [imageSize] = useRecoilState(useImageSize);
+  const [bookCardStyle] = useRecoilState(useBookCardStyle);
 
   const { loading, error, response } = useBooks();
   if (loading) return <Spinner />;
@@ -122,30 +120,32 @@ const Dashboard = () => {
         <TabPanel value={value} index={index} key={index}>
           {response.books.map((book: any, index: number) => {
             return (
-              <Card sx={{ width: style.imageSize.width, margin: 1 }} key={index}>
+              <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height={style.imageSize.height}
+                    height={imageSize.height}
                     src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant="h6">
-                      {book.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        overflow: "hidden",
-                        display: "-webkit-box",
-                        webkitBoxOrient: "vertical",
-                        webkitLineClamp: "4",
-                      }}
-                    >
-                      {book.description}
-                    </Typography>
-                  </CardContent>
+                  {bookCardStyle === "rich" && (
+                    <CardContent>
+                      <Typography gutterBottom variant="h6">
+                        {book.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          webkitBoxOrient: "vertical",
+                          webkitLineClamp: "4",
+                        }}
+                      >
+                        {book.description}
+                      </Typography>
+                    </CardContent>
+                  )}
                 </CardActionArea>
                 <CardActions>
                   <Button size="small">Share</Button>

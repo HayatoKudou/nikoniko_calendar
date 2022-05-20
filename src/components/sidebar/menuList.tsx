@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import { useColorMode } from "../../store/color_mode";
+import { useColorMode } from "../../store/styles/color_mode";
 import useLocalStorage from "../../util/use_local_storage";
 
 const MenuListIcon = (props: { name: string }) => {
@@ -18,7 +18,7 @@ const MenuListIcon = (props: { name: string }) => {
   const theme = useTheme();
 
   const handleColorMode = () => {
-    setColorMode({ color: colorMode.color === "light" ? "dark" : "light" });
+    setColorMode(colorMode === "light" ? "dark" : "light");
   };
 
   return props.name === "dashboard" ? (
