@@ -10,6 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import AddUser from "./add_user";
+import useUsers from "../../api/user/list";
+import Spinner from "../spinner";
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein };
@@ -25,6 +27,12 @@ const rows = [
 
 const Users = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const { loading, error, response } = useUsers();
+  if (loading) return <Spinner />;
+  if (error) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <AddUser open={dialogOpen} setClose={() => setDialogOpen(false)} />

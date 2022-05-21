@@ -15,17 +15,18 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import createClient, { CreateClientRequestErrors } from "../../api/createClient";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
-import ClientContext from "../../context/clientContext";
 import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
+import { useClientInfo } from "../../store/clientInfo";
+import {useRecoilState} from "recoil";
 
 const steps = ["プラン選択", "チーム設定", "プロフィール設定"];
 
 const SignUp = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const clientContext = React.useContext(ClientContext);
+  const [clientInfo, setClientInfo] = useRecoilState(useClientInfo);
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [createClientRequestErrors, setCreateClientRequestErrors] = React.useState<Partial<CreateClientRequestErrors>>(
@@ -62,7 +63,7 @@ const SignUp = () => {
             variant: "success",
           });
           setActiveStep(activeStep + 1);
-          clientContext.setClient(res.client);
+          setClientInfo(res.client);
         } else {
           setCreateClientRequestErrors(res.errors);
           enqueueSnackbar(`組織の登録に失敗しました`, {
@@ -82,7 +83,7 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     signUp({
-      clientId: clientContext.client!.id,
+      clientId: clientInfo.id,
       name: formValues.name,
       email: formValues.email,
       password: formValues.password,
@@ -94,7 +95,7 @@ const SignUp = () => {
           enqueueSnackbar("登録に成功しました。", {
             variant: "success",
           });
-          router.push(`/${clientContext.client!.id}/dashboard`);
+          router.push(`/${clientInfo.id}/dashboard`);
         } else {
           setSignUpRequestErrors(res.errors);
           enqueueSnackbar(`登録に失敗しました`, {

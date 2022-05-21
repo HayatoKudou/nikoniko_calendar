@@ -13,6 +13,7 @@ export interface SignInRequestErrors {
 interface SignInResult {
   errors: Partial<SignInRequestErrors>;
   user: User;
+  client: Client;
 }
 
 const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
