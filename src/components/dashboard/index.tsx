@@ -19,6 +19,7 @@ import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
 import Spinner from "../spinner";
 import BookApply from "./book_apply";
+import BookInfo from "./book_info";
 import BookRegister from "./book_register";
 import StyleSetting from "./style_setting";
 
@@ -58,14 +59,16 @@ function a11yProps(index: number) {
 }
 
 const Dashboard = () => {
+  const [imageSize] = useRecoilState(useImageSize);
+  const [bookCardStyle] = useRecoilState(useBookCardStyle);
   const [value, setValue] = React.useState(0);
   const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
+  const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState(false);
   const [formOpen, setFormOpen] = React.useState(false);
   const [formValue, setFormValue] = React.useState("");
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
-  const [imageSize] = useRecoilState(useImageSize);
-  const [bookCardStyle] = useRecoilState(useBookCardStyle);
+  const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
 
   const { loading, error, response } = useBooks();
   if (loading) return <Spinner />;
@@ -87,17 +90,24 @@ const Dashboard = () => {
     setFormValue("");
   };
 
+  const handleClickBook = (book: Book) => {
+    setSelectedBook(book);
+    setBookInfoDialogOpen(true);
+  };
+
   return (
     <>
       <StyleSetting />
+      <BookInfo open={bookInfoDialogOpen} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
+      <BookApply open={applyDialogOpen} setClose={() => setApplyDialogOpen(false)} />
+      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} />
+
       <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>
         書籍申請
       </Button>
       <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
         書籍登録
       </Button>
-      <BookApply open={applyDialogOpen} setClose={() => setApplyDialogOpen(false)} />
-      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} />
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {tabList.map((tab, index) => (
@@ -118,10 +128,10 @@ const Dashboard = () => {
 
       {tabList.map((tab, index) => (
         <TabPanel value={value} index={index} key={index}>
-          {response.books.map((book: any, index: number) => {
+          {response.books.map((book: Book, index: number) => {
             return (
               <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
-                <CardActionArea>
+                <CardActionArea onClick={() => handleClickBook(book)}>
                   <CardMedia
                     component="img"
                     height={imageSize.height}

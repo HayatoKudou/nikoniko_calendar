@@ -12,9 +12,10 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilState } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/register";
-import useLocalStorage from "../../util/use_local_storage";
+import { useMe } from "../../store/me";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -24,7 +25,7 @@ interface Props {
 }
 
 const BookRegister = (props: Props) => {
-  const [user, _] = useLocalStorage("user", null);
+  const [me] = useRecoilState(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>(
@@ -62,7 +63,7 @@ const BookRegister = (props: Props) => {
       title: title,
       description: formValues.description,
       image: image,
-      apiToken: user.apiToken,
+      apiToken: me.apiToken,
     })
       .then((res) => {
         if (res.succeeded) {

@@ -12,15 +12,16 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilState } from "recoil";
 import signIn from "../../api/signIn";
-import useLocalStorage from "../../util/use_local_storage";
+import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import Spinner from "../spinner";
 
 const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [, setUser] = useLocalStorage("user", null);
+  const [, setMe] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     email: "",
@@ -41,7 +42,7 @@ const SignIn = () => {
         enqueueSnackbar("ログインしました。", {
           variant: "success",
         });
-        setUser(res.user);
+        setMe(res.user);
         router.push(`/${res.user.clientId}/dashboard`);
       })
       .catch(() => {

@@ -1,11 +1,11 @@
 import { useRecoilState } from "recoil";
 import useSWR from "swr";
-import Config from "../../config";
-import { useMe } from "../store/me";
+import Config from "../../../config";
+import { useMe } from "../../store/me";
 
-const useAuthenticatedAccount = () => {
+const useUsers = () => {
   const [me] = useRecoilState(useMe);
-  const endpoint = `${Config.apiOrigin}/api/me`;
+  const endpoint = `${Config.apiOrigin}/api/book/list`;
   const { data, error, isValidating } = useSWR(
     endpoint,
     (url: string) =>
@@ -33,4 +33,4 @@ const useAuthenticatedAccount = () => {
   };
 };
 
-export default useAuthenticatedAccount;
+export default useUsers;

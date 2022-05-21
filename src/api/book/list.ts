@@ -1,15 +1,16 @@
+import { useRecoilState } from "recoil";
 import useSWR from "swr";
 import Config from "../../../config";
-import useLocalStorage from "../../util/use_local_storage";
+import { useMe } from "../../store/me";
 
 const useBooks = () => {
-  const [user, _] = useLocalStorage("user", null);
+  const [me] = useRecoilState(useMe);
   const endpoint = `${Config.apiOrigin}/api/book/list`;
   const { data, error, isValidating } = useSWR(
     endpoint,
     (url: string) =>
       fetch(url, {
-        headers: { Accept: "application/json", Authorization: `Bearer ${user.apiToken}` },
+        headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}` },
       }).then(async (res) => {
         if (!res.ok) {
           const body = await res.text();

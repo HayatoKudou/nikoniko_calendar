@@ -10,8 +10,8 @@ import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
+import { useMe } from "../../store/me";
 import { useColorMode } from "../../store/styles/color_mode";
-import useLocalStorage from "../../util/use_local_storage";
 
 const MenuListIcon = (props: { name: string }) => {
   const [colorMode, setColorMode] = useRecoilState(useColorMode);
@@ -41,7 +41,7 @@ const MenuListIcon = (props: { name: string }) => {
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const router = useRouter();
-  const [user] = useLocalStorage("user", null);
+  const [me] = useRecoilState(useMe);
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
@@ -60,11 +60,11 @@ const MenuList = (props: { open: boolean }) => {
 
   let menuList = [];
 
-  if (user) {
+  if (me) {
     menuList = [
-      { name: "dashboard", title: "ダッシュボード", path: `/${user.clientId}/dashboard` },
-      { name: "users", title: "ユーザー管理", path: `/${user.clientId}/users` },
-      { name: "profile", title: "プロフィール", path: `/${user.clientId}/profile` },
+      { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
+      { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
+      { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
       { name: "paletteMode", title: name, path: null },
     ];
   } else {
