@@ -105,8 +105,10 @@ const BookRegister = (props: Props) => {
 
   const fetchBookImage = () => {
     if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
-      const title = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/)![1];
-      setTitle(title);
+      const decodedUrl = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/);
+      if (decodedUrl) {
+        setTitle(decodedUrl![1]);
+      }
       const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
       const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
 

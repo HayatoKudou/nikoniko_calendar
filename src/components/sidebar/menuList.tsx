@@ -1,7 +1,8 @@
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PeopleIcon from "@mui/icons-material/People";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -24,9 +25,9 @@ const MenuListIcon = (props: { name: string }) => {
   return props.name === "dashboard" ? (
     <DashboardIcon />
   ) : props.name === "users" ? (
-    <AccountBoxIcon />
+    <PeopleIcon />
   ) : props.name === "profile" ? (
-    <AccountBoxIcon />
+    <ManageAccountsIcon />
   ) : props.name === "paletteMode" ? (
     theme.palette.mode === "dark" ? (
       <Brightness7Icon onClick={handleColorMode} />

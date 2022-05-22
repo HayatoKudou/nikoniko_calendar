@@ -7,7 +7,7 @@ export const useClientInfo = atom({
   key: "clientInfo",
   default: {
     id: null,
-    name: ""
+    name: "",
   },
   effects_UNSTABLE: [persistAtom],
 });

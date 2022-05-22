@@ -11,7 +11,7 @@ import Spinner from "./spinner";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
-  const [colorMode, ] = useRecoilState(useColorMode);
+  const [colorMode] = useRecoilState(useColorMode);
   const [user, setUser] = useState<User | null>(null);
   const theme = createTheme({
     palette: {

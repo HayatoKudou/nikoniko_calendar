@@ -5,7 +5,7 @@ import { useMe } from "../../store/me";
 
 const useUsers = () => {
   const [me] = useRecoilState(useMe);
-  const endpoint = `${Config.apiOrigin}/api/book/list`;
+  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/user/list`;
   const { data, error, isValidating } = useSWR(
     endpoint,
     (url: string) =>

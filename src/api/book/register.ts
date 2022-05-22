@@ -1,4 +1,6 @@
+import { useRecoilState } from "recoil";
 import Config from "../../../config";
+import { useMe } from "../../store/me";
 
 export interface RegisterBookRequestErrors {
   categoryId: Array<string>;
@@ -13,7 +15,8 @@ interface RegisterBookResult {
 }
 
 const RegisterBook = async (payload: RegisterBook): Promise<RegisterBookResult> => {
-  const endpoint = `${Config.apiOrigin}/api/book/register`;
+  const [me] = useRecoilState(useMe);
+  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/book/register`;
 
   const res = await fetch(endpoint, {
     method: "POST",

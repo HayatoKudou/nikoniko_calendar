@@ -3,6 +3,8 @@ interface User {
   name: string;
   email: string;
   apiToken: string;
+  role: ?string;
+  password: ?string;
 }
 
 interface Client {

@@ -9,9 +9,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import AddUser from "./add_user";
 import useUsers from "../../api/user/list";
 import Spinner from "../spinner";
+import AddUser from "./add_user";
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein };
@@ -32,6 +32,7 @@ const Users = () => {
   if (error) {
     return <Spinner />;
   }
+  console.log(response);
 
   return (
     <>
@@ -53,14 +54,14 @@ const Users = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            {response.users.map((user: User, index: number) => (
+              <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {user.name}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="right">{user.email}</TableCell>
+                <TableCell align="right">{user.role}</TableCell>
+                <TableCell align="right">{user.password}</TableCell>
               </TableRow>
             ))}
           </TableBody>

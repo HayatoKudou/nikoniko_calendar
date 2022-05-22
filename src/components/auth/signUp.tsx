@@ -13,13 +13,13 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilState } from "recoil";
 import createClient, { CreateClientRequestErrors } from "../../api/createClient";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
+import { useClientInfo } from "../../store/clientInfo";
 import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
-import { useClientInfo } from "../../store/clientInfo";
-import {useRecoilState} from "recoil";
 
 const steps = ["プラン選択", "チーム設定", "プロフィール設定"];
 

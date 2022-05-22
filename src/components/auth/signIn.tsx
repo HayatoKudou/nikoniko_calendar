@@ -14,8 +14,8 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import signIn from "../../api/signIn";
-import { useMe } from "../../store/me";
 import { useClientInfo } from "../../store/clientInfo";
+import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import Spinner from "../spinner";
 
@@ -44,9 +44,8 @@ const SignIn = () => {
         enqueueSnackbar("ログインしました。", {
           variant: "success",
         });
-        console.log(res);
         setMe(res.user);
-        setClientInfo(res.client)
+        setClientInfo(res.client);
         router.push(`/${res.user.clientId}/dashboard`);
       })
       .catch(() => {
