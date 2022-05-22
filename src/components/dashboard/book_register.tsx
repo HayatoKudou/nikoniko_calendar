@@ -22,6 +22,7 @@ import Spinner from "../spinner";
 interface Props {
   open: boolean;
   setClose: any;
+  success: any;
 }
 
 const BookRegister = (props: Props) => {
@@ -58,7 +59,7 @@ const BookRegister = (props: Props) => {
 
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    register({
+    register(me.clientId, {
       categoryId: formValues.categoryId,
       title: title,
       description: formValues.description,
@@ -68,19 +69,20 @@ const BookRegister = (props: Props) => {
       .then((res) => {
         if (res.succeeded) {
           setRegisterBookRequestErrors({});
-          setLoading(false);
           enqueueSnackbar("書籍の登録に成功しました。", {
             variant: "success",
           });
-          props.setClose;
+          props.success();
+          props.setClose();
         } else {
           setRegisterBookRequestErrors(res.errors);
           enqueueSnackbar(`書籍の登録に失敗しました`, {
             variant: "error",
           });
         }
+        setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading(false);
         enqueueSnackbar(`書籍の登録に失敗しました`, {
           variant: "error",

@@ -1,27 +1,35 @@
+import { useSnackbar } from "notistack";
 import { useRecoilState } from "recoil";
 import useSWR from "swr";
 import Config from "../../../config";
 import { useMe } from "../../store/me";
 
 const useUsers = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const endpoint = `${Config.apiOrigin}/api/${me.clientId}/user/list`;
-  const { data, error, isValidating } = useSWR(
-    endpoint,
-    (url: string) =>
-      fetch(url, {
-        headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}` },
-      }).then(async (res) => {
-        if (!res.ok) {
-          const body = await res.text();
-          throw new Error(`failed to request. url=${endpoint} status=${res.status} body=${body}`);
+
+  const fetcher = (endpoint: string) =>
+    fetch(endpoint, {
+      headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}` },
+    }).then((res) => {
+      if (!res.ok) {
+        if (res.status === 402) {
+          enqueueSnackbar(`ユーザは指定された組織に所属していません`, {
+            variant: "error",
+          });
+        } else {
+          enqueueSnackbar(`ユーザーの取得に失敗しました`, {
+            variant: "error",
+          });
         }
-        return res.json();
-      }),
-    {
-      revalidateOnFocus: false,
-    }
-  );
+      }
+      return res.json();
+    });
+
+  const { data, error, isValidating, mutate } = useSWR(endpoint, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const loading = isValidating || (!data && !error);
   const response = !loading && !error ? (data as any) : null;
@@ -30,6 +38,7 @@ const useUsers = () => {
     loading,
     error,
     response,
+    mutate,
   };
 };
 

@@ -14,7 +14,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useRecoilState } from "recoil";
+import Config from "../../../config";
 import useBooks from "../../api/book/list";
+import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
 import Spinner from "../spinner";
@@ -61,6 +63,7 @@ function a11yProps(index: number) {
 const Dashboard = () => {
   const [imageSize] = useRecoilState(useImageSize);
   const [bookCardStyle] = useRecoilState(useBookCardStyle);
+  const [me] = useRecoilState(useMe);
   const [value, setValue] = React.useState(0);
   const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
@@ -70,7 +73,7 @@ const Dashboard = () => {
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
 
-  const { loading, error, response } = useBooks();
+  const { loading, error, response, mutate } = useBooks();
   if (loading) return <Spinner />;
   if (error) {
     return <Spinner />;
@@ -100,7 +103,11 @@ const Dashboard = () => {
       <StyleSetting />
       <BookInfo open={bookInfoDialogOpen} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       <BookApply open={applyDialogOpen} setClose={() => setApplyDialogOpen(false)} />
-      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} />
+      <BookRegister
+        open={registerDialogOpen}
+        setClose={() => setRegisterDialogOpen(false)}
+        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/book/list`)}
+      />
 
       <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>
         書籍申請

@@ -11,8 +11,6 @@ interface Props {
 }
 
 const BookInfo = (props: Props) => {
-  console.log(props);
-
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <DialogTitle>{props.bookInfo?.title}</DialogTitle>

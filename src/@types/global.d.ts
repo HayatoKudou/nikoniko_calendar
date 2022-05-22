@@ -3,8 +3,11 @@ interface User {
   name: string;
   email: string;
   apiToken: string;
-  role: ?string;
-  password: ?string;
+  role: {
+    is_account_manager: number;
+    is_book_manager: number;
+    is_client_manager: number;
+  };
 }
 
 interface Client {

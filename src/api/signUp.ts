@@ -1,7 +1,7 @@
 import Config from "../../config";
 
 interface SignUpRequestPayload {
-  clientId: number;
+  client_id: number;
   name: string;
   email: string;
   password: string;

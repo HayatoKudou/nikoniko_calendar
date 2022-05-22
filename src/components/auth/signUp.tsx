@@ -83,7 +83,7 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     signUp({
-      clientId: clientInfo.id,
+      client_id: clientInfo.id,
       name: formValues.name,
       email: formValues.email,
       password: formValues.password,
@@ -217,13 +217,6 @@ const SignUp = () => {
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
-                <Button
-                  onClick={() => setActiveStep(activeStep - 1)}
-                  variant="contained"
-                  sx={{ float: "left", width: "120px" }}
-                >
-                  {"戻る"}
-                </Button>
                 <Button onClick={handleProfileSubmit} variant="contained" sx={{ float: "right", width: "120px" }}>
                   {"登録"}
                 </Button>
