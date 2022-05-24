@@ -17,27 +17,43 @@ import Config from "../../../config";
 import useUsers from "../../api/user/list";
 import { useMe } from "../../store/me";
 import Spinner from "../spinner";
-import AddUser from "./add_user";
+import CreateUser from "./create_user";
+import UpdateUser from "./update_user";
 
 const Users = () => {
   const [me] = useRecoilState(useMe);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
+  const [selectUser, setSelectUser] = React.useState<User>();
   const { loading, error, response, mutate } = useUsers();
   if (loading) return <Spinner />;
   if (error) {
     return <Spinner />;
   }
 
+  const handleEditUser = (user: User) => {
+    setUpdateDialogOpen(true);
+    setSelectUser(user);
+  };
+
   return (
     <>
-      <AddUser
-        open={dialogOpen}
-        setClose={() => setDialogOpen(false)}
-        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+      <CreateUser
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
       />
+      {selectUser && (
+        <UpdateUser
+          user={selectUser}
+          open={updateDialogOpen}
+          onClose={() => setUpdateDialogOpen(false)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+        />
+      )}
       <Box sx={{ display: "flex", alignItems: "center", height: "80px" }}>
         <Typography variant="h4">ユーザー管理</Typography>
-        <Button variant="contained" sx={{ marginLeft: "auto" }} onClick={() => setDialogOpen(true)}>
+        <Button variant="contained" sx={{ marginLeft: "auto" }} onClick={() => setCreateDialogOpen(true)}>
           ユーザー追加
         </Button>
       </Box>
@@ -52,10 +68,10 @@ const Users = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {response.users.map((user: User, index: number) => (
+            {response.users?.map((user: User, index: number) => (
               <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell>
-                  <IconButton>
+                  <IconButton onClick={() => handleEditUser(user)}>
                     <ModeEditIcon />
                   </IconButton>
                 </TableCell>

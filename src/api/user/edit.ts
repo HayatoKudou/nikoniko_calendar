@@ -1,27 +1,27 @@
 import Config from "../../../config";
 
-export interface CreateUserRequestErrors {
+export interface EditUserRequestErrors {
   name: Array<string>;
   email: Array<string>;
   roles: Array<string>;
 }
 
-interface RegisterBookResult {
+interface EditUserResult {
   succeeded: boolean;
-  errors: Partial<CreateUserRequestErrors>;
+  errors: Partial<EditUserRequestErrors>;
 }
 
-interface CreateUserRequestPayload {
+interface EditUserRequestPayload {
   name: string;
   email: string;
   roles: Array<string>;
   apiToken: string;
 }
 
-const Create = async (clientId: string, payload: CreateUserRequestPayload): Promise<RegisterBookResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/user`;
+const Edit = async (clientId: string, payload: EditUserRequestPayload): Promise<EditUserResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/user/Edit`;
   const res = await fetch(endpoint, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -44,4 +44,4 @@ const Create = async (clientId: string, payload: CreateUserRequestPayload): Prom
   };
 };
 
-export default Create;
+export default Edit;

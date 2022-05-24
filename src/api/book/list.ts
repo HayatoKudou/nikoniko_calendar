@@ -7,7 +7,7 @@ import { useMe } from "../../store/me";
 const useBooks = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
-  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/book/list`;
+  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/books`;
   const fetcher = (endpoint: string) =>
     fetch(endpoint, {
       headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}` },

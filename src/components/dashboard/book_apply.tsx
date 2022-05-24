@@ -15,7 +15,7 @@ import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
-  setClose: any;
+  setClose: () => void;
 }
 
 const BookApply = (props: Props) => {

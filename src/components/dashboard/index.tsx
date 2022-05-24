@@ -106,7 +106,7 @@ const Dashboard = () => {
       <BookRegister
         open={registerDialogOpen}
         setClose={() => setRegisterDialogOpen(false)}
-        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/book/list`)}
+        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
       />
 
       <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>

@@ -20,19 +20,20 @@ import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
-  success: any;
-  setClose: any;
+  user: User;
+  onSuccess: () => void;
+  onClose: () => void;
 }
 
 const roles = ["アカウント管理", "書籍管理", "組織管理"];
 
-const AddUser = (props: Props) => {
+const UpdateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
-    name: "",
-    email: "",
+    name: props.user.name,
+    email: props.user.email,
     roles: [],
   });
   const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<Partial<CreateUserRequestErrors>>({});
@@ -70,8 +71,8 @@ const AddUser = (props: Props) => {
           enqueueSnackbar("ユーザーの登録に成功しました。", {
             variant: "success",
           });
-          props.success();
-          props.setClose();
+          props.onSuccess();
+          props.onClose();
         } else {
           setCreateUserRequestErrors(res.errors);
           enqueueSnackbar(`ユーザー登録に失敗しました`, {
@@ -89,7 +90,7 @@ const AddUser = (props: Props) => {
   };
 
   return (
-    <Dialog open={props.open} onClose={props.setClose} fullWidth>
+    <Dialog open={props.open} onClose={props.onClose} fullWidth>
       <DialogTitle>ユーザー追加</DialogTitle>
       <DialogContent>
         <TextField
@@ -140,11 +141,11 @@ const AddUser = (props: Props) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.setClose}>キャンセル</Button>
+        <Button onClick={props.onClose}>キャンセル</Button>
         <Button onClick={handleSubmit}>登録する</Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default AddUser;
+export default UpdateUser;

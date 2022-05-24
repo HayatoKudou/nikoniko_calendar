@@ -12,8 +12,16 @@ interface RegisterBookResult {
   errors: Partial<RegisterBookRequestErrors>;
 }
 
-const RegisterBook = async (clientId: string, payload: RegisterBook): Promise<RegisterBookResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/book/register`;
+interface RegisterBookRequestPayload {
+  categoryId: number | null;
+  title: string;
+  description: string;
+  image: any | null;
+  apiToken: string;
+}
+
+const RegisterBook = async (clientId: string, payload: RegisterBookRequestPayload): Promise<RegisterBookResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/book`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

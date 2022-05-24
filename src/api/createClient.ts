@@ -15,7 +15,7 @@ interface CreateClientResult {
 }
 
 const CreateClient = async (payload: CreateClientRequestPayload): Promise<CreateClientResult> => {
-  const endpoint = `${Config.apiOrigin}/api/createClient`;
+  const endpoint = `${Config.apiOrigin}/api/client`;
 
   const res = await fetch(endpoint, {
     method: "POST",

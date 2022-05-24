@@ -7,7 +7,7 @@ import { useMe } from "../../store/me";
 const useUsers = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
-  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/user/list`;
+  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/users`;
 
   const fetcher = (endpoint: string) =>
     fetch(endpoint, {
