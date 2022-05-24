@@ -24,8 +24,6 @@ interface Props {
   onClose: () => void;
 }
 
-const roles = ["アカウント管理", "書籍管理", "組織管理"];
-
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
@@ -88,6 +86,21 @@ const CreateUser = (props: Props) => {
       });
   };
 
+  const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
+  const displayRoleName = (roleValue: string) => {
+    switch(roleValue) {
+      case 'is_account_manager':
+        return "アカウント管理";
+      case 'is_book_manager':
+        return "書籍管理"
+      case 'is_client_manager':
+        return "組織管理";
+      default:
+        return "unknown";
+    }
+
+  }
+
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth>
       <DialogTitle>ユーザー追加</DialogTitle>
@@ -131,8 +144,8 @@ const CreateUser = (props: Props) => {
             )}
           >
             {roles.map((role, index: number) => (
-              <MenuItem key={index} value={role}>
-                {role}
+              <MenuItem key={index} value={displayRoleName(role)}>
+                {displayRoleName(role)}
               </MenuItem>
             ))}
           </Select>

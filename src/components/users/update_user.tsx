@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import CreateUser, { CreateUserRequestErrors } from "../../api/user/create";
+import Update, { UpdateUserRequestErrors, UpdateUserRequestPayload } from "../../api/user/update";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
 import Spinner from "../spinner";
@@ -25,18 +25,36 @@ interface Props {
   onClose: () => void;
 }
 
-const roles = ["アカウント管理", "書籍管理", "組織管理"];
-
 const UpdateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState({
-    name: props.user.name,
-    email: props.user.email,
+  const [formValues, setFormValues] = React.useState<UpdateUserRequestPayload>({
+    name: "",
+    email: "",
     roles: [],
+    apiToken: ""
   });
-  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<Partial<CreateUserRequestErrors>>({});
+  const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+
+  React.useEffect(() => {
+    const roles: Array<string>  = [];
+    if(props.user.role.is_account_manager){
+      roles.push("アカウント管理");
+    }
+    if(props.user.role.is_book_manager){
+      roles.push("書籍管理");
+    }
+    if(props.user.role.is_client_manager){
+      roles.push("組織管理");
+    }
+    setFormValues({
+      name: props.user.name,
+      email: props.user.email,
+      roles: roles,
+      apiToken: me.apiToken,
+    })
+  }, [props.open])
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -46,9 +64,7 @@ const UpdateUser = (props: Props) => {
   };
 
   const handleMultiSelectChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
+    const value = event.target.value;
     setFormValues({
       ...formValues,
       ["roles"]: typeof value === "string" ? value.split(",") : value,
@@ -59,22 +75,22 @@ const UpdateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    CreateUser(me.clientId, {
+    Update(me.clientId, {
       name: formValues.name,
       email: formValues.email,
       roles: formValues.roles,
-      apiToken: me.apiToken,
+      apiToken: formValues.apiToken,
     })
       .then((res) => {
         if (res.succeeded) {
-          setCreateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの登録に成功しました。", {
+          setUpdateUserRequestErrors({});
+          enqueueSnackbar("ユーザーの更新に成功しました。", {
             variant: "success",
           });
           props.onSuccess();
           props.onClose();
         } else {
-          setCreateUserRequestErrors(res.errors);
+          setUpdateUserRequestErrors(res.errors);
           enqueueSnackbar(`ユーザー登録に失敗しました`, {
             variant: "error",
           });
@@ -88,6 +104,21 @@ const UpdateUser = (props: Props) => {
         });
       });
   };
+
+  const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
+  const displayRoleName = (roleValue: string) => {
+    switch(roleValue) {
+      case 'is_account_manager':
+        return "アカウント管理";
+      case 'is_book_manager':
+        return "書籍管理"
+      case 'is_client_manager':
+        return "組織管理";
+      default:
+        return "unknown";
+    }
+
+  }
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth>
@@ -103,7 +134,7 @@ const UpdateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={createUserRequestErrors["name"]} />
+        <FormError errors={updateUserRequestErrors["name"]} />
         <TextField
           margin={"dense"}
           label="メールアドレス"
@@ -113,7 +144,7 @@ const UpdateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={createUserRequestErrors["email"]} />
+        <FormError errors={updateUserRequestErrors["email"]} />
 
         <FormControl sx={{ minWidth: 300, display: "block", marginTop: 1 }}>
           <InputLabel sx={{ left: "-15px" }}>ロール</InputLabel>
@@ -132,12 +163,12 @@ const UpdateUser = (props: Props) => {
             )}
           >
             {roles.map((role, index: number) => (
-              <MenuItem key={index} value={role}>
-                {role}
+              <MenuItem key={index} value={displayRoleName(role)}>
+                {displayRoleName(role)}
               </MenuItem>
             ))}
           </Select>
-          <FormError errors={createUserRequestErrors["roles"]} />
+          <FormError errors={updateUserRequestErrors["roles"]} />
         </FormControl>
       </DialogContent>
       <DialogActions>

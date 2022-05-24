@@ -1,25 +1,26 @@
 import Config from "../../../config";
 
-export interface EditUserRequestErrors {
+export interface UpdateUserRequestErrors {
   name: Array<string>;
   email: Array<string>;
   roles: Array<string>;
 }
 
-interface EditUserResult {
+interface UpdateUserResult {
   succeeded: boolean;
-  errors: Partial<EditUserRequestErrors>;
+  errors: Partial<UpdateUserRequestErrors>;
 }
 
-interface EditUserRequestPayload {
+export interface UpdateUserRequestPayload {
   name: string;
   email: string;
   roles: Array<string>;
   apiToken: string;
 }
 
-const Edit = async (clientId: string, payload: EditUserRequestPayload): Promise<EditUserResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/user/Edit`;
+const Update = async (clientId: string, payload: UpdateUserRequestPayload): Promise<UpdateUserResult> => {
+  console.log(payload)
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/user`;
   const res = await fetch(endpoint, {
     method: "PUT",
     headers: {
@@ -44,4 +45,4 @@ const Edit = async (clientId: string, payload: EditUserRequestPayload): Promise<
   };
 };
 
-export default Edit;
+export default Update;
