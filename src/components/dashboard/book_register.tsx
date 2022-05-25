@@ -1,5 +1,5 @@
 import { FormHelperText } from "@mui/material";
-import Box from "@mui/material/BOx";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -147,7 +147,7 @@ const BookRegister = (props: Props) => {
                 left: "15%",
               }}
             >
-              <Button variant="contained">Upload Image</Button>
+              <Button variant="contained" component="span">Upload Image</Button>
             </label>
           ) : (
             <label
@@ -179,6 +179,7 @@ const BookRegister = (props: Props) => {
             fullWidth
             variant="standard"
             margin={"dense"}
+            required
           />
           <FormError errors={registerBookRequestErrors["title"]} />
 

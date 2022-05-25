@@ -2,10 +2,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
@@ -97,7 +95,7 @@ const SignIn = () => {
             type="password"
             autoComplete="current-password"
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="パスワードを記録する" />
+          {/*<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="パスワードを記録する" />*/}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             ログイン
           </Button>

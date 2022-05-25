@@ -88,18 +88,17 @@ const CreateUser = (props: Props) => {
 
   const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
   const displayRoleName = (roleValue: string) => {
-    switch(roleValue) {
-      case 'is_account_manager':
+    switch (roleValue) {
+      case "is_account_manager":
         return "アカウント管理";
-      case 'is_book_manager':
-        return "書籍管理"
-      case 'is_client_manager':
+      case "is_book_manager":
+        return "書籍管理";
+      case "is_client_manager":
         return "組織管理";
       default:
         return "unknown";
     }
-
-  }
+  };
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth>

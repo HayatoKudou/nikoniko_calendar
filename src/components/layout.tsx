@@ -5,12 +5,14 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import useAuthenticatedAccount from "../api/me";
 import UserContext from "../context/userContext";
+import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
 import Spinner from "./spinner";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
+  const [me] = useRecoilState(useMe);
   const [colorMode] = useRecoilState(useColorMode);
   const [user, setUser] = useState<User | null>(null);
   const theme = createTheme({
@@ -20,13 +22,16 @@ const Layout = ({ children }: any) => {
   });
 
   const { loading, error, response } = useAuthenticatedAccount();
-  if (loading) return <Spinner />;
 
   const pathname = router.pathname;
   if (pathname !== "/signUp" && pathname !== "/signIn") {
+    if (loading) return <Spinner />;
     if (error) {
       router.push("/signIn");
       return <Spinner />;
+    }
+    if (me.clientId && pathname === "/") {
+      router.push(`/${me.clientId}/dashboard`);
     }
   }
 

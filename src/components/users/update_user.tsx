@@ -33,19 +33,19 @@ const UpdateUser = (props: Props) => {
     name: "",
     email: "",
     roles: [],
-    apiToken: ""
+    apiToken: "",
   });
   const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
 
   React.useEffect(() => {
-    const roles: Array<string>  = [];
-    if(props.user.role.is_account_manager){
+    const roles: Array<string> = [];
+    if (props.user.role.is_account_manager) {
       roles.push("アカウント管理");
     }
-    if(props.user.role.is_book_manager){
+    if (props.user.role.is_book_manager) {
       roles.push("書籍管理");
     }
-    if(props.user.role.is_client_manager){
+    if (props.user.role.is_client_manager) {
       roles.push("組織管理");
     }
     setFormValues({
@@ -53,8 +53,8 @@ const UpdateUser = (props: Props) => {
       email: props.user.email,
       roles: roles,
       apiToken: me.apiToken,
-    })
-  }, [props.open])
+    });
+  }, [props.open]);
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -107,18 +107,17 @@ const UpdateUser = (props: Props) => {
 
   const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
   const displayRoleName = (roleValue: string) => {
-    switch(roleValue) {
-      case 'is_account_manager':
+    switch (roleValue) {
+      case "is_account_manager":
         return "アカウント管理";
-      case 'is_book_manager':
-        return "書籍管理"
-      case 'is_client_manager':
+      case "is_book_manager":
+        return "書籍管理";
+      case "is_client_manager":
         return "組織管理";
       default:
         return "unknown";
     }
-
-  }
+  };
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth>

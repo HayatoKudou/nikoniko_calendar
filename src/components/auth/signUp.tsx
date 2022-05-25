@@ -14,9 +14,9 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import createClient, { CreateClientRequestErrors } from "../../api/createClient";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
 import { useClientInfo } from "../../store/clientInfo";
+import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
@@ -26,12 +26,10 @@ const steps = ["プラン選択", "チーム設定", "プロフィール設定"]
 const SignUp = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [clientInfo, setClientInfo] = useRecoilState(useClientInfo);
+  const [, setMe] = useRecoilState(useMe);
+  const [, setClientInfo] = useRecoilState(useClientInfo);
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
-  const [createClientRequestErrors, setCreateClientRequestErrors] = React.useState<Partial<CreateClientRequestErrors>>(
-    {}
-  );
   const [formValues, setFormValues] = React.useState({
     name: "",
     email: "",
@@ -49,44 +47,14 @@ const SignUp = () => {
     });
   };
 
-  const handleClientProfileSubmit = (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    createClient({
-      name: formValues.clientName,
-    })
-      .then((res) => {
-        setLoading(false);
-        if (res.succeeded) {
-          setCreateClientRequestErrors({});
-          enqueueSnackbar("組織の登録に成功しました。", {
-            variant: "success",
-          });
-          setActiveStep(activeStep + 1);
-          setClientInfo(res.client);
-        } else {
-          setCreateClientRequestErrors(res.errors);
-          enqueueSnackbar(`組織の登録に失敗しました`, {
-            variant: "error",
-          });
-        }
-      })
-      .catch(() => {
-        setLoading(false);
-        enqueueSnackbar(`組織の登録に失敗しました`, {
-          variant: "error",
-        });
-      });
-  };
-
   const handleProfileSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
     signUp({
-      client_id: clientInfo.id,
       name: formValues.name,
       email: formValues.email,
       password: formValues.password,
+      client_name: formValues.clientName,
     })
       .then((res) => {
         setLoading(false);
@@ -95,8 +63,13 @@ const SignUp = () => {
           enqueueSnackbar("登録に成功しました。", {
             variant: "success",
           });
-          router.push(`/${clientInfo.id}/dashboard`);
+          setMe(res.user);
+          setClientInfo(res.client);
+          router.push(`/${res.client!.id}/dashboard`);
         } else {
+          if (res.errors.client_name) {
+            setActiveStep(1);
+          }
           setSignUpRequestErrors(res.errors);
           enqueueSnackbar(`登録に失敗しました`, {
             variant: "error",
@@ -153,7 +126,7 @@ const SignUp = () => {
                     fullWidth
                     required
                   />
-                  <FormError errors={createClientRequestErrors["name"]} />
+                  <FormError errors={signUpRequestErrors["client_name"]} />
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
@@ -164,8 +137,12 @@ const SignUp = () => {
                 >
                   {"戻る"}
                 </Button>
-                <Button onClick={handleClientProfileSubmit} variant="contained" sx={{ float: "right", width: "120px" }}>
-                  {"登録"}
+                <Button
+                  onClick={() => setActiveStep(activeStep + 1)}
+                  variant="contained"
+                  sx={{ float: "right", width: "120px" }}
+                >
+                  {"次へ"}
                 </Button>
               </Box>
             </>
@@ -217,6 +194,13 @@ const SignUp = () => {
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
+                <Button
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  variant="contained"
+                  sx={{ float: "left", width: "120px" }}
+                >
+                  {"戻る"}
+                </Button>
                 <Button onClick={handleProfileSubmit} variant="contained" sx={{ float: "right", width: "120px" }}>
                   {"登録"}
                 </Button>

@@ -19,7 +19,7 @@ export interface UpdateUserRequestPayload {
 }
 
 const Update = async (clientId: string, payload: UpdateUserRequestPayload): Promise<UpdateUserResult> => {
-  console.log(payload)
+  console.log(payload);
   const endpoint = `${Config.apiOrigin}/api/${clientId}/user`;
   const res = await fetch(endpoint, {
     method: "PUT",

@@ -1,20 +1,23 @@
 import Config from "../../config";
 
 interface SignUpRequestPayload {
-  client_id: number;
   name: string;
   email: string;
   password: string;
+  client_name: string;
 }
 
 export interface SignUpRequestErrors {
   name: Array<string>;
   email: Array<string>;
   password: Array<string>;
+  client_name: Array<string>;
 }
 
 interface SignUpResult {
   succeeded: boolean;
+  client: Client | null;
+  user: User | null;
   errors: Partial<SignUpRequestErrors>;
 }
 
@@ -27,6 +30,7 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
     body: JSON.stringify(payload),
   });
   const response = await res.json();
+  console.log(response);
 
   if (!res.ok) {
     if (500 <= res.status) {
@@ -35,12 +39,16 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
 
     return {
       succeeded: false,
+      client: null,
+      user: null,
       errors: response.errors,
     };
   }
 
   return {
     succeeded: true,
+    client: response.client,
+    user: response.me,
     errors: {},
   };
 };

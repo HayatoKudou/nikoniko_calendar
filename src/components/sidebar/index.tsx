@@ -89,6 +89,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
+  const pathname = router.pathname;
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -119,12 +120,16 @@ export default function Sidebar(props: { children: any }) {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Read Worth
           </Typography>
-          <Button color="inherit" onClick={() => router.push("/signUp")}>
-            新規登録
-          </Button>
-          <Button color="inherit" onClick={() => router.push("/signIn")}>
-            ログイン
-          </Button>
+          {(pathname === "/signUp" || pathname === "/signIn") && (
+            <>
+              <Button color="inherit" onClick={() => router.push("/signUp")}>
+                新規登録
+              </Button>
+              <Button color="inherit" onClick={() => router.push("/signIn")}>
+                ログイン
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

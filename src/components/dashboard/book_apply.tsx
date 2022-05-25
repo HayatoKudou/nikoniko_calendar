@@ -1,4 +1,4 @@
-import Box from "@mui/material/BOx";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -82,7 +82,7 @@ const BookApply = (props: Props) => {
               left: "13%",
             }}
           >
-            <Button variant="contained" color="primary" component="span">
+            <Button variant="contained" component="span">
               Upload Image
             </Button>
           </label>
