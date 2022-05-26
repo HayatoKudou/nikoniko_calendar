@@ -12,13 +12,17 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import Config from "../../../config";
+import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import useBooks from "../../api/book/list";
+import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
+import FormError from "../form_error";
 import Spinner from "../spinner";
 import BookApply from "./book_apply";
 import BookInfo from "./book_info";
@@ -53,28 +57,38 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 const Dashboard = () => {
   const [imageSize] = useRecoilState(useImageSize);
   const [bookCardStyle] = useRecoilState(useBookCardStyle);
+  const [, setBookCategory] = useRecoilState(useBookCategories);
   const [me] = useRecoilState(useMe);
   const [value, setValue] = React.useState(0);
+  const { enqueueSnackbar } = useSnackbar();
+  const [creating, setCreating] = React.useState(false);
   const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState(false);
-  const [formOpen, setFormOpen] = React.useState(false);
-  const [formValue, setFormValue] = React.useState("");
+  const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
+  const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
+  const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>(
+    {}
+  );
   const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
 
   const { loading, error, response, mutate } = useBooks();
-  if (loading) return <Spinner />;
+  React.useEffect(() => {
+    if (response) {
+      const bookCategories = [{ label: "ALL" }];
+      response.bookCategories.map((bookCategory: BookCategory) => {
+        bookCategories.push({ label: bookCategory.name });
+      });
+      setBookCategory(response.bookCategories);
+      setTabList(bookCategories);
+    }
+  }, [response, creating]);
+
+  if (loading || creating) return <Spinner />;
   if (error) {
     return <Spinner />;
   }
@@ -87,10 +101,36 @@ const Dashboard = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    tabList.push({ label: formValue });
-    setTabList(tabList);
-    setFormOpen(false);
-    setFormValue("");
+
+    setCreating(true);
+    CreateBookCategory(me.clientId, {
+      name: bookCategoryFormValue,
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        if (res.succeeded) {
+          setBookCategoryFormError({});
+          enqueueSnackbar("カテゴリの登録に成功しました。", {
+            variant: "success",
+          });
+          tabList.push({ label: bookCategoryFormValue });
+          setTabList(tabList);
+          setBookCategoryFormOpen(false);
+          setBookCategoryFormValue("");
+        } else {
+          setBookCategoryFormError(res.errors);
+          enqueueSnackbar(`カテゴリの登録に失敗しました`, {
+            variant: "error",
+          });
+        }
+        setCreating(false);
+      })
+      .catch(() => {
+        enqueueSnackbar(`カテゴリの登録に失敗しました`, {
+          variant: "error",
+        });
+        setCreating(false);
+      });
   };
 
   const handleClickBook = (book: Book) => {
@@ -116,17 +156,22 @@ const Dashboard = () => {
         書籍登録
       </Button>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs value={value} onChange={handleChange}>
           {tabList.map((tab, index) => (
-            <Tab label={tab.label} {...a11yProps(index)} key={index} />
+            <Tab label={tab.label} key={index} />
           ))}
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={() => setFormOpen(!formOpen)}>
-              {formOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
+            <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
+              {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
             </IconButton>
-            {formOpen && (
+            {bookCategoryFormOpen && (
               <form onSubmit={handleSubmit}>
-                <TextField value={formValue} onChange={(e) => setFormValue(e.target.value)} size="small" />
+                <TextField
+                  value={bookCategoryFormValue}
+                  onChange={(e) => setBookCategoryFormValue(e.target.value)}
+                  size="small"
+                />
+                <FormError errors={bookCategoryFormError["name"]} />
               </form>
             )}
           </Box>

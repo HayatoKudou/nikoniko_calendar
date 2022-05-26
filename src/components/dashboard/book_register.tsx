@@ -15,6 +15,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/register";
+import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
 import Spinner from "../spinner";
@@ -28,6 +29,7 @@ interface Props {
 const BookRegister = (props: Props) => {
   const [me] = useRecoilState(useMe);
   const { enqueueSnackbar } = useSnackbar();
+  const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>(
     {}
@@ -147,7 +149,9 @@ const BookRegister = (props: Props) => {
                 left: "15%",
               }}
             >
-              <Button variant="contained" component="span">Upload Image</Button>
+              <Button variant="contained" component="span">
+                Upload Image
+              </Button>
             </label>
           ) : (
             <label
@@ -167,7 +171,9 @@ const BookRegister = (props: Props) => {
           <FormControl fullWidth margin={"dense"}>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.categoryId} name="role" label="role" variant="standard">
-              <MenuItem>unknown</MenuItem>
+              {bookCategories.map((bookCategory: BookCategory, index: number) => (
+                <MenuItem key={index}>{bookCategory.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           <TextField

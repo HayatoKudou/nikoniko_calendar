@@ -20,3 +20,7 @@ interface Book {
   description: string;
   image: any | null;
 }
+
+interface BookCategory {
+  name: string;
+}
