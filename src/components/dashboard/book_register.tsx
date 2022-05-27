@@ -36,7 +36,7 @@ const BookRegister = (props: Props) => {
   );
   const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
-    categoryId: 0,
+    bookCategoryName: "",
     title: "",
     description: "",
     url: "",
@@ -62,7 +62,7 @@ const BookRegister = (props: Props) => {
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
     register(me.clientId, {
-      categoryId: formValues.categoryId,
+      bookCategoryName: formValues.bookCategoryName,
       title: title,
       description: formValues.description,
       image: image,
@@ -86,6 +86,7 @@ const BookRegister = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
+        setRegisterBookRequestErrors({});
         enqueueSnackbar(`書籍の登録に失敗しました`, {
           variant: "error",
         });
@@ -132,7 +133,7 @@ const BookRegister = (props: Props) => {
       <DialogTitle>書籍登録</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }} />
+          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }}  alt={imageUrl}/>
           <input
             accept="image/*"
             type="file"
@@ -168,14 +169,16 @@ const BookRegister = (props: Props) => {
           )}
         </Box>
         <Box sx={{ width: "55%" }}>
-          <FormControl fullWidth margin={"dense"}>
+          <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select onChange={handleChange} value={formValues.categoryId} name="role" label="role" variant="standard">
+            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
               {bookCategories.map((bookCategory: BookCategory, index: number) => (
-                <MenuItem key={index}>{bookCategory.name}</MenuItem>
+                <MenuItem key={index} value={bookCategory.name}>{bookCategory.name}</MenuItem>
               ))}
+              <MenuItem value={"Unknown"}>{"Unknown"}</MenuItem>
             </Select>
           </FormControl>
+          <FormError errors={registerBookRequestErrors["bookCategoryName"]} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}

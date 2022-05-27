@@ -1,7 +1,7 @@
 import Config from "../../../config";
 
 export interface RegisterBookRequestErrors {
-  categoryId: Array<string>;
+  bookCategoryName: Array<string>;
   title: Array<string>;
   description: Array<string>;
 }
@@ -13,7 +13,7 @@ interface RegisterBookResult {
 }
 
 interface RegisterBookRequestPayload {
-  categoryId: number | null;
+  bookCategoryName: string;
   title: string;
   description: string;
   image: any | null;
