@@ -122,7 +122,7 @@ const BookRegister = (props: Props) => {
           setSelectedImage(blob);
           setImageUrl(URL.createObjectURL(blob));
         })
-        .catch((e) => {
+        .catch(() => {
           setLoading(false);
         });
     }
@@ -133,7 +133,7 @@ const BookRegister = (props: Props) => {
       <DialogTitle>書籍登録</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }}  alt={imageUrl}/>
+          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }} alt={imageUrl} />
           <input
             accept="image/*"
             type="file"
@@ -171,11 +171,18 @@ const BookRegister = (props: Props) => {
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
+            <Select
+              onChange={handleChange}
+              value={formValues.bookCategoryName}
+              name="bookCategoryName"
+              label="role"
+              variant="standard"
+            >
               {bookCategories.map((bookCategory: BookCategory, index: number) => (
-                <MenuItem key={index} value={bookCategory.name}>{bookCategory.name}</MenuItem>
+                <MenuItem key={index} value={bookCategory.name}>
+                  {bookCategory.name}
+                </MenuItem>
               ))}
-              <MenuItem value={"Unknown"}>{"Unknown"}</MenuItem>
             </Select>
           </FormControl>
           <FormError errors={registerBookRequestErrors["bookCategoryName"]} />

@@ -1,4 +1,5 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CircleIcon from "@mui/icons-material/Circle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +23,7 @@ import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
+import { bookStatusColor, bookStatusName } from "../../util/book";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 import BookApply from "./book_apply";
@@ -31,8 +33,8 @@ import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: number;
-  value: number;
+  index: string;
+  value: string;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -58,12 +60,13 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const Dashboard = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [imageSize] = useRecoilState(useImageSize);
   const [bookCardStyle] = useRecoilState(useBookCardStyle);
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [me] = useRecoilState(useMe);
-  const [value, setValue] = React.useState(0);
-  const { enqueueSnackbar } = useSnackbar();
+  const [tabList, setTabList] = React.useState<Array<{ label: string }>>([]);
+  const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState(false);
   const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
@@ -73,15 +76,13 @@ const Dashboard = () => {
   const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>(
     {}
   );
-  const [tabList, setTabList] = React.useState([{ label: "ALL" }]);
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
 
   const { loading, error, response, mutate } = useBooks();
   React.useEffect(() => {
     if (response) {
-      const bookCategories = [{ label: "ALL" }];
-      response.bookCategories.map((bookCategory: BookCategory) => {
-        bookCategories.push({ label: bookCategory.name });
+      const bookCategories = response.bookCategories.map((bookCategory: BookCategory) => {
+        return { label: bookCategory.name };
       });
       setBookCategory(response.bookCategories);
       setTabList(bookCategories);
@@ -93,15 +94,20 @@ const Dashboard = () => {
     return <Spinner />;
   }
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     if (newValue !== undefined) {
-      setValue(newValue);
+      setOpenTabValue(newValue);
     }
+  };
+
+  const bookCategoryFiltered = (): Array<any> => {
+    console.log(response.books);
+    return response.books;
+    // return response.books.filter((book: Book) => book.category == openTabValue);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     setCreating(true);
     CreateBookCategory(me.clientId, {
       name: bookCategoryFormValue,
@@ -156,9 +162,9 @@ const Dashboard = () => {
         書籍登録
       </Button>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs value={openTabValue} onChange={handleTabChange}>
           {tabList.map((tab, index) => (
-            <Tab label={tab.label} key={index} />
+            <Tab label={tab.label} key={index} value={tab.label} />
           ))}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
@@ -179,8 +185,8 @@ const Dashboard = () => {
       </Box>
 
       {tabList.map((tab, index) => (
-        <TabPanel value={value} index={index} key={index}>
-          {response.books.map((book: Book, index: number) => {
+        <TabPanel value={openTabValue} index={tab.label} key={index}>
+          {bookCategoryFiltered().map((book: Book, index: number) => {
             return (
               <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
                 <CardActionArea onClick={() => handleClickBook(book)}>
@@ -210,7 +216,8 @@ const Dashboard = () => {
                   )}
                 </CardActionArea>
                 <CardActions>
-                  <Button size="small">Share</Button>
+                  <Button size="small">{bookStatusName(book.status)}</Button>
+                  <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} sx={{ marginLeft: "auto" }} />
                 </CardActions>
               </Card>
             );
