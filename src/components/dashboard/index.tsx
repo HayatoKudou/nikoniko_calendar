@@ -26,7 +26,7 @@ import { useImageSize } from "../../store/styles/image_size";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import FormError from "../form_error";
 import Spinner from "../spinner";
-import BookApply from "./book_apply";
+import BookApplication from "./book_application";
 import BookInfo from "./book_info";
 import BookRegister from "./book_register";
 import StyleSetting from "./style_setting";
@@ -68,7 +68,7 @@ const Dashboard = () => {
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState(false);
-  const [applyDialogOpen, setApplyDialogOpen] = React.useState(false);
+  const [applicationDialogOpen, setApplicationDialogOpen] = React.useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
@@ -87,7 +87,7 @@ const Dashboard = () => {
       setBookCategory(response.bookCategories);
       setTabList(bookCategories);
     }
-  }, [response, creating]);
+  }, [response]);
 
   if (loading || creating) return <Spinner />;
   if (error) {
@@ -101,9 +101,12 @@ const Dashboard = () => {
   };
 
   const bookCategoryFiltered = (): Array<any> => {
-    console.log(response.books);
-    return response.books;
-    // return response.books.filter((book: Book) => book.category == openTabValue);
+    if (openTabValue === "ALL") {
+      return response.books;
+    }
+    return response.books.filter((book: Book) => {
+      return book.category === openTabValue;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -119,8 +122,14 @@ const Dashboard = () => {
           enqueueSnackbar("カテゴリの登録に成功しました。", {
             variant: "success",
           });
-          tabList.push({ label: bookCategoryFormValue });
-          setTabList(tabList);
+
+          if (res.bookCategories) {
+            const bookCategories = res.bookCategories.map((bookCategory: BookCategory) => {
+              return { label: bookCategory.name };
+            });
+            setBookCategory(res.bookCategories);
+            setTabList(bookCategories);
+          }
           setBookCategoryFormOpen(false);
           setBookCategoryFormValue("");
         } else {
@@ -148,21 +157,25 @@ const Dashboard = () => {
     <>
       <StyleSetting />
       <BookInfo open={bookInfoDialogOpen} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
-      <BookApply open={applyDialogOpen} setClose={() => setApplyDialogOpen(false)} />
+      <BookApplication
+        open={applicationDialogOpen}
+        setClose={() => setApplicationDialogOpen(false)}
+        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
+      />
       <BookRegister
         open={registerDialogOpen}
         setClose={() => setRegisterDialogOpen(false)}
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
       />
 
-      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplyDialogOpen(true)}>
+      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>
         書籍申請
       </Button>
       <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
         書籍登録
       </Button>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={openTabValue} onChange={handleTabChange}>
+        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}

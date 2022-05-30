@@ -30,7 +30,6 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
     body: JSON.stringify(payload),
   });
   const response = await res.json();
-  console.log(response);
 
   if (!res.ok) {
     if (500 <= res.status) {

@@ -6,6 +6,7 @@ export interface CreateBookCategoryRequestErrors {
 
 interface CreateBookCategoryResult {
   succeeded: boolean;
+  bookCategories: Array<{ name: string }> | null;
   errors: Partial<CreateBookCategoryRequestErrors>;
 }
 
@@ -33,12 +34,14 @@ const CreateBookCategory = async (
   if (!res.ok) {
     return {
       succeeded: false,
+      bookCategories: null,
       errors: response.errors,
     };
   }
 
   return {
     succeeded: true,
+    bookCategories: response.bookCategories,
     errors: {},
   };
 };
