@@ -65,7 +65,7 @@ const Dashboard = () => {
   const [bookCardStyle] = useRecoilState(useBookCardStyle);
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [me] = useRecoilState(useMe);
-  const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{label: "ALL"}]);
+  const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState(false);
   const [applicationDialogOpen, setApplicationDialogOpen] = React.useState(false);

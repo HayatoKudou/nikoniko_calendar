@@ -39,15 +39,9 @@ const UpdateUser = (props: Props) => {
 
   React.useEffect(() => {
     const roles: Array<string> = [];
-    if (props.user.role.is_account_manager) {
-      roles.push("アカウント管理");
-    }
-    if (props.user.role.is_book_manager) {
-      roles.push("書籍管理");
-    }
-    if (props.user.role.is_client_manager) {
-      roles.push("組織管理");
-    }
+    if (props.user.role.is_account_manager) roles.push("アカウント管理");
+    if (props.user.role.is_book_manager) roles.push("書籍管理");
+    if (props.user.role.is_client_manager) roles.push("組織管理");
     setFormValues({
       name: props.user.name,
       email: props.user.email,
