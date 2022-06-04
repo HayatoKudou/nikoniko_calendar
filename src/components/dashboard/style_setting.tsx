@@ -21,7 +21,7 @@ const StyleSetting = () => {
   const handleImageSizeSlider = (e: any) => {
     const value = e.target.value;
     const size = {
-      height: value * 1.25 * 10,
+      height: value * 1.5 * 10,
       width: value * 10,
     };
     setImageSize(size);
