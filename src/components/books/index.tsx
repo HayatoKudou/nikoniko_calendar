@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import Config from "../../../config";
@@ -35,6 +36,9 @@ const Books = () => {
 
   return (
     <>
+      <Box sx={{ display: "flex", alignItems: "center", height: "80px" }}>
+        <Typography variant="h4">書籍管理</Typography>
+      </Box>
       {selectBook && (
         <Update
           book={selectBook}

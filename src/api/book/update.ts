@@ -13,6 +13,7 @@ interface UpdateBookResult {
 }
 
 export interface UpdateBookRequestPayload {
+  id: number;
   category: string;
   status: number;
   title: string;

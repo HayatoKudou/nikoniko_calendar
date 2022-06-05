@@ -16,6 +16,7 @@ interface Client {
 }
 
 interface Book {
+  id: number;
   category: string;
   status: number;
   title: string;

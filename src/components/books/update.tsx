@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 import UpdateBook, { UpdateBookRequestErrors, UpdateBookRequestPayload } from "../../api/book/update";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
+import ImageForm from "../image_form";
 import Spinner from "../spinner";
 
 interface Props {
@@ -24,8 +25,9 @@ const Update = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
-  const [imageUrl, setImageUrl] = React.useState<string>("/no_image.png");
+  const [selectedImage, setSelectedImage] = React.useState(props.book.image);
   const [formValues, setFormValues] = React.useState<UpdateBookRequestPayload>({
+    id: 0,
     category: "",
     status: 0,
     title: "",
@@ -37,13 +39,15 @@ const Update = (props: Props) => {
 
   React.useEffect(() => {
     setFormValues({
+      id: props.book.id,
       category: props.book.category,
       status: props.book.status,
       title: props.book.title,
-      description: props.book.description,
+      description: props.book.description || "",
       image: props.book.image,
       apiToken: me.apiToken,
     });
+    setSelectedImage(props.book.image);
   }, [props.open]);
 
   const handleChange = (e: any) => {
@@ -55,14 +59,15 @@ const Update = (props: Props) => {
 
   if (loading) return <Spinner />;
 
-  const handleSubmit = () => {
+  const handleUpdate = (image: string | ArrayBuffer | null) => {
     setLoading(true);
     UpdateBook(me.clientId, {
+      id: formValues.id,
       category: formValues.category,
       status: formValues.status,
       title: formValues.title,
       description: formValues.description,
-      image: formValues.image,
+      image: image,
       apiToken: formValues.apiToken,
     })
       .then((res) => {
@@ -89,10 +94,16 @@ const Update = (props: Props) => {
       });
   };
 
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-    if (e.target.files) {
-      setImageUrl(URL.createObjectURL(e.target.files[0]));
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedImage);
+      reader.onload = function () {
+        handleUpdate(reader.result);
+      };
+    } else {
+      handleUpdate(null);
     }
   };
 
@@ -101,27 +112,7 @@ const Update = (props: Props) => {
       <DialogTitle>書籍編集</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }} alt={imageUrl} />
-          <input
-            accept="image/*"
-            type="file"
-            id="select-image"
-            style={{ display: "none" }}
-            onChange={handleChangeImage}
-          />
-          {imageUrl === "/no_image.png" ? (
-            <label htmlFor="select-image" style={{ position: "absolute", bottom: "5%", left: "15%" }}>
-              <Button variant="contained" component="span">
-                Upload Image
-              </Button>
-            </label>
-          ) : (
-            <label style={{ position: "absolute", bottom: "5%", left: "15%" }}>
-              <Button variant="contained" onClick={() => setImageUrl("/no_image.png")}>
-                Delete Image
-              </Button>
-            </label>
-          )}
+          <ImageForm selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
         </Box>
         <Box sx={{ width: "55%" }}>
           <TextField
@@ -138,7 +129,7 @@ const Update = (props: Props) => {
           <TextField
             margin={"dense"}
             label="説明"
-            name="email"
+            name="description"
             value={formValues.description}
             onChange={handleChange}
             fullWidth
