@@ -108,6 +108,12 @@ const BookApplication = (props: Props) => {
     }
   };
 
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageUrl(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
   const fetchBookImage = () => {
     if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
       const decodedUrl = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/);
@@ -139,29 +145,16 @@ const BookApplication = (props: Props) => {
             type="file"
             id="select-image"
             style={{ display: "none" }}
-            onChange={(e) => setSelectedImage(e.target.files ? e.target.files[0] : null)}
+            onChange={handleChangeImage}
           />
           {imageUrl === "/no_image.png" ? (
-            <label
-              htmlFor="select-image"
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                left: "15%",
-              }}
-            >
+            <label htmlFor="select-image" style={{ position: "absolute", bottom: "5%", left: "15%" }}>
               <Button variant="contained" component="span">
                 Upload Image
               </Button>
             </label>
           ) : (
-            <label
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                left: "15%",
-              }}
-            >
+            <label style={{ position: "absolute", bottom: "5%", left: "15%" }}>
               <Button variant="contained" onClick={() => setImageUrl("/no_image.png")}>
                 Delete Image
               </Button>

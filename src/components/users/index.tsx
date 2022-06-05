@@ -75,9 +75,7 @@ const Users = () => {
                     <ModeEditIcon />
                   </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
-                  {user.name}
-                </TableCell>
+                <TableCell>{user.name}</TableCell>
                 <TableCell align="right">{user.email}</TableCell>
                 <TableCell align="center">
                   {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}

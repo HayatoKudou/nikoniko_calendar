@@ -1,5 +1,6 @@
+import CircleIcon from "@mui/icons-material/Circle";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -9,49 +10,71 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import * as React from "react";
-import useUsers from "../../api/user/list";
+import { useRecoilState } from "recoil";
+import Config from "../../../config";
+import useBooks from "../../api/book/list";
+import { useMe } from "../../store/me";
+import { bookStatusColor, bookStatusName } from "../../util/book";
+import Update from "../books/update";
 import Spinner from "../spinner";
 
-const Users = () => {
-  const { loading, error, response, mutate } = useUsers();
+const Books = () => {
+  const [me] = useRecoilState(useMe);
+  const [selectBook, setSelectBook] = React.useState<Book>();
+  const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
+  const { loading, error, response, mutate } = useBooks();
   if (loading) return <Spinner />;
   if (error) {
     return <Spinner />;
   }
 
-  const handleEditUser = (user: User) => {
-    console.log("handleEditUser");
+  const handleEditBook = (book: Book) => {
+    setSelectBook(book);
+    setUpdateDialogOpen(true);
   };
 
   return (
     <>
+      {selectBook && (
+        <Update
+          book={selectBook}
+          open={updateDialogOpen}
+          onClose={() => setUpdateDialogOpen(false)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+        />
+      )}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>名前</TableCell>
-              <TableCell align="right">メールアドレス</TableCell>
-              <TableCell align="center">ロール</TableCell>
+              <TableCell>ステータス</TableCell>
+              <TableCell align="right">カテゴリ</TableCell>
+              <TableCell align="center" sx={{ width: "30%" }}>
+                タイトル
+              </TableCell>
+              <TableCell align="center" sx={{ width: "40%" }}>
+                説明
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {response.users?.map((user: User, index: number) => (
+            {response.books?.map((book: Book, index: number) => (
               <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell>
-                  <IconButton onClick={() => handleEditUser(user)}>
+                  <IconButton onClick={() => handleEditBook(book)}>
                     <ModeEditIcon />
                   </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
-                  {user.name}
+                <TableCell>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
+                    {bookStatusName(book.status)}
+                  </Box>
                 </TableCell>
-                <TableCell align="right">{user.email}</TableCell>
-                <TableCell align="center">
-                  {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
-                  {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
-                  {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
-                </TableCell>
+                <TableCell align="left">{book.category}</TableCell>
+                <TableCell align="left">{book.title}</TableCell>
+                <TableCell align="left">{book.description}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -61,4 +84,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Books;

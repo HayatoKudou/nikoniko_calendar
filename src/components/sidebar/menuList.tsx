@@ -1,6 +1,7 @@
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import List from "@mui/material/List";
@@ -22,21 +23,24 @@ const MenuListIcon = (props: { name: string }) => {
     setColorMode(colorMode === "light" ? "dark" : "light");
   };
 
-  return props.name === "dashboard" ? (
-    <DashboardIcon />
-  ) : props.name === "users" ? (
-    <PeopleIcon />
-  ) : props.name === "profile" ? (
-    <ManageAccountsIcon />
-  ) : props.name === "paletteMode" ? (
-    theme.palette.mode === "dark" ? (
-      <Brightness7Icon onClick={handleColorMode} />
-    ) : (
-      <Brightness4Icon onClick={handleColorMode} />
-    )
-  ) : (
-    <></>
-  );
+  switch (props.name) {
+    case "dashboard":
+      return <DashboardIcon />;
+    case "books":
+      return <LibraryBooksIcon />;
+    case "users":
+      return <PeopleIcon />;
+    case "profile":
+      return <ManageAccountsIcon />;
+    case "paletteMode":
+      if (theme.palette.mode === "dark") {
+        return <Brightness7Icon onClick={handleColorMode} />;
+      } else {
+        return <Brightness4Icon onClick={handleColorMode} />;
+      }
+    default:
+      return <></>;
+  }
 };
 
 const MenuList = (props: { open: boolean }) => {
@@ -61,9 +65,11 @@ const MenuList = (props: { open: boolean }) => {
 
   let menuList = [];
 
+  // 認証しているかで項目を変更
   if (me) {
     menuList = [
       { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
+      { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
       { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
       { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
       { name: "paletteMode", title: name, path: null },
