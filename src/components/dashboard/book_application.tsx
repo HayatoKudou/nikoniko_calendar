@@ -18,6 +18,7 @@ import CreateBookApplication, { BookApplicationRequestErrors } from "../../api/b
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
+import ImageForm from "../image_form";
 import Spinner from "../spinner";
 
 interface Props {
@@ -42,14 +43,7 @@ const BookApplication = (props: Props) => {
     url: "",
     reason: "",
   });
-  const [selectedImage, setSelectedImage] = React.useState<File | Blob | null>(null);
-  const [imageUrl, setImageUrl] = React.useState<string>("/no_image.png");
-
-  React.useEffect(() => {
-    if (selectedImage) {
-      setImageUrl(URL.createObjectURL(selectedImage));
-    }
-  }, [selectedImage]);
+  const [selectedImage, setSelectedImage] = React.useState<Blob | null>(null);
 
   if (loading) return <Spinner />;
 
@@ -108,12 +102,6 @@ const BookApplication = (props: Props) => {
     }
   };
 
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImageUrl(URL.createObjectURL(e.target.files[0]));
-    }
-  };
-
   const fetchBookImage = () => {
     if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
       const decodedUrl = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/);
@@ -126,7 +114,6 @@ const BookApplication = (props: Props) => {
       AmazonImage(dp)
         .then((blob) => {
           setSelectedImage(blob);
-          setImageUrl(URL.createObjectURL(blob));
         })
         .catch(() => {
           setLoading(false);
@@ -139,27 +126,7 @@ const BookApplication = (props: Props) => {
       <DialogTitle>書籍申請</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
-          <img src={imageUrl} style={{ maxHeight: "300px", maxWidth: "250px", marginBottom: "10px" }} alt={imageUrl} />
-          <input
-            accept="image/*"
-            type="file"
-            id="select-image"
-            style={{ display: "none" }}
-            onChange={handleChangeImage}
-          />
-          {imageUrl === "/no_image.png" ? (
-            <label htmlFor="select-image" style={{ position: "absolute", bottom: "5%", left: "15%" }}>
-              <Button variant="contained" component="span">
-                Upload Image
-              </Button>
-            </label>
-          ) : (
-            <label style={{ position: "absolute", bottom: "5%", left: "15%" }}>
-              <Button variant="contained" onClick={() => setImageUrl("/no_image.png")}>
-                Delete Image
-              </Button>
-            </label>
-          )}
+          <ImageForm selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
         </Box>
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>

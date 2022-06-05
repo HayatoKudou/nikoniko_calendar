@@ -1,5 +1,6 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CircleIcon from "@mui/icons-material/Circle";
+import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -203,11 +204,19 @@ const Dashboard = () => {
             return (
               <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
                 <CardActionArea onClick={() => handleClickBook(book)}>
-                  <CardMedia
-                    component="img"
-                    height={imageSize.height}
-                    src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
-                  />
+                  {book.image ? (
+                    <CardMedia
+                      component="img"
+                      height={imageSize.height}
+                      src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
+                    />
+                  ) : (
+                    <Box
+                      sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}
+                    >
+                      <ImageNotSupportedIcon fontSize="large" />
+                    </Box>
+                  )}
                   {bookCardStyle === "rich" && (
                     <CardContent>
                       <Typography gutterBottom variant="h6">

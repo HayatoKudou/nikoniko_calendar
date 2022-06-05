@@ -44,7 +44,7 @@ const ImageForm = (props: Props) => {
         </>
       ) : (
         <>
-          <ImageNotSupportedIcon />
+          <ImageNotSupportedIcon fontSize="large" />
           <label htmlFor="select-image" style={{ position: "absolute", bottom: "5%", left: "15%" }}>
             <Button variant="contained" component="span">
               Upload Image

@@ -27,7 +27,7 @@ const Update = async (clientId: string, payload: UpdateBookRequestPayload): Prom
   const res = await fetch(endpoint, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       Accept: "application/json",
       Authorization: `Bearer ${payload.apiToken}`,
     },

@@ -25,7 +25,7 @@ const Update = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState(props.book.image);
+  const [selectedImage, setSelectedImage] = React.useState<Blob | null>(props.book.image);
   const [formValues, setFormValues] = React.useState<UpdateBookRequestPayload>({
     id: 0,
     category: "",
