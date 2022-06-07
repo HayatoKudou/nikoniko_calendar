@@ -4,8 +4,20 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
+import {useRouter} from "next/router";
+import {useResetRecoilState} from "recoil";
+import {useMe} from "../../store/me";
+import {useClientInfo} from "../../store/clientInfo";
 
 const MenuList2 = (props: { open: boolean }) => {
+  const router = useRouter();
+  const resetMe = useResetRecoilState(useMe);
+  const resetClientInfo = useResetRecoilState(useClientInfo);
+  const logout = () => {
+    resetMe();
+    resetClientInfo();
+    router.push('/signIn');
+  }
   return (
     <List>
       <ListItemButton
@@ -16,6 +28,7 @@ const MenuList2 = (props: { open: boolean }) => {
         }}
       >
         <ListItemIcon
+          onClick={logout}
           sx={{
             minWidth: 0,
             mr: props.open ? 3 : "auto",
