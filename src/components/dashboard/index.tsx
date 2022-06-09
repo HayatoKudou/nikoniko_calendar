@@ -89,6 +89,7 @@ const Dashboard = () => {
       setTabList(bookCategories);
     }
   }, [response]);
+  console.log(response);
 
   if (loading || creating) return <Spinner />;
   if (error) {
@@ -149,7 +150,7 @@ const Dashboard = () => {
       });
   };
 
-  const handleClickBook = (book: Book) => {
+  const handleDetailBook = (book: Book) => {
     setSelectedBook(book);
     setBookInfoDialogOpen(true);
   };
@@ -203,7 +204,7 @@ const Dashboard = () => {
           {bookCategoryFiltered().map((book: Book, index: number) => {
             return (
               <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
-                <CardActionArea onClick={() => handleClickBook(book)}>
+                <CardActionArea onClick={() => handleDetailBook(book)}>
                   {book.image ? (
                     <CardMedia
                       component="img"

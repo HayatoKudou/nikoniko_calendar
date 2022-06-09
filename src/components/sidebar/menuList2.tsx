@@ -3,11 +3,11 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { useRouter } from "next/router";
 import * as React from "react";
-import {useRouter} from "next/router";
-import {useResetRecoilState} from "recoil";
-import {useMe} from "../../store/me";
-import {useClientInfo} from "../../store/clientInfo";
+import { useResetRecoilState } from "recoil";
+import { useClientInfo } from "../../store/clientInfo";
+import { useMe } from "../../store/me";
 
 const MenuList2 = (props: { open: boolean }) => {
   const router = useRouter();
@@ -16,8 +16,8 @@ const MenuList2 = (props: { open: boolean }) => {
   const logout = () => {
     resetMe();
     resetClientInfo();
-    router.push('/signIn');
-  }
+    router.push("/signIn");
+  };
   return (
     <List>
       <ListItemButton

@@ -22,6 +22,7 @@ interface Book {
   title: string;
   description: string;
   image: any | null;
+  applicant: User;
 }
 
 interface BookCategory {

@@ -10,7 +10,11 @@ const useAuthenticatedAccount = () => {
     endpoint,
     (url: string) =>
       fetch(url, {
-        headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}`, "Access-Control-Allow-Origin": "*" },
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${me.apiToken}`,
+          "Access-Control-Allow-Origin": "*",
+        },
       }).then(async (res) => {
         if (!res.ok) {
           const body = await res.text();
