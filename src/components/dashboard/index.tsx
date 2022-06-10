@@ -27,8 +27,8 @@ import { useImageSize } from "../../store/styles/image_size";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import FormError from "../form_error";
 import Spinner from "../spinner";
-import BookApplication from "./book_application";
 import BookInfo from "./book_info";
+import BookApply from "./book_purchase_apply";
 import BookRegister from "./book_register";
 import StyleSetting from "./style_setting";
 
@@ -159,7 +159,7 @@ const Dashboard = () => {
     <>
       <StyleSetting />
       <BookInfo open={bookInfoDialogOpen} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
-      <BookApplication
+      <BookApply
         open={applicationDialogOpen}
         setClose={() => setApplicationDialogOpen(false)}
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}

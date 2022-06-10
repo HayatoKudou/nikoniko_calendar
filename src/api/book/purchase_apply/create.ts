@@ -1,19 +1,19 @@
 import Config from "../../../../config";
 
-export interface BookApplicationRequestErrors {
+export interface BookApplyRequestErrors {
   bookCategoryName: Array<string>;
   title: Array<string>;
   reason: Array<string>;
   description: Array<string>;
 }
 
-interface BookApplicationResult {
+interface BookApplyResult {
   succeeded: boolean;
   books: Array<Book> | null;
-  errors: Partial<BookApplicationRequestErrors>;
+  errors: Partial<BookApplyRequestErrors>;
 }
 
-interface BookApplicationRequestPayload {
+interface BookApplyRequestPayload {
   bookCategoryName: string;
   title: string;
   reason: string;
@@ -22,11 +22,11 @@ interface BookApplicationRequestPayload {
   apiToken: string;
 }
 
-const CreateBookApplication = async (
+const CreateBookPurchaseApply = async (
   clientId: string,
-  payload: BookApplicationRequestPayload
-): Promise<BookApplicationResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/bookApplication`;
+  payload: BookApplyRequestPayload
+): Promise<BookApplyResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/bookPurchaseApply`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -53,4 +53,4 @@ const CreateBookApplication = async (
   };
 };
 
-export default CreateBookApplication;
+export default CreateBookPurchaseApply;

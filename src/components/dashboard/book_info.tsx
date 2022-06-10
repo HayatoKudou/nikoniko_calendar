@@ -1,9 +1,12 @@
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import * as React from "react";
+import { bookStatusName } from "../../util/book";
+import BookRentalApply from "./book_rental_apply";
 
 interface Props {
   open: boolean;
@@ -12,6 +15,8 @@ interface Props {
 }
 
 const BookInfo = (props: Props) => {
+  const [openForm, setOpenForm] = React.useState<boolean>(false);
+
   return props.bookInfo ? (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
@@ -30,11 +35,24 @@ const BookInfo = (props: Props) => {
         <Box>
           <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
           <Box sx={{ margin: 2 }}>説明: {props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
-          <Box sx={{ margin: 2 }}>
-            ステータス: {props.bookInfo.applicant ? props.bookInfo.applicant.name + " 貸出中" : "貸出可能"}
-          </Box>
+          <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
+          {props.bookInfo.status === 3 && props.bookInfo.purchaseApplicant && (
+            <Box sx={{ margin: 2 }}>申請者: {props.bookInfo.purchaseApplicant.name}</Box>
+          )}
+        </Box>
+        <Box sx={{ marginLeft: "auto", marginTop: "auto" }}>
+          {openForm ? (
+            <Button variant="contained" onClick={() => setOpenForm(false)}>
+              閉じる
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1}>
+              {bookStatusName(props.bookInfo.status)}
+            </Button>
+          )}
         </Box>
       </DialogContent>
+      {openForm && <BookRentalApply />}
     </Dialog>
   ) : (
     <></>

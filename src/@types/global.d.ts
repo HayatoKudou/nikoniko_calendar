@@ -22,7 +22,7 @@ interface Book {
   title: string;
   description: string;
   image: any | null;
-  applicant: User;
+  purchaseApplicant: User;
 }
 
 interface BookCategory {
