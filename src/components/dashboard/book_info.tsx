@@ -11,7 +11,8 @@ import BookRentalApply from "./book_rental_apply";
 interface Props {
   open: boolean;
   bookInfo: Book | null;
-  setClose: any;
+  setClose: () => void;
+  success: () => void;
 }
 
 const BookInfo = (props: Props) => {
@@ -36,8 +37,11 @@ const BookInfo = (props: Props) => {
           <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
           <Box sx={{ margin: 2 }}>説明: {props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
           <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
+          {props.bookInfo.status === 2 && props.bookInfo.rentalApplicant && (
+            <Box sx={{ margin: 2 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
+          )}
           {props.bookInfo.status === 3 && props.bookInfo.purchaseApplicant && (
-            <Box sx={{ margin: 2 }}>申請者: {props.bookInfo.purchaseApplicant.name}</Box>
+            <Box sx={{ margin: 2 }}>購入申請者: {props.bookInfo.purchaseApplicant.name}</Box>
           )}
         </Box>
         <Box sx={{ marginLeft: "auto", marginTop: "auto" }}>
@@ -52,7 +56,7 @@ const BookInfo = (props: Props) => {
           )}
         </Box>
       </DialogContent>
-      {openForm && <BookRentalApply />}
+      {openForm && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
     </Dialog>
   ) : (
     <></>

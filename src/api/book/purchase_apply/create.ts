@@ -1,19 +1,19 @@
 import Config from "../../../../config";
 
-export interface BookApplyRequestErrors {
+export interface BookPurchaseApplyRequestErrors {
   bookCategoryName: Array<string>;
   title: Array<string>;
   reason: Array<string>;
   description: Array<string>;
 }
 
-interface BookApplyResult {
+interface BookPurchaseApplyResult {
   succeeded: boolean;
   books: Array<Book> | null;
-  errors: Partial<BookApplyRequestErrors>;
+  errors: Partial<BookPurchaseApplyRequestErrors>;
 }
 
-interface BookApplyRequestPayload {
+interface BookPurchaseApplyRequestPayload {
   bookCategoryName: string;
   title: string;
   reason: string;
@@ -24,8 +24,8 @@ interface BookApplyRequestPayload {
 
 const CreateBookPurchaseApply = async (
   clientId: string,
-  payload: BookApplyRequestPayload
-): Promise<BookApplyResult> => {
+  payload: BookPurchaseApplyRequestPayload
+): Promise<BookPurchaseApplyResult> => {
   const endpoint = `${Config.apiOrigin}/api/${clientId}/bookPurchaseApply`;
   const res = await fetch(endpoint, {
     method: "POST",

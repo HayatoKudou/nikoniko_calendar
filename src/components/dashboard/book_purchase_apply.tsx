@@ -14,7 +14,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
-import CreateBookPurchaseApply, { BookApplyRequestErrors } from "../../api/book/purchase_apply/create";
+import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
@@ -32,7 +32,9 @@ const BookApply = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [bookApplyRequestErrors, setBookApplyRequestErrors] = React.useState<Partial<BookApplyRequestErrors>>({});
+  const [bookPurchaseApplyRequestErrors, setBookPurchaseApplyRequestErrors] = React.useState<
+    Partial<BookPurchaseApplyRequestErrors>
+  >({});
   const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
     bookCategoryName: "",
@@ -64,14 +66,14 @@ const BookApply = (props: Props) => {
     })
       .then((res) => {
         if (res.succeeded) {
-          setBookApplyRequestErrors({});
+          setBookPurchaseApplyRequestErrors({});
           enqueueSnackbar("申請しました。", {
             variant: "success",
           });
           props.success();
           props.setClose();
         } else {
-          setBookApplyRequestErrors(res.errors);
+          setBookPurchaseApplyRequestErrors(res.errors);
           enqueueSnackbar(`申請に失敗しました`, {
             variant: "error",
           });
@@ -80,7 +82,7 @@ const BookApply = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
-        setBookApplyRequestErrors({});
+        setBookPurchaseApplyRequestErrors({});
         enqueueSnackbar(`申請に失敗しました`, {
           variant: "error",
         });
@@ -143,7 +145,7 @@ const BookApply = (props: Props) => {
               ))}
             </Select>
           </FormControl>
-          <FormError errors={bookApplyRequestErrors["bookCategoryName"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors["bookCategoryName"]} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}
@@ -155,7 +157,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookApplyRequestErrors["title"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors["title"]} />
 
           <TextField
             onChange={handleChange}
@@ -168,7 +170,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookApplyRequestErrors["description"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors["description"]} />
 
           <TextField
             onChange={handleChange}
@@ -182,7 +184,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookApplyRequestErrors["reason"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors["reason"]} />
 
           <TextField
             onChange={handleChange}

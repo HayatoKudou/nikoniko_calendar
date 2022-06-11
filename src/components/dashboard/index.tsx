@@ -28,7 +28,7 @@ import { bookStatusColor, bookStatusName } from "../../util/book";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 import BookInfo from "./book_info";
-import BookApply from "./book_purchase_apply";
+import BookPurchaseApply from "./book_purchase_apply";
 import BookRegister from "./book_register";
 import StyleSetting from "./style_setting";
 
@@ -89,7 +89,6 @@ const Dashboard = () => {
       setTabList(bookCategories);
     }
   }, [response]);
-  console.log(response);
 
   if (loading || creating) return <Spinner />;
   if (error) {
@@ -158,8 +157,13 @@ const Dashboard = () => {
   return (
     <>
       <StyleSetting />
-      <BookInfo open={bookInfoDialogOpen} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
-      <BookApply
+      <BookInfo
+        open={bookInfoDialogOpen}
+        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
+        setClose={() => setBookInfoDialogOpen(false)}
+        bookInfo={selectedBook}
+      />
+      <BookPurchaseApply
         open={applicationDialogOpen}
         setClose={() => setApplicationDialogOpen(false)}
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
@@ -212,9 +216,7 @@ const Dashboard = () => {
                       src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                     />
                   ) : (
-                    <Box
-                      sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}
-                    >
+                    <Box sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}>
                       <ImageNotSupportedIcon fontSize="large" />
                     </Box>
                   )}
