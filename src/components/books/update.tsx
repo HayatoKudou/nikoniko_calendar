@@ -125,7 +125,7 @@ const Update = (props: Props) => {
             fullWidth
             variant="standard"
           />
-          <FormError errors={UpdateBookRequestErrors["title"]} />
+          <FormError errors={UpdateBookRequestErrors?.title} />
           <TextField
             margin={"dense"}
             label="説明"
@@ -135,7 +135,7 @@ const Update = (props: Props) => {
             fullWidth
             variant="standard"
           />
-          <FormError errors={UpdateBookRequestErrors["description"]} />
+          <FormError errors={UpdateBookRequestErrors?.description} />
         </Box>
       </DialogContent>
       <DialogActions>

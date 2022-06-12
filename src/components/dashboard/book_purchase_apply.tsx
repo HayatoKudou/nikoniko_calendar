@@ -145,7 +145,7 @@ const BookApply = (props: Props) => {
               ))}
             </Select>
           </FormControl>
-          <FormError errors={bookPurchaseApplyRequestErrors["bookCategoryName"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors?.bookCategoryName} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}
@@ -157,7 +157,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookPurchaseApplyRequestErrors["title"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors?.title} />
 
           <TextField
             onChange={handleChange}
@@ -170,7 +170,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookPurchaseApplyRequestErrors["description"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors?.description} />
 
           <TextField
             onChange={handleChange}
@@ -184,7 +184,7 @@ const BookApply = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={bookPurchaseApplyRequestErrors["reason"]} />
+          <FormError errors={bookPurchaseApplyRequestErrors?.reason} />
 
           <TextField
             onChange={handleChange}

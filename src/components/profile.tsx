@@ -29,7 +29,7 @@ const Profile = () => {
         <Paper>
           <Box sx={{ padding: 2 }}>
             <Box sx={{ display: "flex" }}>
-              <FormField errors={createRequestErrors["lastName"]}>
+              <FormField errors={createRequestErrors?.lastName}>
                 <TextField
                   value={formValues.lastName}
                   fullWidth
@@ -41,7 +41,7 @@ const Profile = () => {
                 />
               </FormField>
 
-              <FormField errors={createRequestErrors["firstName"]}>
+              <FormField errors={createRequestErrors?.firstName}>
                 <TextField
                   value={formValues.firstName}
                   fullWidth
@@ -54,7 +54,7 @@ const Profile = () => {
               </FormField>
             </Box>
 
-            <FormField errors={createRequestErrors["email"]}>
+            <FormField errors={createRequestErrors?.email}>
               <TextField
                 value={formValues.email}
                 fullWidth
@@ -66,7 +66,7 @@ const Profile = () => {
               />
             </FormField>
 
-            <FormField errors={createRequestErrors["password"]}>
+            <FormField errors={createRequestErrors?.password}>
               <TextField
                 type={"password"}
                 value={formValues.password}

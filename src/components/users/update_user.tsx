@@ -127,7 +127,7 @@ const UpdateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={updateUserRequestErrors["name"]} />
+        <FormError errors={updateUserRequestErrors?.name} />
         <TextField
           margin={"dense"}
           label="メールアドレス"
@@ -137,7 +137,7 @@ const UpdateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={updateUserRequestErrors["email"]} />
+        <FormError errors={updateUserRequestErrors?.email} />
 
         <FormControl sx={{ minWidth: 300, display: "block", marginTop: 1 }}>
           <InputLabel sx={{ left: "-15px" }}>ロール</InputLabel>
@@ -161,7 +161,7 @@ const UpdateUser = (props: Props) => {
               </MenuItem>
             ))}
           </Select>
-          <FormError errors={updateUserRequestErrors["roles"]} />
+          <FormError errors={updateUserRequestErrors?.roles} />
         </FormControl>
       </DialogContent>
       <DialogActions>

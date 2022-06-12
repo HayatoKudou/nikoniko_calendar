@@ -126,7 +126,7 @@ const SignUp = () => {
                     fullWidth
                     required
                   />
-                  <FormError errors={signUpRequestErrors["client_name"]} />
+                  <FormError errors={signUpRequestErrors?.client_name} />
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
@@ -159,7 +159,7 @@ const SignUp = () => {
                     fullWidth
                     required
                   />
-                  <FormError errors={signUpRequestErrors["name"]} />
+                  <FormError errors={signUpRequestErrors?.name} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -171,7 +171,7 @@ const SignUp = () => {
                     autoComplete="email"
                     required
                   />
-                  <FormError errors={signUpRequestErrors["email"]} />
+                  <FormError errors={signUpRequestErrors?.email} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -183,7 +183,7 @@ const SignUp = () => {
                     type="password"
                     name="password"
                   />
-                  <FormError errors={signUpRequestErrors["password"]} />
+                  <FormError errors={signUpRequestErrors?.password} />
                 </Grid>
               </Grid>
               <Grid container justifyContent="flex-end">

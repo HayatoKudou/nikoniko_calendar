@@ -145,7 +145,7 @@ const BookRegister = (props: Props) => {
               ))}
             </Select>
           </FormControl>
-          <FormError errors={registerBookRequestErrors["bookCategoryName"]} />
+          <FormError errors={registerBookRequestErrors?.bookCategoryName} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}
@@ -157,7 +157,7 @@ const BookRegister = (props: Props) => {
             margin={"dense"}
             required
           />
-          <FormError errors={registerBookRequestErrors["title"]} />
+          <FormError errors={registerBookRequestErrors?.title} />
 
           <TextField
             onChange={handleChange}

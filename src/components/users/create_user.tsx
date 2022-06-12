@@ -114,7 +114,7 @@ const CreateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={createUserRequestErrors["name"]} />
+        <FormError errors={createUserRequestErrors?.name} />
         <TextField
           margin={"dense"}
           label="メールアドレス"
@@ -124,7 +124,7 @@ const CreateUser = (props: Props) => {
           fullWidth
           variant="standard"
         />
-        <FormError errors={createUserRequestErrors["email"]} />
+        <FormError errors={createUserRequestErrors?.email} />
 
         <FormControl sx={{ minWidth: 300, display: "block", marginTop: 1 }}>
           <InputLabel sx={{ left: "-15px" }}>ロール</InputLabel>
@@ -148,7 +148,7 @@ const CreateUser = (props: Props) => {
               </MenuItem>
             ))}
           </Select>
-          <FormError errors={createUserRequestErrors["roles"]} />
+          <FormError errors={createUserRequestErrors?.roles} />
         </FormControl>
       </DialogContent>
       <DialogActions>
