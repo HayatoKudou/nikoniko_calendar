@@ -120,12 +120,12 @@ export default function Sidebar(props: { children: any }) {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Read Worth
           </Typography>
-          {(pathname === "/signUp" || pathname === "/signIn") && (
+          {(pathname === "/sign-up" || pathname === "/sign-in") && (
             <>
-              <Button color="inherit" onClick={() => router.push("/signUp")}>
+              <Button color="inherit" onClick={() => router.push("/sign-up")}>
                 新規登録
               </Button>
-              <Button color="inherit" onClick={() => router.push("/signIn")}>
+              <Button color="inherit" onClick={() => router.push("/sign-in")}>
                 ログイン
               </Button>
             </>

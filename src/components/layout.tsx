@@ -24,10 +24,10 @@ const Layout = ({ children }: any) => {
   const { loading, error, response } = useAuthenticatedAccount();
 
   const pathname = router.pathname;
-  if (pathname !== "/signUp" && pathname !== "/signIn") {
+  if (pathname !== "/sign-up" && pathname !== "/sign-in") {
     if (loading) return <Spinner />;
     if (error || !response) {
-      router.push("/signIn");
+      router.push("/sign-in");
       return <Spinner />;
     }
     if (me.clientId && pathname === "/") {

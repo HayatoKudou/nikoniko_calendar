@@ -106,7 +106,7 @@ const SignIn = () => {
               </Link>
             </Grid>
             <Grid item xs>
-              <Link href={"/signUp"} variant="body2">
+              <Link href={"/sign-up"} variant="body2">
                 {"アカウントをお持ちではありませんか？"}
               </Link>
             </Grid>

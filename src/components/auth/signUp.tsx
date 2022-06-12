@@ -20,6 +20,11 @@ import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CheckIcon from '@mui/icons-material/Check';
 
 const steps = ["プラン選択", "組織設定", "プロフィール設定"];
 
@@ -31,6 +36,7 @@ const SignUp = () => {
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
+    plan: "free",
     name: "",
     email: "",
     password: "",
@@ -40,7 +46,7 @@ const SignUp = () => {
 
   if (loading) return <Spinner />;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: any) => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
@@ -110,9 +116,43 @@ const SignUp = () => {
 
         <Box sx={{ mt: 3, width: "100%" }}>
           {activeStep === 0 ? (
-            <Button onClick={() => setActiveStep(activeStep + 1)} variant="contained" fullWidth sx={{ mt: 3, mb: 2 }}>
-              {"次へ"}
-            </Button>
+            <>
+              <Box sx={{justifyContent: 'center', display: "flex"}}>
+                <Grid item xs={12} md={4}>
+                  <Card variant="outlined" sx={{margin: 1}}>
+                    <CardHeader title={"FREE"}></CardHeader>
+                    <CardContent>
+                      <Box px={1}>
+                        <Typography variant="h3" component="h2" gutterBottom={true}>
+                          ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 30</Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 100</Typography>
+                      </Box>
+                      <Button variant="outlined" name="plan" value="free" onClick={handleChange} endIcon={formValues.plan === "free" && <CheckIcon />}>Select plan</Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card variant="outlined" sx={{margin: 1}}>
+                    <CardHeader title={"BETA"}></CardHeader>
+                    <CardContent>
+                      <Box px={1}>
+                        <Typography variant="h3" component="h2" gutterBottom={true}>
+                          ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 無制限</Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 無制限</Typography>
+                      </Box>
+                      <Button variant="outlined" name="plan" value="beta" onClick={handleChange} endIcon={formValues.plan === "beta" && <CheckIcon />}>Select plan</Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Box>
+              <Button onClick={() => setActiveStep(activeStep + 1)} variant="contained" fullWidth sx={{ mt: 3, mb: 2 }}>
+                {"次へ"}
+              </Button>
+            </>
           ) : activeStep === 1 ? (
             <>
               <Grid container spacing={2}>
@@ -188,7 +228,7 @@ const SignUp = () => {
               </Grid>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href={"/signIn"} variant="body2">
+                  <Link href={"/sign-in"} variant="body2">
                     すでにアカウントをお持ちですか？
                   </Link>
                 </Grid>

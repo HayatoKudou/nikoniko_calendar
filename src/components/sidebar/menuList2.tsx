@@ -16,7 +16,7 @@ const MenuList2 = (props: { open: boolean }) => {
   const logout = () => {
     resetMe();
     resetClientInfo();
-    router.push("/signIn");
+    router.push("/sign-in");
   };
   return (
     <List>

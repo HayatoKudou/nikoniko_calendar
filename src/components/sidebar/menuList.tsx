@@ -75,7 +75,7 @@ const MenuList = (props: { open: boolean }) => {
       { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
       { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
       { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
-      { name: "clientProfile", title: "組織設定", path: `/${me.clientId}/clientProfile` },
+      { name: "clientProfile", title: "組織設定", path: `/${me.clientId}/client-profile` },
       { name: "paletteMode", title: name, path: null },
     ];
   } else {
