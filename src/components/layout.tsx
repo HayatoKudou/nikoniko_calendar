@@ -26,7 +26,7 @@ const Layout = ({ children }: any) => {
   const pathname = router.pathname;
   if (pathname !== "/signUp" && pathname !== "/signIn") {
     if (loading) return <Spinner />;
-    if (error) {
+    if (error || !response) {
       router.push("/signIn");
       return <Spinner />;
     }

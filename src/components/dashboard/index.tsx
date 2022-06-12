@@ -216,7 +216,9 @@ const Dashboard = () => {
                       src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                     />
                   ) : (
-                    <Box sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <Box
+                      sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}
+                    >
                       <ImageNotSupportedIcon fontSize="large" />
                     </Box>
                   )}

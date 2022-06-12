@@ -26,9 +26,7 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
 
   const res = await fetch(endpoint, {
     method: "POST",
-    mode: 'cors',
     headers: { "Content-Type": "application/json", Accept: "application/json" },
-    credentials: 'include',
     body: JSON.stringify(payload),
   });
   const response = await res.json();

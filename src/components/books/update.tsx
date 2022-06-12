@@ -73,14 +73,14 @@ const Update = (props: Props) => {
       .then((res) => {
         if (res.succeeded) {
           setUpdateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの更新に成功しました。", {
+          enqueueSnackbar("書籍の更新に成功しました。", {
             variant: "success",
           });
           props.onSuccess();
           props.onClose();
         } else {
           setUpdateUserRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
+          enqueueSnackbar(`書籍の更新に失敗しました`, {
             variant: "error",
           });
         }
@@ -88,7 +88,7 @@ const Update = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, {
+        enqueueSnackbar(`書籍の更新に失敗しました`, {
           variant: "error",
         });
       });
