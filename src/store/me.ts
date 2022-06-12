@@ -6,6 +6,7 @@ const { persistAtom } = recoilPersist();
 export const useMe = atom({
   key: "me",
   default: {
+    id: null,
     clientId: null,
     name: "",
     email: "",

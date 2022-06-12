@@ -1,20 +1,43 @@
-import SaveIcon from "@mui/icons-material/Save";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useSnackbar } from "notistack";
 import * as React from "react";
-import FormField from "./form_field";
+import { useRecoilState } from "recoil";
+import Update, { UpdateUserRequestErrors } from "../api/user/update";
+import { useMe } from "../store/me";
+import FormError from "./form_error";
+import Spinner from "./spinner";
 
 const Profile = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [me] = useRecoilState(useMe);
+  const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
-    lastName: "",
-    firstName: "",
+    id: 0,
+    name: "",
     email: "",
     password: "",
+    passwordConfirmation: "",
+    apiToken: "",
   });
-  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<any>>({});
+  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+
+  React.useEffect(() => {
+    setFormValues({
+      id: me.id,
+      name: me.name,
+      email: me.email,
+      password: "",
+      passwordConfirmation: "",
+      apiToken: me.apiToken,
+    });
+  }, []);
+
+  if (loading) return <Spinner />;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -23,71 +46,110 @@ const Profile = () => {
     });
   };
 
+  const handleSubmit = () => {
+    setLoading(true);
+    Update(me.clientId, {
+      id: formValues.id,
+      name: formValues.name,
+      email: formValues.email,
+      roles: [],
+      password: formValues.password,
+      password_confirmation: formValues.passwordConfirmation,
+      apiToken: formValues.apiToken,
+    })
+      .then((res) => {
+        if (res.succeeded) {
+          setCreateRequestErrors({});
+          enqueueSnackbar("ユーザーの更新に成功しました。", {
+            variant: "success",
+          });
+        } else {
+          setCreateRequestErrors(res.errors);
+          enqueueSnackbar(`ユーザー登録に失敗しました`, {
+            variant: "error",
+          });
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`ユーザーの登録に失敗しました`, {
+          variant: "error",
+        });
+      });
+  };
+
   return (
-    <Grid container sx={{ display: "block", width: "70%", margin: "0 auto" }}>
-      <Grid item xl={12}>
+    <>
+      <Box sx={{ display: "flex", alignItems: "center", height: "80px" }}>
+        <Typography variant="h4">プロフィール設定</Typography>
+      </Box>
+      <Grid container sx={{ display: "block", width: "70%", margin: "0 auto" }}>
         <Paper>
           <Box sx={{ padding: 2 }}>
-            <Box sx={{ display: "flex" }}>
-              <FormField errors={createRequestErrors?.lastName}>
-                <TextField
-                  value={formValues.lastName}
-                  fullWidth
-                  onChange={handleChange}
-                  name={"lastName"}
-                  label={"性"}
-                  required
-                  inputProps={{ minLength: 1, maxLength: 100 }}
-                />
-              </FormField>
+            <TextField
+              value={formValues.name}
+              fullWidth
+              onChange={handleChange}
+              name={"name"}
+              label={"名前"}
+              required
+              inputProps={{ minLength: 1, maxLength: 255 }}
+              variant="standard"
+              margin={"normal"}
+            />
+            <FormError errors={createRequestErrors?.name} />
 
-              <FormField errors={createRequestErrors?.firstName}>
-                <TextField
-                  value={formValues.firstName}
-                  fullWidth
-                  onChange={handleChange}
-                  name={"firstName"}
-                  label={"名"}
-                  required
-                  inputProps={{ minLength: 1, maxLength: 100 }}
-                />
-              </FormField>
-            </Box>
+            <TextField
+              value={formValues.email}
+              fullWidth
+              onChange={handleChange}
+              name={"email"}
+              label={"メールアドレス"}
+              required
+              inputProps={{ minLength: 1, maxLength: 255 }}
+              variant="standard"
+              margin={"normal"}
+            />
+            <FormError errors={createRequestErrors?.email} />
 
-            <FormField errors={createRequestErrors?.email}>
-              <TextField
-                value={formValues.email}
-                fullWidth
-                onChange={handleChange}
-                name={"email"}
-                label={"メールアドレス"}
-                required
-                inputProps={{ minLength: 1, maxLength: 100 }}
-              />
-            </FormField>
+            <TextField
+              type={"password"}
+              value={formValues.password}
+              fullWidth
+              onChange={handleChange}
+              name={"password"}
+              label={"パスワード"}
+              required
+              inputProps={{ minLength: 1, maxLength: 255 }}
+              variant="standard"
+              margin={"normal"}
+            />
+            <FormError errors={createRequestErrors?.password} />
 
-            <FormField errors={createRequestErrors?.password}>
-              <TextField
-                type={"password"}
-                value={formValues.password}
-                fullWidth
-                onChange={handleChange}
-                name={"password"}
-                label={"パスワード"}
-                required
-                inputProps={{ minLength: 1, maxLength: 100 }}
-              />
-            </FormField>
+            <TextField
+              type={"password"}
+              value={formValues.passwordConfirmation}
+              fullWidth
+              onChange={handleChange}
+              name={"passwordConfirmation"}
+              label={"パスワード確認"}
+              required
+              inputProps={{ minLength: 1, maxLength: 255 }}
+              variant="standard"
+              margin={"normal"}
+            />
+            <FormError errors={createRequestErrors?.password_confirmation} />
 
             <Box sx={{ textAlign: "right", margin: 2 }}>
-              <Button type={"submit"} startIcon={<SaveIcon />} variant={"contained"}>
-                作成
+              <Button type={"submit"} variant={"contained"} onClick={handleSubmit}>
+                更新する
               </Button>
             </Box>
           </Box>
         </Paper>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

@@ -21,7 +21,7 @@ import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
-const steps = ["プラン選択", "チーム設定", "プロフィール設定"];
+const steps = ["プラン選択", "組織設定", "プロフィール設定"];
 
 const SignUp = () => {
   const router = useRouter();

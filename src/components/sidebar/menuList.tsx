@@ -1,5 +1,6 @@
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import BusinessIcon from "@mui/icons-material/Business";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -32,6 +33,8 @@ const MenuListIcon = (props: { name: string }) => {
       return <PeopleIcon />;
     case "profile":
       return <ManageAccountsIcon />;
+    case "clientProfile":
+      return <BusinessIcon />;
     case "paletteMode":
       if (theme.palette.mode === "dark") {
         return <Brightness7Icon onClick={handleColorMode} />;
@@ -72,6 +75,7 @@ const MenuList = (props: { open: boolean }) => {
       { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
       { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
       { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
+      { name: "clientProfile", title: "組織設定", path: `/${me.clientId}/clientProfile` },
       { name: "paletteMode", title: name, path: null },
     ];
   } else {

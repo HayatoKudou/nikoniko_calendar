@@ -30,9 +30,12 @@ const UpdateUser = (props: Props) => {
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<UpdateUserRequestPayload>({
+    id: 0,
     name: "",
     email: "",
     roles: [],
+    password: "",
+    password_confirmation: "",
     apiToken: "",
   });
   const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
@@ -43,8 +46,11 @@ const UpdateUser = (props: Props) => {
     if (props.user.role.is_book_manager) roles.push("書籍管理");
     if (props.user.role.is_client_manager) roles.push("組織管理");
     setFormValues({
+      id: props.user.id,
       name: props.user.name,
       email: props.user.email,
+      password: "",
+      password_confirmation: "",
       roles: roles,
       apiToken: me.apiToken,
     });
@@ -70,9 +76,12 @@ const UpdateUser = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     Update(me.clientId, {
+      id: formValues.id,
       name: formValues.name,
       email: formValues.email,
       roles: formValues.roles,
+      password: formValues.password,
+      password_confirmation: formValues.password_confirmation,
       apiToken: formValues.apiToken,
     })
       .then((res) => {
@@ -166,7 +175,7 @@ const UpdateUser = (props: Props) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose}>キャンセル</Button>
-        <Button onClick={handleSubmit}>登録する</Button>
+        <Button onClick={handleSubmit}>更新する</Button>
       </DialogActions>
     </Dialog>
   );
