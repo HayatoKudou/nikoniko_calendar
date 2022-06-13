@@ -32,9 +32,7 @@ const BookRegister = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>(
-    {}
-  );
+  const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>({});
   const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
     bookCategoryName: "",
@@ -131,13 +129,7 @@ const BookRegister = (props: Props) => {
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select
-              onChange={handleChange}
-              value={formValues.bookCategoryName}
-              name="bookCategoryName"
-              label="role"
-              variant="standard"
-            >
+            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
               {bookCategories.map((bookCategory: BookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}

@@ -42,13 +42,7 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
         <Box sx={{ p: 3 }}>
           <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
@@ -74,9 +68,7 @@ const Dashboard = () => {
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
-  const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>(
-    {}
-  );
+  const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
 
   const { loading, error, response, mutate } = useBooks();
@@ -191,11 +183,7 @@ const Dashboard = () => {
             </IconButton>
             {bookCategoryFormOpen && (
               <form onSubmit={handleSubmit}>
-                <TextField
-                  value={bookCategoryFormValue}
-                  onChange={(e) => setBookCategoryFormValue(e.target.value)}
-                  size="small"
-                />
+                <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" />
                 <FormError errors={bookCategoryFormError["name"]} />
               </form>
             )}
@@ -216,9 +204,7 @@ const Dashboard = () => {
                       src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                     />
                   ) : (
-                    <Box
-                      sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}
-                    >
+                    <Box sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}>
                       <ImageNotSupportedIcon fontSize="large" />
                     </Box>
                   )}

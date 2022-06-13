@@ -126,16 +126,7 @@ const UpdateUser = (props: Props) => {
     <Dialog open={props.open} onClose={props.onClose} fullWidth>
       <DialogTitle>ユーザー追加</DialogTitle>
       <DialogContent>
-        <TextField
-          margin={"dense"}
-          autoFocus
-          label="名前"
-          name="name"
-          value={formValues.name}
-          onChange={handleChange}
-          fullWidth
-          variant="standard"
-        />
+        <TextField margin={"dense"} autoFocus label="名前" name="name" value={formValues.name} onChange={handleChange} fullWidth variant="standard" />
         <FormError errors={updateUserRequestErrors?.name} />
         <TextField
           margin={"dense"}

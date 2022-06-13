@@ -29,9 +29,7 @@ const BookRentalApply = (props: Props) => {
   const [formValues, setFormValues] = React.useState({
     reason: "",
   });
-  const [bookRentalApplyRequestErrors, setBookRentalApplyRequestErrors] = React.useState<
-    Partial<BookRentalApplyRequestErrors>
-  >({});
+  const [bookRentalApplyRequestErrors, setBookRentalApplyRequestErrors] = React.useState<Partial<BookRentalApplyRequestErrors>>({});
 
   if (loading) return <Spinner />;
 

@@ -75,16 +75,7 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            onChange={handleChange}
-            margin="normal"
-            required
-            fullWidth
-            label="メールアドレス"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
+          <TextField onChange={handleChange} margin="normal" required fullWidth label="メールアドレス" name="email" autoComplete="email" autoFocus />
           <TextField
             onChange={handleChange}
             margin="normal"

@@ -27,14 +27,12 @@ interface Props {
   success: () => void;
 }
 
-const BookApply = (props: Props) => {
+const BookPurchaseApply = (props: Props) => {
   const [me] = useRecoilState(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [bookPurchaseApplyRequestErrors, setBookPurchaseApplyRequestErrors] = React.useState<
-    Partial<BookPurchaseApplyRequestErrors>
-  >({});
+  const [bookPurchaseApplyRequestErrors, setBookPurchaseApplyRequestErrors] = React.useState<Partial<BookPurchaseApplyRequestErrors>>({});
   const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
     bookCategoryName: "",
@@ -131,13 +129,7 @@ const BookApply = (props: Props) => {
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select
-              onChange={handleChange}
-              value={formValues.bookCategoryName}
-              name="bookCategoryName"
-              label="role"
-              variant="standard"
-            >
+            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
               {bookCategories.map((bookCategory: BookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
@@ -210,4 +202,4 @@ const BookApply = (props: Props) => {
   );
 };
 
-export default BookApply;
+export default BookPurchaseApply;

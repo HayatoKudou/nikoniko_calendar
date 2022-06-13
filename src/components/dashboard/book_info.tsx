@@ -23,11 +23,7 @@ const BookInfo = (props: Props) => {
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent sx={{ display: "flex" }}>
         {props.bookInfo.image ? (
-          <Box
-            sx={{ padding: 2, textAlign: "center", maxWidth: "30%" }}
-            component="img"
-            src={`data:image/png;base64, ${props.bookInfo.image}`}
-          />
+          <Box sx={{ padding: 2, textAlign: "center", maxWidth: "30%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
         ) : (
           <Box sx={{ height: "200px", width: "40%", display: "flex", justifyContent: "center", alignItems: "center" }}>
             <ImageNotSupportedIcon fontSize="large" />

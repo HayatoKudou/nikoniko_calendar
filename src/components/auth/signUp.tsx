@@ -187,31 +187,15 @@ const SignUp = () => {
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <TextField
-                    onChange={handleChange}
-                    value={formValues.clientName}
-                    name="clientName"
-                    label="組織名"
-                    autoFocus
-                    fullWidth
-                    required
-                  />
+                  <TextField onChange={handleChange} value={formValues.clientName} name="clientName" label="組織名" autoFocus fullWidth required />
                   <FormError errors={signUpRequestErrors?.client_name} />
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
-                <Button
-                  onClick={() => setActiveStep(activeStep - 1)}
-                  variant="contained"
-                  sx={{ float: "left", width: "120px" }}
-                >
+                <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
                   {"戻る"}
                 </Button>
-                <Button
-                  onClick={() => setActiveStep(activeStep + 1)}
-                  variant="contained"
-                  sx={{ float: "right", width: "120px" }}
-                >
+                <Button onClick={() => setActiveStep(activeStep + 1)} variant="contained" sx={{ float: "right", width: "120px" }}>
                   {"次へ"}
                 </Button>
               </Box>
@@ -220,15 +204,7 @@ const SignUp = () => {
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <TextField
-                    onChange={handleChange}
-                    value={formValues.name}
-                    label="名前"
-                    name="name"
-                    autoFocus
-                    fullWidth
-                    required
-                  />
+                  <TextField onChange={handleChange} value={formValues.name} label="名前" name="name" autoFocus fullWidth required />
                   <FormError errors={signUpRequestErrors?.name} />
                 </Grid>
                 <Grid item xs={12}>
@@ -264,11 +240,7 @@ const SignUp = () => {
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>
-                <Button
-                  onClick={() => setActiveStep(activeStep - 1)}
-                  variant="contained"
-                  sx={{ float: "left", width: "120px" }}
-                >
+                <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
                   {"戻る"}
                 </Button>
                 <Button onClick={handleProfileSubmit} variant="contained" sx={{ float: "right", width: "120px" }}>
