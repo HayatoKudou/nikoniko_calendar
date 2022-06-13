@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Config from "../../../config";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import useBooks from "../../api/book/list";
@@ -62,10 +62,10 @@ function TabPanel(props: TabPanelProps) {
 
 const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [imageSize] = useRecoilState(useImageSize);
-  const [bookCardStyle] = useRecoilState(useBookCardStyle);
+  const me = useRecoilValue(useMe);
+  const imageSize = useRecoilValue(useImageSize);
+  const bookCardStyle = useRecoilValue(useBookCardStyle);
   const [, setBookCategory] = useRecoilState(useBookCategories);
-  const [me] = useRecoilState(useMe);
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState(false);
@@ -223,21 +223,17 @@ const Dashboard = () => {
                     </Box>
                   )}
                   {bookCardStyle === "rich" && (
-                    <CardContent>
-                      <Typography gutterBottom variant="h6">
-                        {book.title}
-                      </Typography>
+                    <CardContent sx={{ maxHeight: "100px" }}>
                       <Typography
-                        variant="body2"
-                        color="text.secondary"
                         sx={{
-                          overflow: "hidden",
+                          fontSize: imageSize.height / 15,
                           display: "-webkit-box",
-                          webkitBoxOrient: "vertical",
-                          webkitLineClamp: "4",
+                          overflow: "hidden",
+                          "-webkitLineClamp": "3",
+                          "-webkitBoxOrient": "vertical",
                         }}
                       >
-                        {book.description}
+                        {book.title}
                       </Typography>
                     </CardContent>
                   )}

@@ -1,5 +1,8 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -8,16 +11,10 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Update, { UpdateClientRequestErrors } from "../api/client/update";
-import { useMe } from "../store/me";
 import { useClientInfo } from "../store/clientInfo";
+import { useMe } from "../store/me";
 import FormError from "./form_error";
 import Spinner from "./spinner";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 
 const Profile = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -99,34 +96,52 @@ const Profile = () => {
             />
             <FormError errors={createRequestErrors?.name} />
 
-            <Box sx={{justifyContent: 'center', display: "flex"}}>
+            <Box sx={{ justifyContent: "center", display: "flex" }}>
               <Grid item xs={12} md={4}>
-                <Card variant="outlined" sx={{margin: 1}}>
+                <Card variant="outlined" sx={{ margin: 1 }}>
                   <CardHeader title={"FREE"}></CardHeader>
                   <CardContent>
                     <Box px={1}>
                       <Typography variant="h3" component="h2" gutterBottom={true}>
-                        ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                        ¥0
+                        <Typography variant="h6" color="textSecondary" component="span">
+                          / 月
+                        </Typography>
                       </Typography>
-                      <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 30</Typography>
-                      <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 100</Typography>
+                      <Typography color="textSecondary" variant="subtitle1" component="p">
+                        メンバー上限: 30
+                      </Typography>
+                      <Typography color="textSecondary" variant="subtitle1" component="p">
+                        書籍上限: 100
+                      </Typography>
                     </Box>
-                    <Button variant="outlined" color="primary">Select plan</Button>
+                    <Button variant="outlined" color="primary">
+                      Select plan
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
               <Grid item xs={12} md={4}>
-                <Card variant="outlined" sx={{margin: 1}}>
+                <Card variant="outlined" sx={{ margin: 1 }}>
                   <CardHeader title={"BETA"}></CardHeader>
                   <CardContent>
                     <Box px={1}>
                       <Typography variant="h3" component="h2" gutterBottom={true}>
-                        ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                        ¥0
+                        <Typography variant="h6" color="textSecondary" component="span">
+                          / 月
+                        </Typography>
                       </Typography>
-                      <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 無制限</Typography>
-                      <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 無制限</Typography>
+                      <Typography color="textSecondary" variant="subtitle1" component="p">
+                        メンバー上限: 無制限
+                      </Typography>
+                      <Typography color="textSecondary" variant="subtitle1" component="p">
+                        書籍上限: 無制限
+                      </Typography>
                     </Box>
-                    <Button variant="outlined" color="primary">Select plan</Button>
+                    <Button variant="outlined" color="primary">
+                      Select plan
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>

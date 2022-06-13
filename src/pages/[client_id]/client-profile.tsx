@@ -1,5 +1,5 @@
-import Layout from "../../components/layout";
 import ClientProfile from "../../components/client_profile";
+import Layout from "../../components/layout";
 import type { NextPage } from "next";
 
 const Index: NextPage = () => {

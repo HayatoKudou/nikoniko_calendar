@@ -1,7 +1,11 @@
+import CheckIcon from "@mui/icons-material/Check";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -10,6 +14,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
@@ -20,11 +25,6 @@ import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import CheckIcon from '@mui/icons-material/Check';
 
 const steps = ["プラン選択", "組織設定", "プロフィール設定"];
 
@@ -117,34 +117,64 @@ const SignUp = () => {
         <Box sx={{ mt: 3, width: "100%" }}>
           {activeStep === 0 ? (
             <>
-              <Box sx={{justifyContent: 'center', display: "flex"}}>
+              <Box sx={{ justifyContent: "center", display: "flex" }}>
                 <Grid item xs={12} md={4}>
-                  <Card variant="outlined" sx={{margin: 1}}>
+                  <Card variant="outlined" sx={{ margin: 1 }}>
                     <CardHeader title={"FREE"}></CardHeader>
                     <CardContent>
                       <Box px={1}>
                         <Typography variant="h3" component="h2" gutterBottom={true}>
-                          ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                          ¥0
+                          <Typography variant="h6" color="textSecondary" component="span">
+                            / 月
+                          </Typography>
                         </Typography>
-                        <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 30</Typography>
-                        <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 100</Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          メンバー上限: 30
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          書籍上限: 100
+                        </Typography>
                       </Box>
-                      <Button variant="outlined" name="plan" value="free" onClick={handleChange} endIcon={formValues.plan === "free" && <CheckIcon />}>Select plan</Button>
+                      <Button
+                        variant="outlined"
+                        name="plan"
+                        value="free"
+                        onClick={handleChange}
+                        endIcon={formValues.plan === "free" && <CheckIcon />}
+                      >
+                        Select plan
+                      </Button>
                     </CardContent>
                   </Card>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Card variant="outlined" sx={{margin: 1}}>
+                  <Card variant="outlined" sx={{ margin: 1 }}>
                     <CardHeader title={"BETA"}></CardHeader>
                     <CardContent>
                       <Box px={1}>
                         <Typography variant="h3" component="h2" gutterBottom={true}>
-                          ¥0<Typography variant="h6" color="textSecondary" component="span">/ 月</Typography>
+                          ¥0
+                          <Typography variant="h6" color="textSecondary" component="span">
+                            / 月
+                          </Typography>
                         </Typography>
-                        <Typography color="textSecondary" variant="subtitle1" component="p">メンバー: 無制限</Typography>
-                        <Typography color="textSecondary" variant="subtitle1" component="p">書籍: 無制限</Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          メンバー上限: 無制限
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          書籍上限: 無制限
+                        </Typography>
                       </Box>
-                      <Button variant="outlined" name="plan" value="beta" onClick={handleChange} endIcon={formValues.plan === "beta" && <CheckIcon />}>Select plan</Button>
+                      <Button
+                        variant="outlined"
+                        name="plan"
+                        value="beta"
+                        onClick={handleChange}
+                        endIcon={formValues.plan === "beta" && <CheckIcon />}
+                      >
+                        Select plan
+                      </Button>
                     </CardContent>
                   </Card>
                 </Grid>
