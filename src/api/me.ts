@@ -1,10 +1,10 @@
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 import Config from "../../config";
 import { useMe } from "../store/me";
 
 const useAuthenticatedAccount = () => {
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const endpoint = `${Config.apiOrigin}/api/${me.clientId}/user`;
   const { data, error, isValidating } = useSWR(
     endpoint,

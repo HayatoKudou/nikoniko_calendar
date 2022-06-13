@@ -1,6 +1,7 @@
 import Config from "../../config";
 
 interface SignUpRequestPayload {
+  plan: string;
   name: string;
   email: string;
   password: string;
@@ -32,10 +33,6 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
   const response = await res.json();
 
   if (!res.ok) {
-    if (500 <= res.status) {
-      throw new Error("Failed to signUp");
-    }
-
     return {
       succeeded: false,
       client: null,

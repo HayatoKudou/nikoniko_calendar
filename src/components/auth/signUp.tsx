@@ -57,6 +57,7 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     signUp({
+      plan: formValues.plan,
       name: formValues.name,
       email: formValues.email,
       password: formValues.password,
@@ -179,6 +180,13 @@ const SignUp = () => {
                   </Card>
                 </Grid>
               </Box>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href={"/sign-in"} variant="body2">
+                    すでにアカウントをお持ちですか？
+                  </Link>
+                </Grid>
+              </Grid>
               <Button onClick={() => setActiveStep(activeStep + 1)} variant="contained" fullWidth sx={{ mt: 3, mb: 2 }}>
                 {"次へ"}
               </Button>
@@ -189,6 +197,13 @@ const SignUp = () => {
                 <Grid item xs={12}>
                   <TextField onChange={handleChange} value={formValues.clientName} name="clientName" label="組織名" autoFocus fullWidth required />
                   <FormError errors={signUpRequestErrors?.client_name} />
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href={"/sign-in"} variant="body2">
+                    すでにアカウントをお持ちですか？
+                  </Link>
                 </Grid>
               </Grid>
               <Box sx={{ marginTop: 2 }}>

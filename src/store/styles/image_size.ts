@@ -6,8 +6,8 @@ const { persistAtom } = recoilPersist();
 export const useImageSize = atom({
   key: "imageSize",
   default: {
-    height: 300,
-    width: 200,
+    height: 225,
+    width: 150,
   },
   effects_UNSTABLE: [persistAtom],
 });

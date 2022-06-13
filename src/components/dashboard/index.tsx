@@ -209,14 +209,14 @@ const Dashboard = () => {
                     </Box>
                   )}
                   {bookCardStyle === "rich" && (
-                    <CardContent sx={{padding: 1}}>
+                    <CardContent sx={{ padding: 1 }}>
                       <Typography
                         sx={{
                           fontSize: imageSize.height / 15,
                           display: "-webkit-box",
                           overflow: "hidden",
-                          "-webkitLineClamp": "3",
-                          "-webkitBoxOrient": "vertical",
+                          WebkitLineClamp: "3",
+                          WebkitBoxOrient: "vertical",
                         }}
                       >
                         {book.title}
