@@ -195,7 +195,7 @@ const Dashboard = () => {
         <TabPanel value={openTabValue} index={tab.label} key={index}>
           {bookCategoryFiltered().map((book: Book, index: number) => {
             return (
-              <Card sx={{ width: imageSize.width, margin: 1 }} key={index}>
+              <Card sx={{ width: imageSize.width, margin: 1, display: "flex", justifyContent: "space-between", flexDirection: "column" }} key={index}>
                 <CardActionArea onClick={() => handleDetailBook(book)}>
                   {book.image ? (
                     <CardMedia
@@ -209,7 +209,7 @@ const Dashboard = () => {
                     </Box>
                   )}
                   {bookCardStyle === "rich" && (
-                    <CardContent sx={{ maxHeight: "100px" }}>
+                    <CardContent sx={{padding: 1}}>
                       <Typography
                         sx={{
                           fontSize: imageSize.height / 15,

@@ -5,6 +5,6 @@ const { persistAtom } = recoilPersist();
 
 export const useBookCardStyle = atom({
   key: "bookCardStyle",
-  default: "simple",
+  default: "rich",
   effects_UNSTABLE: [persistAtom],
 });

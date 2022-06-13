@@ -59,8 +59,8 @@ const StyleSetting = () => {
             <FormControl>
               <FormLabel>スタイル</FormLabel>
               <RadioGroup value={bookCardStyle}>
-                <FormControlLabel value="simple" onChange={() => setBookCardStyle("simple")} control={<Radio />} label="シンプル" />
                 <FormControlLabel value="rich" onChange={() => setBookCardStyle("rich")} control={<Radio />} label="リッチ" />
+                <FormControlLabel value="simple" onChange={() => setBookCardStyle("simple")} control={<Radio />} label="シンプル" />
               </RadioGroup>
             </FormControl>
           </Box>
