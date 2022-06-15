@@ -31,7 +31,7 @@ const BookInfo = (props: Props) => {
         )}
         <Box>
           <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
-          <Box sx={{ margin: 2 }}>説明: {props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
+          <Box sx={{ margin: 2 }}>本の説明: {props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
           <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
           {props.bookInfo.status === 2 && props.bookInfo.rentalApplicant && (
             <Box sx={{ margin: 2 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>

@@ -167,7 +167,7 @@ const Dashboard = () => {
       />
 
       <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>
-        書籍申請
+        書籍購入申請
       </Button>
       <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
         書籍登録

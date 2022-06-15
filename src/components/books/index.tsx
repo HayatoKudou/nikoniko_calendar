@@ -54,12 +54,8 @@ const Books = () => {
               <TableCell />
               <TableCell>ステータス</TableCell>
               <TableCell align="right">カテゴリ</TableCell>
-              <TableCell align="center" sx={{ width: "30%" }}>
-                タイトル
-              </TableCell>
-              <TableCell align="center" sx={{ width: "40%" }}>
-                説明
-              </TableCell>
+              <TableCell align="center" sx={{ width: "30%" }}>タイトル</TableCell>
+              <TableCell align="center" sx={{ width: "40%" }}>本の説明</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

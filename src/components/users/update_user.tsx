@@ -165,8 +165,8 @@ const UpdateUser = (props: Props) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose}>キャンセル</Button>
-        <Button onClick={handleSubmit}>更新する</Button>
+        <Button onClick={props.onClose} variant="contained">キャンセル</Button>
+        <Button onClick={handleSubmit} variant="contained">更新する</Button>
       </DialogActions>
     </Dialog>
   );

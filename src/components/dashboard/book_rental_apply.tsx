@@ -106,9 +106,7 @@ const BookRentalApply = (props: Props) => {
         </LocalizationProvider>
       </Box>
       <DialogActions>
-        <Button variant="contained" onClick={handleSubmit}>
-          申請する
-        </Button>
+        <Button variant="contained" onClick={handleSubmit} >申請する</Button>
       </DialogActions>
     </>
   );

@@ -155,7 +155,7 @@ const BookPurchaseApply = (props: Props) => {
             onChange={handleChange}
             value={formValues.description}
             name="description"
-            label="説明"
+            label="本の説明"
             fullWidth
             variant="standard"
             multiline
@@ -195,8 +195,8 @@ const BookPurchaseApply = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.setClose}>キャンセル</Button>
-        <Button onClick={handleSubmit}>申請する</Button>
+        <Button onClick={props.setClose} variant="contained">キャンセル</Button>
+        <Button onClick={handleSubmit} variant="contained">申請する</Button>
       </DialogActions>
     </Dialog>
   );

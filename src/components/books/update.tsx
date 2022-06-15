@@ -128,7 +128,7 @@ const Update = (props: Props) => {
           <FormError errors={UpdateBookRequestErrors?.title} />
           <TextField
             margin={"dense"}
-            label="説明"
+            label="本の説明"
             name="description"
             value={formValues.description}
             onChange={handleChange}
@@ -139,8 +139,8 @@ const Update = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose}>キャンセル</Button>
-        <Button onClick={handleSubmit}>更新する</Button>
+        <Button onClick={props.onClose} variant="contained">キャンセル</Button>
+        <Button onClick={handleSubmit} variant="contained">更新する</Button>
       </DialogActions>
     </Dialog>
   );
