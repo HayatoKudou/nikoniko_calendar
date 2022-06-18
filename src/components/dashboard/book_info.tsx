@@ -4,8 +4,13 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilState } from "recoil";
+import UpdateBook from "../../api/book/update";
+import { useMe } from "../../store/me";
 import { bookStatusName } from "../../util/book";
+import Spinner from "../spinner";
 import BookRentalApply from "./book_rental_apply";
 
 interface Props {
@@ -16,7 +21,39 @@ interface Props {
 }
 
 const BookInfo = (props: Props) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [me] = useRecoilState(useMe);
+  const [loading, setLoading] = React.useState(false);
   const [openForm, setOpenForm] = React.useState<boolean>(false);
+
+  if (loading) return <Spinner />;
+
+  const availableBook = (props: Props) => {
+    setLoading(true);
+    UpdateBook(me.clientId, {
+      id: props.bookInfo!.id,
+      category: props.bookInfo!.category,
+      status: 1, // 1 = 貸出可能
+      title: props.bookInfo!.title,
+      description: props.bookInfo!.description,
+      image: "data:image/png;base64," + props.bookInfo!.image,
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        if (res.succeeded) {
+          enqueueSnackbar("ステータスを更新しました。", { variant: "success" });
+          props.success();
+          props.setClose();
+        } else {
+          enqueueSnackbar(`ステータス更新に失敗しました`, { variant: "error" });
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`ステータス更新に失敗しました`, { variant: "error" });
+      });
+  };
 
   return props.bookInfo ? (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
@@ -31,7 +68,10 @@ const BookInfo = (props: Props) => {
         )}
         <Box>
           <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
-          <Box sx={{ margin: 2 }}>本の説明: {props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
+          <Box sx={{ margin: 2, whiteSpace: "pre-wrap", display: "flex" }}>
+            <Box>本の説明: </Box>
+            <Box>{props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
+          </Box>
           <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
           {props.bookInfo.status === 2 && props.bookInfo.rentalApplicant && (
             <Box sx={{ margin: 2 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
@@ -46,9 +86,16 @@ const BookInfo = (props: Props) => {
               閉じる
             </Button>
           ) : (
-            <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1}>
-              {bookStatusName(props.bookInfo.status)}
-            </Button>
+            <>
+              {props.bookInfo.status === 3 && (
+                <Button variant="contained" onClick={() => availableBook(props)}>
+                  貸出可能にする
+                </Button>
+              )}
+              <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
+                {bookStatusName(props.bookInfo.status)}
+              </Button>
+            </>
           )}
         </Box>
       </DialogContent>

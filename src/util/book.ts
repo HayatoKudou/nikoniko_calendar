@@ -18,7 +18,7 @@ export const bookStatusName = (status: number) => {
     case 2:
       return "貸出中";
     case 3:
-      return "申請中";
+      return "購入申請中";
     default:
       return "貸出可能";
   }

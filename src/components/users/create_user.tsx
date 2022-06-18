@@ -143,8 +143,12 @@ const CreateUser = (props: Props) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} variant="contained">キャンセル</Button>
-        <Button onClick={handleSubmit} variant="contained">登録する</Button>
+        <Button onClick={props.onClose} variant="contained">
+          キャンセル
+        </Button>
+        <Button onClick={handleSubmit} variant="contained">
+          登録する
+        </Button>
       </DialogActions>
     </Dialog>
   );

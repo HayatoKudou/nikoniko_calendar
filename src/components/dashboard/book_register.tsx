@@ -142,7 +142,6 @@ const BookRegister = (props: Props) => {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             name="title"
-            autoFocus
             label="タイトル"
             fullWidth
             variant="standard"
@@ -177,8 +176,12 @@ const BookRegister = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.setClose} variant="contained">キャンセル</Button>
-        <Button onClick={handleSubmit} variant="contained">登録する</Button>
+        <Button onClick={props.setClose} variant="contained">
+          キャンセル
+        </Button>
+        <Button onClick={handleSubmit} variant="contained">
+          登録する
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -6,8 +6,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
@@ -35,11 +39,13 @@ const BookPurchaseApply = (props: Props) => {
   const [bookPurchaseApplyRequestErrors, setBookPurchaseApplyRequestErrors] = React.useState<Partial<BookPurchaseApplyRequestErrors>>({});
   const [title, setTitle] = React.useState("");
   const [formValues, setFormValues] = React.useState({
+    bookOwner: "team",
     bookCategoryName: "",
     title: "",
     description: "",
     url: "",
     reason: "",
+    price: 0,
   });
   const [selectedImage, setSelectedImage] = React.useState<Blob | null>(null);
 
@@ -178,6 +184,33 @@ const BookPurchaseApply = (props: Props) => {
           />
           <FormError errors={bookPurchaseApplyRequestErrors?.reason} />
 
+          <FormControl sx={{ display: "block", marginTop: 1 }}>
+            <FormLabel sx={{ marginRight: 2 }}>所有者</FormLabel>
+            <RadioGroup value={formValues.bookOwner} sx={{ display: "inline" }}>
+              <FormControlLabel name="bookOwner" value="team" onChange={handleChange} control={<Radio />} label="組織" />
+              <FormControlLabel name="bookOwner" value="personal" onChange={handleChange} control={<Radio />} label="個人" />
+            </RadioGroup>
+            {formValues.bookOwner === "personal" && (
+              <TextField onChange={handleChange} value={formValues.price} name="price" autoFocus label="価格" variant="standard" required />
+            )}
+          </FormControl>
+
+          {formValues.bookOwner === "personal" && (
+            <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
+              <Box sx={{ display: "flex" }}>
+                今月の購入上限：<Box sx={{ marginLeft: "auto" }}>¥3000</Box>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                購入残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (3000 - formValues.price)}</Box>
+              </Box>
+              {3000 - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入上限を超えています</Box>}
+              {isNaN(3000 - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
+            </Box>
+          )}
+
           <TextField
             onChange={handleChange}
             onBlur={fetchBookImage}
@@ -187,7 +220,6 @@ const BookPurchaseApply = (props: Props) => {
             label="URL"
             fullWidth
             variant="standard"
-            margin={"dense"}
           />
 
           <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>
@@ -195,8 +227,12 @@ const BookPurchaseApply = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.setClose} variant="contained">キャンセル</Button>
-        <Button onClick={handleSubmit} variant="contained">申請する</Button>
+        <Button onClick={props.setClose} variant="contained">
+          キャンセル
+        </Button>
+        <Button onClick={handleSubmit} variant="contained">
+          申請する
+        </Button>
       </DialogActions>
     </Dialog>
   );
