@@ -9,7 +9,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import UpdateBook from "../../api/book/update";
 import { useMe } from "../../store/me";
-import { bookStatusName } from "../../util/book";
+import { bookStatusName, BOOK_STATUS } from "../../util/book";
 import Spinner from "../spinner";
 import BookRentalApply from "./book_rental_apply";
 
@@ -73,10 +73,10 @@ const BookInfo = (props: Props) => {
             <Box>{props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
           </Box>
           <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
-          {props.bookInfo.status === 2 && props.bookInfo.rentalApplicant && (
+          {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant && (
             <Box sx={{ margin: 2 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
           )}
-          {props.bookInfo.status === 3 && props.bookInfo.purchaseApplicant && (
+          {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && props.bookInfo.purchaseApplicant && (
             <Box sx={{ margin: 2 }}>購入申請者: {props.bookInfo.purchaseApplicant.name}</Box>
           )}
         </Box>
@@ -87,10 +87,8 @@ const BookInfo = (props: Props) => {
             </Button>
           ) : (
             <>
-              {props.bookInfo.status === 3 && (
-                <Button variant="contained" onClick={() => availableBook(props)}>
-                  貸出可能にする
-                </Button>
+              {(props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager) && (
+                <Button variant="contained" onClick={() => availableBook(props)}>貸出可能にする</Button>
               )}
               <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
                 {bookStatusName(props.bookInfo.status)}

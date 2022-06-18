@@ -85,9 +85,7 @@ const SignUp = () => {
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`登録に失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`登録に失敗しました`, {variant: "error"});
       });
   };
 

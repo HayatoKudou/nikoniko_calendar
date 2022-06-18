@@ -1,3 +1,9 @@
+export const BOOK_STATUS = {
+  STATUS_CAN_LEND: 1,
+  STATUS_CAN_NOT_LEND: 2,
+  STATUS_APPLYING: 3,
+}
+
 export const bookStatusColor = (status: number) => {
   switch (status) {
     case 1:

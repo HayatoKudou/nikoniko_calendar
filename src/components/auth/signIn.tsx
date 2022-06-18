@@ -39,18 +39,14 @@ const SignIn = () => {
     })
       .then((res) => {
         setLoading(false);
-        enqueueSnackbar("ログインしました。", {
-          variant: "success",
-        });
+        enqueueSnackbar("ログインしました。", {variant: "success" });
         setMe(res.user);
         setClientInfo(res.client);
         router.push(`/${res.user.clientId}/dashboard`);
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`ログインに失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`ログインに失敗しました`, {variant: "error"});
       });
   };
 

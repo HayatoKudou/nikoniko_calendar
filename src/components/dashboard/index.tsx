@@ -134,9 +134,7 @@ const Dashboard = () => {
         setCreating(false);
       })
       .catch(() => {
-        enqueueSnackbar(`カテゴリの登録に失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`カテゴリの登録に失敗しました`, {variant: "error"});
         setCreating(false);
       });
   };
@@ -166,18 +164,17 @@ const Dashboard = () => {
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
       />
 
-      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>
-        書籍購入申請
-      </Button>
-      <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
-        書籍登録
-      </Button>
+      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>書籍購入申請</Button>
+      {me.role.is_book_manager && (
+        <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>書籍登録</Button>
+      )}
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          {me.role.is_book_manager && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
               {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
             </IconButton>
@@ -188,6 +185,7 @@ const Dashboard = () => {
               </form>
             )}
           </Box>
+          )}
         </Tabs>
       </Box>
 

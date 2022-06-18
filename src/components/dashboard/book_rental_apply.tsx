@@ -65,9 +65,7 @@ const BookRentalApply = (props: Props) => {
       .catch(() => {
         setLoading(false);
         setBookRentalApplyRequestErrors({});
-        enqueueSnackbar(`申請に失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`申請に失敗しました`, {variant: "error"});
       });
   };
 

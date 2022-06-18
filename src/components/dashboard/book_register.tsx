@@ -79,9 +79,7 @@ const BookRegister = (props: Props) => {
       .catch(() => {
         setLoading(false);
         setRegisterBookRequestErrors({});
-        enqueueSnackbar(`書籍の登録に失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`書籍の登録に失敗しました`, {variant: "error"});
       });
   };
 

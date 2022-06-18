@@ -88,9 +88,7 @@ const Update = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`書籍の更新に失敗しました`, {
-          variant: "error",
-        });
+        enqueueSnackbar(`書籍の更新に失敗しました`, {variant: "error"});
       });
   };
 
