@@ -28,7 +28,7 @@ import Spinner from "../spinner";
 
 const steps = ["プラン選択", "組織設定", "プロフィール設定"];
 
-const SignUp = () => {
+const Sign_up = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [, setMe] = useRecoilState(useMe);
@@ -271,4 +271,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Sign_up;
