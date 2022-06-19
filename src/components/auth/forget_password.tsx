@@ -1,40 +1,19 @@
-import CheckIcon from "@mui/icons-material/Check";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Stepper from "@mui/material/Stepper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
-import emailResendVerify, { EmailResendVerifyRequestErrors } from "../../api/email_resend_verify";
-import { useClientInfo } from "../../store/clientInfo";
-import { useMe } from "../../store/me";
-import Copyright from "../copyright";
+import forgetPassword, { ForgetPasswordRequestErrors } from "../../api/forget_password";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
-const steps = ["プラン選択", "組織設定", "プロフィール設定"];
-
 const SignUp = () => {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [, setMe] = useRecoilState(useMe);
-  const [, setClientInfo] = useRecoilState(useClientInfo);
   const [loading, setLoading] = React.useState(false);
-  const [emailResendVerifyRequestErrors, setEmailResendVerifyRequestErrors] = React.useState<Partial<EmailResendVerifyRequestErrors>>({});
+  const [forgetPasswordRequestErrors, setForgetPasswordRequestErrors] = React.useState<Partial<ForgetPasswordRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
     email: "",
   });
@@ -51,18 +30,18 @@ const SignUp = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    emailResendVerify({
+    forgetPassword({
       email: formValues.email,
     })
       .then((res) => {
         setLoading(false);
         if (res.succeeded) {
-          setEmailResendVerifyRequestErrors({});
+          setForgetPasswordRequestErrors({});
           enqueueSnackbar("リセットメールを送信しました", {
             variant: "success",
           });
         } else {
-          setEmailResendVerifyRequestErrors(res.errors);
+          setForgetPasswordRequestErrors(res.errors);
           enqueueSnackbar(`リセットメール送信に失敗しました`, {
             variant: "error",
           });
@@ -90,7 +69,7 @@ const SignUp = () => {
                 autoComplete="email"
                 required
               />
-              <FormError errors={emailResendVerifyRequestErrors?.email} />
+              <FormError errors={forgetPasswordRequestErrors?.email} />
             </Grid>
           </Grid>
           <Button onClick={handleSubmit} variant="contained" sx={{ float: "right", marginTop: 2 }}>

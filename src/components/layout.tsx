@@ -24,7 +24,7 @@ const Layout = ({ children }: any) => {
   const { loading, error, response } = useAuthenticatedAccount();
 
   const pathname = router.pathname;
-  if (pathname !== "/sign-up" && pathname !== "/sign-in" && pathname !== "/resend-email-verify") {
+  if (pathname !== "/sign-up" && pathname !== "/sign-in" && pathname !== "/forget-password" && !pathname.match(/reset-password/)) {
     if (loading) return <Spinner />;
     if (error || !response) {
       router.push("/sign-in");

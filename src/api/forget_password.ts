@@ -13,7 +13,7 @@ interface ForgetPasswordResult {
   errors: Partial<ForgetPasswordRequestErrors>;
 }
 
-const emailResendVerify = async (payload: ForgetPasswordRequestPayload): Promise<ForgetPasswordResult> => {
+const forgetPassword = async (payload: ForgetPasswordRequestPayload): Promise<ForgetPasswordResult> => {
   const endpoint = `${Config.apiOrigin}/api/forgot-password`;
   const res = await fetch(endpoint, {
     method: "POST",
@@ -35,4 +35,4 @@ const emailResendVerify = async (payload: ForgetPasswordRequestPayload): Promise
   };
 };
 
-export default emailResendVerify;
+export default forgetPassword;
