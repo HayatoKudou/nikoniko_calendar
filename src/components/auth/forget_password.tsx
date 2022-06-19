@@ -1,12 +1,14 @@
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import forgetPassword, { ForgetPasswordRequestErrors } from "../../api/forget_password";
+import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -54,30 +56,28 @@ const SignUp = () => {
   };
 
   return (
-    <>
-      <Typography variant="h4">パスワードリセット</Typography>
-      <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                onChange={handleChange}
-                value={formValues.email}
-                fullWidth
-                label="メールアドレス"
-                name="email"
-                autoComplete="email"
-                required
-              />
-              <FormError errors={forgetPasswordRequestErrors?.email} />
-            </Grid>
-          </Grid>
-          <Button onClick={handleSubmit} variant="contained" sx={{ float: "right", marginTop: 2 }}>
+          <TextField onChange={handleChange} value={formValues.email} fullWidth label="メールアドレス" name="email" autoComplete="email" required />
+          <FormError errors={forgetPasswordRequestErrors?.email} />
+          <Button type="submit" fullWidth onClick={handleSubmit} variant="contained" sx={{ mt: 3, mb: 2 }}>
             {"パスワードリセットメール送信"}
           </Button>
         </Box>
-      </Container>
-    </>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
   );
 };
 

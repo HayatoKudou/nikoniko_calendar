@@ -3,6 +3,8 @@ import Config from "../../../config";
 export interface CreateUserRequestErrors {
   name: Array<string>;
   email: Array<string>;
+  password: Array<string>;
+  password_confirmation: Array<string>;
   roles: Array<string>;
 }
 
@@ -14,6 +16,8 @@ interface RegisterBookResult {
 interface CreateUserRequestPayload {
   name: string;
   email: string;
+  password: string;
+  password_confirmation: string;
   roles: Array<string>;
   apiToken: string;
 }

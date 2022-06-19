@@ -5,6 +5,6 @@ const { persistAtom } = recoilPersist();
 
 export const useColorMode = atom({
   key: "colorMode",
-  default: "dark",
+  default: "light",
   effects_UNSTABLE: [persistAtom],
 });

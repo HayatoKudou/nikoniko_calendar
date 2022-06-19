@@ -38,11 +38,15 @@ const SignIn = () => {
       password: formValues.password,
     })
       .then((res) => {
-        setLoading(false);
-        enqueueSnackbar("ログインしました。", { variant: "success" });
-        setMe(res.user);
-        setClientInfo(res.client);
-        router.push(`/${res.user.clientId}/dashboard`);
+        if(res.succeeded){
+          setLoading(false);
+          enqueueSnackbar("ログインしました。", { variant: "success" });
+          setMe(res.user);
+          setClientInfo(res.client);
+          router.push(`/${res.user.clientId}/dashboard`);
+        } else {
+          console.log(res.errors);
+        }
       })
       .catch(() => {
         setLoading(false);
@@ -82,7 +86,6 @@ const SignIn = () => {
             type="password"
             autoComplete="current-password"
           />
-          {/*<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="パスワードを記録する" />*/}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             ログイン
           </Button>
