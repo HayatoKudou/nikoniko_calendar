@@ -1,4 +1,4 @@
-import ResendEmailVerify from "../components/auth/resend_email_verify";
+import ResendEmailVerify from "../components/auth/forget_password";
 import Layout from "../components/layout";
 
 const Index = () => {
