@@ -88,7 +88,7 @@ const SignIn = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="/resend-email-verify" variant="body2">
                 {"パスワードを忘れましたか？"}
               </Link>
             </Grid>
