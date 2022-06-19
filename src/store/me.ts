@@ -15,7 +15,7 @@ export const useMe = atom({
       is_account_manager: false,
       is_book_manager: false,
       is_client_manager: false,
-    }
+    },
   },
   effects_UNSTABLE: [persistAtom],
 });

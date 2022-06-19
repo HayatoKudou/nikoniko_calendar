@@ -87,7 +87,7 @@ const BookPurchaseApply = (props: Props) => {
       .catch(() => {
         setLoading(false);
         setBookPurchaseApplyRequestErrors({});
-        enqueueSnackbar(`申請に失敗しました`, {variant: "error"});
+        enqueueSnackbar(`申請に失敗しました`, { variant: "error" });
       });
   };
 

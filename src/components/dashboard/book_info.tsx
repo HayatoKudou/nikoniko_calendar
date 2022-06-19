@@ -87,8 +87,10 @@ const BookInfo = (props: Props) => {
             </Button>
           ) : (
             <>
-              {(props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager) && (
-                <Button variant="contained" onClick={() => availableBook(props)}>貸出可能にする</Button>
+              {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
+                <Button variant="contained" onClick={() => availableBook(props)}>
+                  貸出可能にする
+                </Button>
               )}
               <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
                 {bookStatusName(props.bookInfo.status)}

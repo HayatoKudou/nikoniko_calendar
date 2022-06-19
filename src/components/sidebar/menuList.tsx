@@ -66,18 +66,18 @@ const MenuList = (props: { open: boolean }) => {
     }
   };
 
-  let menuList: { name: string; title: string | undefined; path: string | null; }[] = [];
+  let menuList: { name: string; title: string | undefined; path: string | null }[] = [];
 
   if (me) {
     menuList = [
-      {name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard`},
-      {name: "books", title: "書籍管理", path: `/${me.clientId}/books`},
+      { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
+      { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
     ];
-    if (me.role.is_account_manager) menuList.push({name: "users", title: "ユーザー管理", path: `/${me.clientId}/users`})
-    menuList.push({name: "profile", title: "プロフィール", path: `/${me.clientId}/profile`})
-    if (me.role.is_client_manager) menuList.push({name: "clientProfile", title: "組織設定", path: `/${me.clientId}/client-profile`})
+    if (me.role.is_account_manager) menuList.push({ name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` });
+    menuList.push({ name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` });
+    if (me.role.is_client_manager) menuList.push({ name: "clientProfile", title: "組織設定", path: `/${me.clientId}/client-profile` });
   }
-  menuList.push({name: "paletteMode", title: name, path: null})
+  menuList.push({ name: "paletteMode", title: name, path: null });
 
   return (
     <List>

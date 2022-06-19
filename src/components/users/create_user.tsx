@@ -80,7 +80,7 @@ const CreateUser = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, {variant: "error"});
+        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
       });
   };
 

@@ -24,6 +24,10 @@ const useAuthenticatedAccount = () => {
       }),
     {
       revalidateOnFocus: false,
+      // onErrorRetry: (error) => {
+      //   // 403では再試行しない。
+      //   if (error.status === 403) return
+      // }
     }
   );
 

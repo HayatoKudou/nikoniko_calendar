@@ -134,7 +134,7 @@ const Dashboard = () => {
         setCreating(false);
       })
       .catch(() => {
-        enqueueSnackbar(`カテゴリの登録に失敗しました`, {variant: "error"});
+        enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
         setCreating(false);
       });
   };
@@ -164,9 +164,13 @@ const Dashboard = () => {
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
       />
 
-      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>書籍購入申請</Button>
+      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>
+        書籍購入申請
+      </Button>
       {me.role.is_book_manager && (
-        <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>書籍登録</Button>
+        <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
+          書籍登録
+        </Button>
       )}
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
@@ -175,16 +179,16 @@ const Dashboard = () => {
           ))}
           {me.role.is_book_manager && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
-              {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
-            </IconButton>
-            {bookCategoryFormOpen && (
-              <form onSubmit={handleSubmit}>
-                <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" />
-                <FormError errors={bookCategoryFormError["name"]} />
-              </form>
-            )}
-          </Box>
+              <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
+                {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
+              </IconButton>
+              {bookCategoryFormOpen && (
+                <form onSubmit={handleSubmit}>
+                  <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" />
+                  <FormError errors={bookCategoryFormError["name"]} />
+                </form>
+              )}
+            </Box>
           )}
         </Tabs>
       </Box>

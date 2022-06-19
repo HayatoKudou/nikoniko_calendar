@@ -72,7 +72,7 @@ const SignUp = () => {
           });
           setMe(res.user);
           setClientInfo(res.client);
-          router.push(`/${res.client!.id}/dashboard`);
+          router.push("/need-email-verify");
         } else {
           if (res.errors.client_name) {
             setActiveStep(1);
@@ -85,7 +85,7 @@ const SignUp = () => {
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`登録に失敗しました`, {variant: "error"});
+        enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
       });
   };
 
