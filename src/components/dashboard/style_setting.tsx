@@ -38,7 +38,7 @@ const StyleSetting = () => {
           top: "50%",
         }}
       >
-        <SettingsIcon sx={{ fontSize: "10vh" }} />
+        <SettingsIcon sx={{ fontSize: "60px" }} />
       </IconButton>
       <Drawer anchor={"right"} open={open} onClose={() => setOpen(!open)}>
         <Box sx={{ width: 300, marginTop: 10 }}>

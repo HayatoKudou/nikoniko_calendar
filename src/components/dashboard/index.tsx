@@ -62,14 +62,15 @@ const Dashboard = () => {
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
-  const [creating, setCreating] = React.useState(false);
-  const [applicationDialogOpen, setApplicationDialogOpen] = React.useState(false);
-  const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
-  const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState(false);
+  const [creating, setCreating] = React.useState<boolean>(false);
+  const [applicationDialogOpen, setApplicationDialogOpen] = React.useState<boolean>(false);
+  const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
+  const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
   const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
+  const [bookSearchString, setBookSearchString] = React.useState<string>("");
 
   const { loading, error, response, mutate } = useBooks();
   React.useEffect(() => {
@@ -94,10 +95,18 @@ const Dashboard = () => {
   };
 
   const bookCategoryFiltered = (): Array<any> => {
-    if (openTabValue === "ALL") {
-      return response.books;
+    let filtered = response.books;
+    if(bookSearchString){
+      filtered = filtered.filter((book: Book) => {
+        if (book.title.indexOf(bookSearchString) !== -1) {
+          return book
+        }
+      });
     }
-    return response.books.filter((book: Book) => {
+    if (openTabValue === "ALL") {
+      return filtered;
+    }
+    return filtered.filter((book: Book) => {
       return book.category === openTabValue;
     });
   };
@@ -164,14 +173,13 @@ const Dashboard = () => {
         success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
       />
 
-      <Button variant="contained" sx={{ float: "right" }} onClick={() => setApplicationDialogOpen(true)}>
-        書籍購入申請
-      </Button>
-      {me.role.is_book_manager && (
-        <Button variant="contained" sx={{ float: "right", marginRight: 1 }} onClick={() => setRegisterDialogOpen(true)}>
-          書籍登録
-        </Button>
-      )}
+      <Box sx={{ float: "right" }}>
+        <TextField value={bookSearchString} onChange={(e) => setBookSearchString(e.target.value)} sx={{ marginRight: 1 }} label="書籍検索" size="small"　/>
+        <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>書籍購入申請</Button>
+        {me.role.is_book_manager && (
+          <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>書籍登録</Button>
+        )}
+      </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
