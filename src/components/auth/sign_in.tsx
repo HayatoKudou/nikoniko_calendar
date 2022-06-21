@@ -38,7 +38,7 @@ const SignIn = () => {
       password: formValues.password,
     })
       .then((res) => {
-        if(res.succeeded){
+        if (res.succeeded) {
           setLoading(false);
           enqueueSnackbar("ログインしました。", { variant: "success" });
           setMe(res.user);

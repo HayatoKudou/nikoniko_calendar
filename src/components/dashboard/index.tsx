@@ -2,6 +2,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CircleIcon from "@mui/icons-material/Circle";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -96,10 +97,10 @@ const Dashboard = () => {
 
   const bookCategoryFiltered = (): Array<any> => {
     let filtered = response.books;
-    if(bookSearchString){
+    if (bookSearchString) {
       filtered = filtered.filter((book: Book) => {
         if (book.title.indexOf(bookSearchString) !== -1) {
-          return book
+          return book;
         }
       });
     }
@@ -156,12 +157,14 @@ const Dashboard = () => {
   return (
     <>
       <StyleSetting />
-      <BookInfo
-        open={bookInfoDialogOpen}
-        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
-        setClose={() => setBookInfoDialogOpen(false)}
-        bookInfo={selectedBook}
-      />
+      {selectedBook && (
+        <BookInfo
+          open={bookInfoDialogOpen}
+          success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
+          setClose={() => setBookInfoDialogOpen(false)}
+          bookInfo={selectedBook}
+        />
+      )}
       <BookPurchaseApply
         open={applicationDialogOpen}
         setClose={() => setApplicationDialogOpen(false)}
@@ -174,10 +177,23 @@ const Dashboard = () => {
       />
 
       <Box sx={{ float: "right" }}>
-        <TextField value={bookSearchString} onChange={(e) => setBookSearchString(e.target.value)} sx={{ marginRight: 1 }} label="書籍検索" size="small"　/>
-        <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>書籍購入申請</Button>
+        <TextField
+          value={bookSearchString}
+          onChange={(e) => setBookSearchString(e.target.value)}
+          sx={{ marginRight: 1 }}
+          label="書籍検索"
+          size="small"
+          InputProps={{
+            startAdornment: <SearchIcon />,
+          }}
+        />
+        <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
+          書籍購入申請
+        </Button>
         {me.role.is_book_manager && (
-          <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>書籍登録</Button>
+          <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
+            書籍登録
+          </Button>
         )}
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

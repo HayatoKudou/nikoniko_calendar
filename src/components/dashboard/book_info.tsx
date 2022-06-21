@@ -12,10 +12,11 @@ import { useMe } from "../../store/me";
 import { bookStatusName, BOOK_STATUS } from "../../util/book";
 import Spinner from "../spinner";
 import BookRentalApply from "./book_rental_apply";
+import BookReview from "./book_review";
 
 interface Props {
   open: boolean;
-  bookInfo: Book | null;
+  bookInfo: Book;
   setClose: () => void;
   success: () => void;
 }
@@ -24,19 +25,20 @@ const BookInfo = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
-  const [openForm, setOpenForm] = React.useState<boolean>(false);
+  const [openRentalForm, setOpenRentalForm] = React.useState<boolean>(false);
+  const [openReviewForm, setOpenReviewForm] = React.useState<boolean>(false);
 
   if (loading) return <Spinner />;
 
   const availableBook = (props: Props) => {
     setLoading(true);
     UpdateBook(me.clientId, {
-      id: props.bookInfo!.id,
-      category: props.bookInfo!.category,
+      id: props.bookInfo.id,
+      category: props.bookInfo.category,
       status: 1, // 1 = 貸出可能
-      title: props.bookInfo!.title,
-      description: props.bookInfo!.description,
-      image: "data:image/png;base64," + props.bookInfo!.image,
+      title: props.bookInfo.title,
+      description: props.bookInfo.description,
+      image: "data:image/png;base64," + props.bookInfo.image,
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -55,7 +57,12 @@ const BookInfo = (props: Props) => {
       });
   };
 
-  return props.bookInfo ? (
+  const handleClose = () => {
+    setOpenRentalForm(false);
+    setOpenReviewForm(false);
+  };
+
+  return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent sx={{ display: "flex" }}>
@@ -81,28 +88,32 @@ const BookInfo = (props: Props) => {
           )}
         </Box>
         <Box sx={{ marginLeft: "auto", marginTop: "auto" }}>
-          {openForm ? (
-            <Button variant="contained" onClick={() => setOpenForm(false)}>
+          {openRentalForm ? (
+            <Button variant="contained" onClick={handleClose}>
               閉じる
             </Button>
           ) : (
             <>
+              {props.bookInfo.rentalApplicant?.id === me.id && (
+                <Button variant="contained" onClick={() => setOpenReviewForm(true)}>
+                  返却 & レビュー
+                </Button>
+              )}
               {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
                 <Button variant="contained" onClick={() => availableBook(props)}>
                   貸出可能にする
                 </Button>
               )}
-              <Button variant="contained" onClick={() => setOpenForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
+              <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
                 {bookStatusName(props.bookInfo.status)}
               </Button>
             </>
           )}
         </Box>
       </DialogContent>
-      {openForm && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
+      {openRentalForm && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
+      {openReviewForm && <BookReview bookInfo={props.bookInfo} success={props.success} />}
     </Dialog>
-  ) : (
-    <></>
   );
 };
 

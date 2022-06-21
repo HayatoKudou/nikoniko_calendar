@@ -41,7 +41,7 @@ const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
     client: response.client,
     user: response.me,
     errors: {},
-  }
+  };
 };
 
 export default signUp;
