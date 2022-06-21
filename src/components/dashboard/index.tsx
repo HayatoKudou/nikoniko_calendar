@@ -154,27 +154,21 @@ const Dashboard = () => {
     setBookInfoDialogOpen(true);
   };
 
+  const handleSuccess = () => {
+    mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
+    setBookInfoDialogOpen(false);
+    setApplicationDialogOpen(false);
+    setRegisterDialogOpen(false);
+  };
+
   return (
     <>
       <StyleSetting />
       {selectedBook && (
-        <BookInfo
-          open={bookInfoDialogOpen}
-          success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
-          setClose={() => setBookInfoDialogOpen(false)}
-          bookInfo={selectedBook}
-        />
+        <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       )}
-      <BookPurchaseApply
-        open={applicationDialogOpen}
-        setClose={() => setApplicationDialogOpen(false)}
-        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
-      />
-      <BookRegister
-        open={registerDialogOpen}
-        setClose={() => setRegisterDialogOpen(false)}
-        success={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/books`)}
-      />
+      <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
+      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
       <Box sx={{ float: "right" }}>
         <TextField

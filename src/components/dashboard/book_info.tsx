@@ -60,10 +60,11 @@ const BookInfo = (props: Props) => {
   const handleClose = () => {
     setOpenRentalForm(false);
     setOpenReviewForm(false);
+    props.setClose();
   };
 
   return (
-    <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
+    <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"md"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent sx={{ display: "flex" }}>
         {props.bookInfo.image ? (
@@ -88,26 +89,30 @@ const BookInfo = (props: Props) => {
           )}
         </Box>
         <Box sx={{ marginLeft: "auto", marginTop: "auto" }}>
+          {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND &&
+            props.bookInfo.rentalApplicant?.id === me.id &&
+            (openReviewForm ? (
+              <Button variant="contained" onClick={() => setOpenReviewForm(false)} sx={{ marginRight: 1 }}>
+                閉じる
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={() => setOpenReviewForm(true)} sx={{ marginRight: 1 }}>
+                返却 & レビュー
+              </Button>
+            ))}
+          {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
+            <Button variant="contained" onClick={() => availableBook(props)} sx={{ marginRight: 1 }}>
+              貸出可能にする
+            </Button>
+          )}
           {openRentalForm ? (
-            <Button variant="contained" onClick={handleClose}>
+            <Button variant="contained" onClick={() => setOpenRentalForm(false)}>
               閉じる
             </Button>
           ) : (
-            <>
-              {props.bookInfo.rentalApplicant?.id === me.id && (
-                <Button variant="contained" onClick={() => setOpenReviewForm(true)}>
-                  返却 & レビュー
-                </Button>
-              )}
-              {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
-                <Button variant="contained" onClick={() => availableBook(props)}>
-                  貸出可能にする
-                </Button>
-              )}
-              <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginLeft: 1 }}>
-                {bookStatusName(props.bookInfo.status)}
-              </Button>
-            </>
+            <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1}>
+              {bookStatusName(props.bookInfo.status)}
+            </Button>
           )}
         </Box>
       </DialogContent>

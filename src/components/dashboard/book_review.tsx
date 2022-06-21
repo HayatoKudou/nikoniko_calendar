@@ -22,7 +22,7 @@ const BookReview = (props: Props) => {
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
-    rate: null,
+    rate: 0,
     review: "",
   });
   const [bookReviewRequestErrors, setBookRentalApplyRequestErrors] = React.useState<Partial<CreateBookReviewRequestErrors>>({});
@@ -38,7 +38,8 @@ const BookReview = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    CreateBookReview(me.clientId, {
+    CreateBookReview(me.clientId, props.bookInfo.id, {
+      rate: formValues.rate,
       review: formValues.review,
       apiToken: me.apiToken,
     })
@@ -46,12 +47,12 @@ const BookReview = (props: Props) => {
         if (res.succeeded) {
           setBookRentalApplyRequestErrors({});
           props.success();
-          enqueueSnackbar("申請しました。", {
+          enqueueSnackbar("返却しました。", {
             variant: "success",
           });
         } else {
           setBookRentalApplyRequestErrors(res.errors);
-          enqueueSnackbar(`申請に失敗しました`, {
+          enqueueSnackbar(`返却に失敗しました`, {
             variant: "error",
           });
         }
@@ -60,7 +61,7 @@ const BookReview = (props: Props) => {
       .catch(() => {
         setLoading(false);
         setBookRentalApplyRequestErrors({});
-        enqueueSnackbar(`申請に失敗しました`, { variant: "error" });
+        enqueueSnackbar(`返却に失敗しました`, { variant: "error" });
       });
   };
 
@@ -68,7 +69,8 @@ const BookReview = (props: Props) => {
     <>
       <DialogTitle sx={{ textAlign: "center" }}>返却 & レビュー</DialogTitle>
       <Box sx={{ padding: 2 }}>
-        <Rating name="rate" value={formValues.rate} onChange={handleChange} />
+        <Rating name="rate" value={formValues.rate} onChange={handleChange} sx={{ display: "flex" }} />
+        <FormError errors={bookReviewRequestErrors?.rate} />
         <TextField
           onChange={handleChange}
           value={formValues.review}
@@ -79,7 +81,7 @@ const BookReview = (props: Props) => {
           margin={"dense"}
           multiline
         />
-        <FormError errors={bookReviewRequestErrors.review} />
+        <FormError errors={bookReviewRequestErrors?.review} />
       </Box>
       <DialogActions>
         <Button variant="contained" onClick={handleSubmit}>

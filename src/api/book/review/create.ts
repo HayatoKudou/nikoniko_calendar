@@ -1,6 +1,7 @@
 import Config from "../../../../config";
 
 export interface CreateBookReviewRequestErrors {
+  rate: Array<string>;
   review: Array<string>;
 }
 
@@ -10,12 +11,13 @@ interface CreateBookReviewResult {
 }
 
 interface CreateBookReviewRequestPayload {
+  rate: number;
   review: string;
   apiToken: string;
 }
 
-const CreateBookReview = async (clientId: string, payload: CreateBookReviewRequestPayload): Promise<CreateBookReviewResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/bookReview`;
+const CreateBookReview = async (clientId: string, bookId: number, payload: CreateBookReviewRequestPayload): Promise<CreateBookReviewResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/bookReview`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
