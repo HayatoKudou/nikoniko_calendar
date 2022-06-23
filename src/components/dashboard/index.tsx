@@ -11,6 +11,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
+import Rating from "@mui/material/Rating";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
@@ -31,6 +32,7 @@ import Spinner from "../spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
 import BookRegister from "./book_register";
+import BookReviews from "./book_reviews";
 import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
@@ -67,10 +69,12 @@ const Dashboard = () => {
   const [applicationDialogOpen, setApplicationDialogOpen] = React.useState<boolean>(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
+  const [bookReviewsDialogOpen, setBookReviewsDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
   const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
+  const [bookSearchStringInput, setBookSearchStringInput] = React.useState<string>("");
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
 
   const { loading, error, response, mutate } = useBooks();
@@ -165,20 +169,38 @@ const Dashboard = () => {
     <>
       <StyleSetting />
       {selectedBook && (
-        <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
+        <>
+          <BookInfo
+            open={bookInfoDialogOpen}
+            success={handleSuccess}
+            setClose={() => setBookInfoDialogOpen(false)}
+            bookInfo={selectedBook}
+            setOpenReview={() => setBookReviewsDialogOpen(true)}
+          />
+          <BookReviews
+            open={bookReviewsDialogOpen}
+            setClose={() => setBookReviewsDialogOpen(false)}
+            success={handleSuccess}
+            bookInfo={selectedBook}
+          />
+        </>
       )}
       <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
       <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
       <Box sx={{ float: "right" }}>
         <TextField
-          value={bookSearchString}
-          onChange={(e) => setBookSearchString(e.target.value)}
+          value={bookSearchStringInput}
+          onChange={(e) => setBookSearchStringInput(e.target.value)}
           sx={{ marginRight: 1 }}
           label="書籍検索"
           size="small"
           InputProps={{
-            startAdornment: <SearchIcon />,
+            endAdornment: (
+              <IconButton onClick={() => setBookSearchString(bookSearchStringInput)}>
+                <SearchIcon />
+              </IconButton>
+            ),
           }}
         />
         <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
@@ -214,8 +236,27 @@ const Dashboard = () => {
       {tabList.map((tab, index) => (
         <TabPanel value={openTabValue} index={tab.label} key={index}>
           {bookCategoryFiltered().map((book: Book, index: number) => {
+            let rateAverage = 0;
+            if (book.reviews.length > 0) {
+              const rateSum = book.reviews
+                .map((review: Review) => review.rate)
+                .reduce((a: number, b: number) => {
+                  return a + b;
+                });
+              rateAverage = rateSum / book.reviews.length;
+            }
             return (
-              <Card sx={{ width: imageSize.width, margin: 1, display: "flex", justifyContent: "space-between", flexDirection: "column" }} key={index}>
+              <Card
+                sx={{
+                  width: imageSize.width,
+                  margin: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  border: book.rentalApplicant?.id === me.id ? "solid red" : "",
+                }}
+                key={index}
+              >
                 <CardActionArea onClick={() => handleDetailBook(book)}>
                   {book.image ? (
                     <CardMedia
@@ -229,7 +270,7 @@ const Dashboard = () => {
                     </Box>
                   )}
                   {bookCardStyle === "rich" && (
-                    <CardContent sx={{ padding: 1 }}>
+                    <CardContent sx={{ padding: "8px 8px 0px 8px" }}>
                       <Typography
                         sx={{
                           fontSize: imageSize.height / 15,
@@ -244,9 +285,19 @@ const Dashboard = () => {
                     </CardContent>
                   )}
                 </CardActionArea>
-                <CardActions>
-                  <Button size="small">{bookStatusName(book.status)}</Button>
-                  <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} sx={{ marginLeft: "auto" }} />
+                <CardActions sx={{ display: "block", paddingTop: 0 }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Rating name="rate" value={rateAverage} readOnly precision={0.5} sx={{ fontSize: imageSize.height / 12 }} />
+                    <Button size="small" sx={{ minWidth: "20px" }}>
+                      {book.reviews.length}
+                    </Button>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", marginLeft: "0px !important" }}>
+                    <Button size="small" sx={{ paddingLeft: 0 }}>
+                      {bookStatusName(book.status)}
+                    </Button>
+                    <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} sx={{ marginLeft: "auto" }} />
+                  </Box>
                 </CardActions>
               </Card>
             );

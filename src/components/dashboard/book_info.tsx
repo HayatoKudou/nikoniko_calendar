@@ -1,9 +1,13 @@
+import CommentIcon from "@mui/icons-material/Comment";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
@@ -19,6 +23,7 @@ interface Props {
   bookInfo: Book;
   setClose: () => void;
   success: () => void;
+  setOpenReview: () => void;
 }
 
 const BookInfo = (props: Props) => {
@@ -63,6 +68,21 @@ const BookInfo = (props: Props) => {
     props.setClose();
   };
 
+  const handleOpenReview = () => {
+    props.setClose();
+    props.setOpenReview();
+  };
+
+  let rateAverage = 0;
+  if (props.bookInfo.reviews.length > 0) {
+    const rateSum = props.bookInfo.reviews
+      .map((review: Review) => review.rate)
+      .reduce((a: number, b: number) => {
+        return a + b;
+      });
+    rateAverage = rateSum / props.bookInfo.reviews.length;
+  }
+
   return (
     <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"md"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
@@ -75,6 +95,13 @@ const BookInfo = (props: Props) => {
           </Box>
         )}
         <Box>
+          <Box sx={{ margin: 2, display: "flex", alignItems: "center" }}>
+            <Rating name="rate" value={rateAverage} readOnly precision={0.5} />
+            <IconButton color="primary" onClick={handleOpenReview}>
+              <CommentIcon />
+              <Typography component="span">{props.bookInfo.reviews.length}</Typography>
+            </IconButton>
+          </Box>
           <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
           <Box sx={{ margin: 2, whiteSpace: "pre-wrap", display: "flex" }}>
             <Box>本の説明: </Box>
@@ -97,7 +124,7 @@ const BookInfo = (props: Props) => {
               </Button>
             ) : (
               <Button variant="contained" onClick={() => setOpenReviewForm(true)} sx={{ marginRight: 1 }}>
-                返却 & レビュー
+                返却
               </Button>
             ))}
           {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (

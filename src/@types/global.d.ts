@@ -25,8 +25,16 @@ interface Book {
   image: any | null;
   purchaseApplicant: User;
   rentalApplicant: User;
+  reviews: any;
 }
 
 interface BookCategory {
   name: string;
+}
+
+interface Review {
+  id: number;
+  book_id: number;
+  rate: number;
+  review: string;
 }

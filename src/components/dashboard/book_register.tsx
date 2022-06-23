@@ -23,8 +23,8 @@ import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
-  setClose: any;
-  success: any;
+  setClose: () => void;
+  success: () => void;
 }
 
 const BookRegister = (props: Props) => {
