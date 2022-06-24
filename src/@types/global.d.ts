@@ -33,8 +33,8 @@ interface BookCategory {
 }
 
 interface Review {
-  id: number;
-  book_id: number;
   rate: number;
   review: string;
+  reviewedAt: string;
+  reviewer: string;
 }

@@ -32,7 +32,6 @@ import Spinner from "../spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
 import BookRegister from "./book_register";
-import BookReviews from "./book_reviews";
 import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
@@ -69,7 +68,6 @@ const Dashboard = () => {
   const [applicationDialogOpen, setApplicationDialogOpen] = React.useState<boolean>(false);
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
-  const [bookReviewsDialogOpen, setBookReviewsDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
   const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
@@ -98,6 +96,7 @@ const Dashboard = () => {
       setOpenTabValue(newValue);
     }
   };
+  console.log(response);
 
   const bookCategoryFiltered = (): Array<any> => {
     let filtered = response.books;
@@ -169,21 +168,7 @@ const Dashboard = () => {
     <>
       <StyleSetting />
       {selectedBook && (
-        <>
-          <BookInfo
-            open={bookInfoDialogOpen}
-            success={handleSuccess}
-            setClose={() => setBookInfoDialogOpen(false)}
-            bookInfo={selectedBook}
-            setOpenReview={() => setBookReviewsDialogOpen(true)}
-          />
-          <BookReviews
-            open={bookReviewsDialogOpen}
-            setClose={() => setBookReviewsDialogOpen(false)}
-            success={handleSuccess}
-            bookInfo={selectedBook}
-          />
-        </>
+        <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       )}
       <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
       <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />

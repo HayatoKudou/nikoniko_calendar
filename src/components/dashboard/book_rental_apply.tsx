@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -71,7 +70,6 @@ const BookRentalApply = (props: Props) => {
 
   return (
     <>
-      <DialogTitle sx={{ textAlign: "center" }}>貸出申請</DialogTitle>
       <Box sx={{ padding: 2 }}>
         <Box>
           <TextField
@@ -105,7 +103,7 @@ const BookRentalApply = (props: Props) => {
       </Box>
       <DialogActions>
         <Button variant="contained" onClick={handleSubmit}>
-          申請する
+          貸出申請
         </Button>
       </DialogActions>
     </>
