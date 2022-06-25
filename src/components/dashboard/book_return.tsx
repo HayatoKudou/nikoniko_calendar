@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import BookReturn from "../../api/book/return";
 import { useMe } from "../../store/me";
-import ConfirmDialog from "../confirmDialog";
+import Confirm_dialog from "../confirm_dialog";
 import Spinner from "../spinner";
 
 interface Props {
@@ -57,7 +57,7 @@ const BookReturnForm = (props: Props) => {
       <Button variant="contained" onClick={handleClickOpen} sx={{ marginRight: 1 }}>
         返却
       </Button>
-      <ConfirmDialog open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
+      <Confirm_dialog message={"本当に返却しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
     </>
   );
 };

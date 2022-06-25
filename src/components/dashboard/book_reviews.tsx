@@ -8,7 +8,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
 import { useMe } from "../../store/me";
-import ConfirmDialog from "../confirmDialog";
+import Confirm_dialog from "../confirm_dialog";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -87,6 +87,7 @@ const BookReviews = (props: Props) => {
           variant="standard"
           margin={"dense"}
           multiline
+          required
         />
         <FormError errors={bookCreateReviewRequestErrors?.review} />
       </Box>
@@ -95,7 +96,7 @@ const BookReviews = (props: Props) => {
           レビュー投稿
         </Button>
       </DialogActions>
-      <ConfirmDialog open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
+      <Confirm_dialog message={"レビューを投稿しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
       {props.bookInfo.reviews.map((review: Review, index: number) => (
         <Box key={index} sx={{ padding: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -106,7 +107,7 @@ const BookReviews = (props: Props) => {
               {review.reviewedAt}
             </Box>
           </Box>
-          {review.review}
+          <Box sx={{whiteSpace: "pre-wrap"}}>{review.review}</Box>
         </Box>
       ))}
     </>

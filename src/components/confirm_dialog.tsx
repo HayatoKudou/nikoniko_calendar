@@ -6,6 +6,7 @@ import * as React from "react";
 
 interface Props {
   open: boolean;
+  message: string;
   onClose: () => void;
   handleSubmit: () => void;
 }
@@ -13,7 +14,7 @@ interface Props {
 const ConfirmDialog = (props: Props) => {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
-      <DialogTitle>本当に実行しますか？</DialogTitle>
+      <DialogTitle>{props.message}</DialogTitle>
       <DialogActions>
         <Button onClick={props.onClose}>いいえ</Button>
         <Button onClick={props.handleSubmit} autoFocus>

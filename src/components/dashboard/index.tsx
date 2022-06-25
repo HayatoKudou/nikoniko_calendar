@@ -173,32 +173,8 @@ const Dashboard = () => {
       <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
       <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
-      <Box sx={{ float: "right" }}>
-        <TextField
-          value={bookSearchStringInput}
-          onChange={(e) => setBookSearchStringInput(e.target.value)}
-          sx={{ marginRight: 1 }}
-          label="書籍検索"
-          size="small"
-          InputProps={{
-            endAdornment: (
-              <IconButton onClick={() => setBookSearchString(bookSearchStringInput)}>
-                <SearchIcon />
-              </IconButton>
-            ),
-          }}
-        />
-        <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
-          書籍購入申請
-        </Button>
-        {me.role.is_book_manager && (
-          <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
-            書籍登録
-          </Button>
-        )}
-      </Box>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+      <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
+        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{maxWidth: "65%"}}>
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}
@@ -209,13 +185,38 @@ const Dashboard = () => {
               </IconButton>
               {bookCategoryFormOpen && (
                 <form onSubmit={handleSubmit}>
-                  <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" />
+                  <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" sx={{minWidth: "150px"}}/>
                   <FormError errors={bookCategoryFormError["name"]} />
                 </form>
               )}
             </Box>
           )}
         </Tabs>
+
+        <Box sx={{ marginLeft: "auto", maxWidth: "35%" }}>
+          <TextField
+            value={bookSearchStringInput}
+            onChange={(e) => setBookSearchStringInput(e.target.value)}
+            sx={{ marginRight: 1 }}
+            label="書籍検索"
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={() => setBookSearchString(bookSearchStringInput)}>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+          />
+          <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
+            書籍購入申請
+          </Button>
+          {me.role.is_book_manager && (
+            <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
+              書籍登録
+            </Button>
+          )}
+        </Box>
       </Box>
 
       {tabList.map((tab, index) => (
