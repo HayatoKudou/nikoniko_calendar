@@ -8,7 +8,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
 import { useMe } from "../../store/me";
-import Confirm_dialog from "../confirm_dialog";
+import ConfirmDialog from "../confirm_dialog";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -52,6 +52,7 @@ const BookReviews = (props: Props) => {
         setOpenConfirm(false);
         if (res.succeeded) {
           props.onSuccess();
+          setBookCreateRentalApplyRequestErrors({});
           enqueueSnackbar("レビューを投稿しました。", {
             variant: "success",
           });
@@ -65,6 +66,7 @@ const BookReviews = (props: Props) => {
       })
       .catch(() => {
         setLoading(false);
+        setBookCreateRentalApplyRequestErrors({});
         enqueueSnackbar(`レビューの投稿に失敗しました`, { variant: "error" });
       });
   };
@@ -96,7 +98,7 @@ const BookReviews = (props: Props) => {
           レビュー投稿
         </Button>
       </DialogActions>
-      <Confirm_dialog message={"レビューを投稿しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"レビューを投稿しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
       {props.bookInfo.reviews.map((review: Review, index: number) => (
         <Box key={index} sx={{ padding: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>

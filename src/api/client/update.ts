@@ -2,10 +2,8 @@ import Config from "../../../config";
 
 export interface UpdateClientRequestErrors {
   name: Array<string>;
-  email: Array<string>;
-  roles: Array<string>;
-  password: Array<string>;
-  password_confirmation: Array<string>;
+  purchase_limit: Array<string>;
+  purchase_limit_unit: Array<string>;
 }
 
 interface UpdateClientResult {
@@ -14,9 +12,9 @@ interface UpdateClientResult {
 }
 
 interface UpdateClientRequestPayload {
-  id: number;
   name: string;
-  plan: string;
+  purchase_limit: number;
+  purchase_limit_unit: string;
   apiToken: string;
 }
 

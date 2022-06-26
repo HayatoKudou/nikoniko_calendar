@@ -5,6 +5,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
+import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Tab from "@mui/material/Tab";
@@ -14,13 +15,19 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import Config from "../../../config";
 import useClientInfo from "../../api/client/info";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../confirm_dialog";
 import FormError from "./../form_error";
 import Spinner from "./../spinner";
 
-const purchaseSubsidyLimitUnits = [
+const purchaseLimitUnits = [
+  {
+    value: "everyYear",
+    label: "年",
+  },
   {
     value: "monthly",
     label: "月",
@@ -31,20 +38,22 @@ const purchaseSubsidyLimitUnits = [
   },
 ];
 
+const tabList = [{ label: "基本情報" }, { label: "プラン選択" }];
+
 const Profile = () => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const [openConfirm, setOpenConfirm] = React.useState(false);
   const [updating, setUpdating] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     id: 0,
     name: "",
     plan: "",
-    purchaseSubsidyLimit: 0,
-    purchaseSubsidyLimitUnit: "monthly",
+    purchaseLimit: 0,
+    purchaseLimitUnit: "monthly",
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
-  const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "基本情報" }, { label: "プラン選択" }]);
   const { loading, error, response, mutate } = useClientInfo();
 
   React.useEffect(() => {
@@ -53,12 +62,11 @@ const Profile = () => {
         id: response.client.id,
         name: response.client.name,
         plan: response.client.plan,
-        purchaseSubsidyLimit: 0,
-        purchaseSubsidyLimitUnit: "monthly",
+        purchaseLimit: response.client.purchaseLimit,
+        purchaseLimitUnit: response.client.purchaseLimitUnit,
       });
     }
   }, [response]);
-  console.log(response);
 
   if (loading || updating) return <Spinner />;
 
@@ -78,20 +86,21 @@ const Profile = () => {
   const handleSubmit = () => {
     setUpdating(true);
     Update(me.clientId, {
-      id: formValues.id,
       name: formValues.name,
-      plan: formValues.plan,
+      purchase_limit: formValues.purchaseLimit,
+      purchase_limit_unit: formValues.purchaseLimitUnit,
       apiToken: me.apiToken,
     })
       .then((res) => {
         if (res.succeeded) {
           setCreateRequestErrors({});
-          enqueueSnackbar("ユーザーの更新に成功しました。", {
+          enqueueSnackbar("更新に成功しました。", {
             variant: "success",
           });
+          mutate(`${Config.apiOrigin}/api/${me.clientId}/client`);
         } else {
           setCreateRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
+          enqueueSnackbar(`更新に失敗しました`, {
             variant: "error",
           });
         }
@@ -99,7 +108,7 @@ const Profile = () => {
       })
       .catch(() => {
         setUpdating(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
+        enqueueSnackbar(`更新に失敗しました`, { variant: "error" });
       });
   };
 
@@ -135,31 +144,29 @@ const Profile = () => {
 
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <TextField
-                    value={formValues.purchaseSubsidyLimit}
+                    value={formValues.purchaseLimit}
                     fullWidth
                     onChange={handleChange}
-                    name={"purchaseSubsidyLimit"}
-                    label={"購入補助金"}
+                    name={"purchaseLimit"}
+                    label={"購入補助金上限"}
                     required
                     variant="standard"
                     margin={"normal"}
                     type={"number"}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">¥</InputAdornment>,
+                    }}
                   />
+                  <FormError errors={createRequestErrors?.purchase_limit} />
                   <Box sx={{ padding: 2 }}>/</Box>
-                  <TextField
-                    select
-                    name={"purchaseSubsidyLimitUnit"}
-                    value={formValues.purchaseSubsidyLimitUnit}
-                    onChange={handleChange}
-                    sx={{ minWidth: "80px" }}
-                  >
-                    {purchaseSubsidyLimitUnits.map((purchaseSubsidyLimitUnit) => (
-                      <MenuItem key={purchaseSubsidyLimitUnit.value} value={purchaseSubsidyLimitUnit.value}>
-                        {purchaseSubsidyLimitUnit.label}
+                  <TextField select name={"purchaseLimitUnit"} value={formValues.purchaseLimitUnit} onChange={handleChange} sx={{ minWidth: "80px" }}>
+                    {purchaseLimitUnits.map((purchaseLimitUnit) => (
+                      <MenuItem key={purchaseLimitUnit.value} value={purchaseLimitUnit.value}>
+                        {purchaseLimitUnit.label}
                       </MenuItem>
                     ))}
                   </TextField>
-                  <FormError errors={createRequestErrors?.name} />
+                  <FormError errors={createRequestErrors?.purchase_limit_unit} />
                 </Box>
               </>
             )}
@@ -172,7 +179,7 @@ const Profile = () => {
                 </Grid>
                 <Box sx={{ justifyContent: "center", display: "flex" }}>
                   <Grid item xs={12} md={4}>
-                    <Card variant="outlined" sx={{ margin: 1 }}>
+                    <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
                       <CardHeader title={"FREE"}></CardHeader>
                       <CardContent>
                         <Box px={1}>
@@ -202,7 +209,7 @@ const Profile = () => {
                     </Card>
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <Card variant="outlined" sx={{ margin: 1 }}>
+                    <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
                       <CardHeader title={"BETA"}></CardHeader>
                       <CardContent>
                         <Box px={1}>
@@ -222,9 +229,9 @@ const Profile = () => {
                         <Button
                           variant="outlined"
                           name="plan"
-                          value="free"
+                          value="beta"
                           onClick={handleChange}
-                          endIcon={formValues.plan === "free" && <CheckIcon />}
+                          endIcon={formValues.plan === "beta" && <CheckIcon />}
                         >
                           Select plan
                         </Button>
@@ -236,10 +243,11 @@ const Profile = () => {
             )}
 
             <Box sx={{ textAlign: "right", margin: 2 }}>
-              <Button type={"submit"} variant={"contained"} onClick={handleSubmit}>
+              <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
                 更新する
               </Button>
             </Box>
+            <ConfirmDialog message={"本当に更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
           </Box>
         </Paper>
       </Grid>

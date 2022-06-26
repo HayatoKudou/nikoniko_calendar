@@ -115,7 +115,7 @@ const SignUp = () => {
             <>
               <Box sx={{ justifyContent: "center", display: "flex" }}>
                 <Grid item xs={12} md={4}>
-                  <Card variant="outlined" sx={{ margin: 1 }}>
+                  <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
                     <CardHeader title={"FREE"}></CardHeader>
                     <CardContent>
                       <Box px={1}>
@@ -145,7 +145,7 @@ const SignUp = () => {
                   </Card>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Card variant="outlined" sx={{ margin: 1 }}>
+                  <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
                     <CardHeader title={"BETA"}></CardHeader>
                     <CardContent>
                       <Box px={1}>

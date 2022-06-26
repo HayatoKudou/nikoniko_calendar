@@ -20,7 +20,7 @@ import useBooks from "../../api/book/list";
 import { useMe } from "../../store/me";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import Update from "../books/update";
-import Confirm_dialog from "../confirm_dialog";
+import ConfirmDialog from "../confirm_dialog";
 import Spinner from "../spinner";
 
 const Books = () => {
@@ -112,7 +112,7 @@ const Books = () => {
                   <IconButton onClick={() => handleClickDeleteButton(book)}>
                     <DeleteForeverIcon />
                   </IconButton>
-                  <Confirm_dialog
+                  <ConfirmDialog
                     message={"本当に削除しますか？"}
                     open={openDeleteConfirm}
                     onClose={handleConfirmClose}
