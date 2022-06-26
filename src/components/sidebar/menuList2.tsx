@@ -6,16 +6,13 @@ import ListItemText from "@mui/material/ListItemText";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useResetRecoilState } from "recoil";
-import { useClientInfo } from "../../store/clientInfo";
 import { useMe } from "../../store/me";
 
 const MenuList2 = (props: { open: boolean }) => {
   const router = useRouter();
   const resetMe = useResetRecoilState(useMe);
-  const resetClientInfo = useResetRecoilState(useClientInfo);
   const logout = () => {
     resetMe();
-    resetClientInfo();
     router.push("/sign-in");
   };
   return (

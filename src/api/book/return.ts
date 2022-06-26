@@ -1,14 +1,10 @@
 import Config from "../../../config";
 
-interface BookReturnResult {
-  succeeded: boolean;
-}
-
 interface BookReturnRequestPayload {
   apiToken: string;
 }
 
-const BookReturn = async (clientId: string, bookId: number, payload: BookReturnRequestPayload): Promise<BookReturnResult> => {
+const BookReturn = async (clientId: string, bookId: number, payload: BookReturnRequestPayload) => {
   const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/bookReturn`;
   const res = await fetch(endpoint, {
     method: "POST",
@@ -21,14 +17,10 @@ const BookReturn = async (clientId: string, bookId: number, payload: BookReturnR
   });
 
   if (!res.ok) {
-    return {
-      succeeded: false,
-    };
+    throw new Error(`failed to request. url=${endpoint} status=${res.status}`);
   }
 
-  return {
-    succeeded: true,
-  };
+  return res.json();
 };
 
 export default BookReturn;

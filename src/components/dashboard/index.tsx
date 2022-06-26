@@ -174,7 +174,7 @@ const Dashboard = () => {
       <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
-        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{maxWidth: "65%"}}>
+        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{ maxWidth: "65%" }}>
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}
@@ -185,7 +185,12 @@ const Dashboard = () => {
               </IconButton>
               {bookCategoryFormOpen && (
                 <form onSubmit={handleSubmit}>
-                  <TextField value={bookCategoryFormValue} onChange={(e) => setBookCategoryFormValue(e.target.value)} size="small" sx={{minWidth: "150px"}}/>
+                  <TextField
+                    value={bookCategoryFormValue}
+                    onChange={(e) => setBookCategoryFormValue(e.target.value)}
+                    size="small"
+                    sx={{ minWidth: "150px" }}
+                  />
                   <FormError errors={bookCategoryFormError["name"]} />
                 </form>
               )}

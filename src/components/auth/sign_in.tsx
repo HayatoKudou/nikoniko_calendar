@@ -12,7 +12,6 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import signIn from "../../api/signIn";
-import { useClientInfo } from "../../store/clientInfo";
 import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import Spinner from "../spinner";
@@ -21,7 +20,6 @@ const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [, setMe] = useRecoilState(useMe);
-  const [, setClientInfo] = useRecoilState(useClientInfo);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     email: "",
@@ -42,7 +40,6 @@ const SignIn = () => {
           setLoading(false);
           enqueueSnackbar("ログインしました。", { variant: "success" });
           setMe(res.user);
-          setClientInfo(res.client);
           router.push(`/${res.user.clientId}/dashboard`);
         } else {
           console.log(res.errors);

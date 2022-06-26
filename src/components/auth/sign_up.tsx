@@ -20,7 +20,6 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
-import { useClientInfo } from "../../store/clientInfo";
 import { useMe } from "../../store/me";
 import Copyright from "../copyright";
 import FormError from "../form_error";
@@ -28,11 +27,10 @@ import Spinner from "../spinner";
 
 const steps = ["プラン選択", "組織設定", "プロフィール設定"];
 
-const Sign_up = () => {
+const SignUp = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [, setMe] = useRecoilState(useMe);
-  const [, setClientInfo] = useRecoilState(useClientInfo);
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
@@ -71,7 +69,6 @@ const Sign_up = () => {
             variant: "success",
           });
           setMe(res.user);
-          setClientInfo(res.client);
           router.push("/need-email-verify");
         } else {
           if (res.errors.client_name) {
@@ -129,7 +126,7 @@ const Sign_up = () => {
                           </Typography>
                         </Typography>
                         <Typography color="textSecondary" variant="subtitle1" component="p">
-                          メンバー上限: 30
+                          ユーザー上限: 30
                         </Typography>
                         <Typography color="textSecondary" variant="subtitle1" component="p">
                           書籍上限: 100
@@ -159,7 +156,7 @@ const Sign_up = () => {
                           </Typography>
                         </Typography>
                         <Typography color="textSecondary" variant="subtitle1" component="p">
-                          メンバー上限: 無制限
+                          ユーザー上限: 無制限
                         </Typography>
                         <Typography color="textSecondary" variant="subtitle1" component="p">
                           書籍上限: 無制限
@@ -271,4 +268,4 @@ const Sign_up = () => {
   );
 };
 
-export default Sign_up;
+export default SignUp;

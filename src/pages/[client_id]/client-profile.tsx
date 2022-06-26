@@ -1,4 +1,4 @@
-import ClientProfile from "../../components/client_profile";
+import ClientProfile from "../../components/client_proofile";
 import Layout from "../../components/layout";
 import type { NextPage } from "next";
 

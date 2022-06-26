@@ -107,7 +107,7 @@ const BookReviews = (props: Props) => {
               {review.reviewedAt}
             </Box>
           </Box>
-          <Box sx={{whiteSpace: "pre-wrap"}}>{review.review}</Box>
+          <Box sx={{ whiteSpace: "pre-wrap" }}>{review.review}</Box>
         </Box>
       ))}
     </>

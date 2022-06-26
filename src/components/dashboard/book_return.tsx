@@ -33,17 +33,11 @@ const BookReturnForm = (props: Props) => {
     BookReturn(me.clientId, props.bookInfo.id, {
       apiToken: me.apiToken,
     })
-      .then((res) => {
-        if (res.succeeded) {
-          props.success();
-          enqueueSnackbar("返却しました。", {
-            variant: "success",
-          });
-        } else {
-          enqueueSnackbar(`返却に失敗しました`, {
-            variant: "error",
-          });
-        }
+      .then(() => {
+        props.success();
+        enqueueSnackbar("返却しました。", {
+          variant: "success",
+        });
         setLoading(false);
       })
       .catch(() => {
