@@ -119,7 +119,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, handleDelete } = props;
+  const { numSelected } = props;
   return (
     <Toolbar
       sx={{
@@ -136,12 +136,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          書籍管理
         </Typography>
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={handleDelete}>
+          <IconButton onClick={() => props.handleDelete()}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -161,7 +161,7 @@ export default function EnhancedTable(props: Props) {
   const [orderBy, setOrderBy] = React.useState("status");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -171,7 +171,7 @@ export default function EnhancedTable(props: Props) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = props.books.map((n: any) => n.name);
+      const newSelecteds = props.books.map((n: any) => n.title);
       setSelected(newSelecteds);
       return;
     }
@@ -203,7 +203,7 @@ export default function EnhancedTable(props: Props) {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (title: string) => selected.indexOf(title) !== -1;
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.books.length) : 0;
 
   return (
@@ -224,18 +224,18 @@ export default function EnhancedTable(props: Props) {
             <TableBody>
               {stableSort(props.books, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any, index) => {
-                  const isItemSelected = isSelected(props.books.name);
+                .map((book: any, index) => {
+                  const isItemSelected = isSelected(book.title);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, props.books.name)}
+                      onClick={(event) => handleClick(event, book.title)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={book.title}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -248,22 +248,22 @@ export default function EnhancedTable(props: Props) {
                         />
                       </TableCell>
                       <TableCell>
-                        <IconButton onClick={() => props.handleEdit(row)}>
+                        <IconButton onClick={(e) => props.handleEdit(e, book)}>
                           <ModeEditIcon />
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <CircleIcon color={bookStatusColor(row.status)} fontSize={"small"} />
-                          {bookStatusName(row.status)}
+                          <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
+                          {bookStatusName(book.status)}
                         </Box>
                       </TableCell>
-                      <TableCell align="center">{row.category}</TableCell>
+                      <TableCell align="center">{book.category}</TableCell>
                       <TableCell align="left" sx={{ width: "30%" }}>
-                        {row.title}
+                        {book.title}
                       </TableCell>
                       <TableCell align="left" sx={{ width: "40%" }}>
-                        {row.description}
+                        {book.description}
                       </TableCell>
                     </TableRow>
                   );
@@ -277,7 +277,7 @@ export default function EnhancedTable(props: Props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[25, 50, 100]}
           component="div"
           count={props.books.length}
           rowsPerPage={rowsPerPage}

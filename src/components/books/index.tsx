@@ -58,14 +58,18 @@ const Books = () => {
     return <Spinner />;
   }
 
-  const handleEditBook = (book: Book) => {
+  const handleEditBook = (e: { stopPropagation: any; }, book: Book) => {
+    e.stopPropagation();
     setSelectBook(book);
     setUpdateDialogOpen(true);
+
   };
 
-  const handleClickDeleteButton = (book: Book) => {
-    setOpenDeleteConfirm(true);
-    setSelectedDeleteBook(book);
+  const handleClickDeleteButton = () => {
+    if(selectBook){
+      setOpenDeleteConfirm(true);
+      setSelectedDeleteBook(selectBook);
+    }
   };
 
   const handleConfirmClose = () => {
