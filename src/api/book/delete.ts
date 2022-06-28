@@ -1,7 +1,7 @@
 import Config from "../../../config";
 
 export interface DeleteBookRequestPayload {
-  book_id: number;
+  book_ids: number[];
   apiToken: string;
 }
 

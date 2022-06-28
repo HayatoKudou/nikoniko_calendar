@@ -20,9 +20,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
+import { Dispatch, SetStateAction } from "react";
 import { bookStatusColor, bookStatusName } from "../../util/book";
+import { getComparator, stableSort } from "../../util/table";
 
 type Order = "asc" | "desc";
+
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
@@ -32,45 +35,53 @@ interface EnhancedTableProps {
   rowCount: number;
   headCells: any;
 }
+
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  handleDelete: any;
+  handleDelete: () => void;
 }
+
 interface Props {
-  headCells: any;
-  books: any;
-  handleEdit: any;
-  handleDelete: any;
+  books: Array<Book>;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
+  handleDelete: () => void;
+  selected: Array<any>;
+  setSelected: Dispatch<SetStateAction<any>>;
 }
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
+interface HeadCell {
+  disablePadding: boolean;
+  id: string;
+  label: string;
+  numeric: boolean;
 }
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-  return order === "desc" ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+const headCells: readonly HeadCell[] = [
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: true,
+    label: "ステータス",
+  },
+  {
+    id: "category",
+    numeric: false,
+    disablePadding: false,
+    label: "カテゴリ",
+  },
+  {
+    id: "title",
+    numeric: false,
+    disablePadding: false,
+    label: "タイトル",
+  },
+  {
+    id: "description",
+    numeric: false,
+    disablePadding: false,
+    label: "本の説明",
+  },
+];
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
@@ -86,9 +97,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
           />
         </TableCell>
         <TableCell />
@@ -159,7 +167,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 export default function EnhancedTable(props: Props) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState("status");
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -171,27 +178,27 @@ export default function EnhancedTable(props: Props) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = props.books.map((n: any) => n.title);
-      setSelected(newSelecteds);
+      const newSelecteds = props.books.map((n: any) => n.id);
+      props.setSelected(newSelecteds);
       return;
     }
-    setSelected([]);
+    props.setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    const selectedIndex = props.selected.indexOf(id);
+    let newSelected: string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(props.selected, id);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(props.selected.slice(1));
+    } else if (selectedIndex === props.selected.length - 1) {
+      newSelected = newSelected.concat(props.selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      newSelected = newSelected.concat(props.selected.slice(0, selectedIndex), props.selected.slice(selectedIndex + 1));
     }
-    setSelected(newSelected);
+    props.setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -203,35 +210,36 @@ export default function EnhancedTable(props: Props) {
     setPage(0);
   };
 
-  const isSelected = (title: string) => selected.indexOf(title) !== -1;
+  const isSelected = (id: number) => props.selected.indexOf(id) !== -1;
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.books.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} handleDelete={props.handleDelete} />
+        <EnhancedTableToolbar numSelected={props.selected.length} handleDelete={props.handleDelete} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="small">
             <EnhancedTableHead
-              numSelected={selected.length}
+              numSelected={props.selected.length}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={props.books.length}
-              headCells={props.headCells}
+              headCells={headCells}
             />
             <TableBody>
+              {/*@ts-ignore*/}
               {stableSort(props.books, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((book: any, index) => {
-                  const isItemSelected = isSelected(book.title);
+                  const isItemSelected = isSelected(book.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, book.title)}
+                      onClick={(event) => handleClick(event, book.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

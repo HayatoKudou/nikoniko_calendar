@@ -10,45 +10,12 @@ import ConfirmDialog from "../confirm_dialog";
 import Spinner from "../spinner";
 import CustomTable from "./table";
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: string;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: "status",
-    numeric: false,
-    disablePadding: true,
-    label: "ステータス",
-  },
-  {
-    id: "category",
-    numeric: true,
-    disablePadding: false,
-    label: "カテゴリ",
-  },
-  {
-    id: "title",
-    numeric: true,
-    disablePadding: false,
-    label: "タイトル",
-  },
-  {
-    id: "description",
-    numeric: true,
-    disablePadding: false,
-    label: "本の説明",
-  },
-];
-
 const Books = () => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [deleting, setDeleting] = React.useState<boolean>(false);
-  const [selectBook, setSelectBook] = React.useState<Book>();
+  const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
+  const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [selectedDeleteBook, setSelectedDeleteBook] = React.useState<Book | null>(null);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
@@ -58,18 +25,14 @@ const Books = () => {
     return <Spinner />;
   }
 
-  const handleEditBook = (e: { stopPropagation: any; }, book: Book) => {
+  const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
     e.stopPropagation();
-    setSelectBook(book);
+    setSelectedEditBook(book);
     setUpdateDialogOpen(true);
-
   };
 
   const handleClickDeleteButton = () => {
-    if(selectBook){
-      setOpenDeleteConfirm(true);
-      setSelectedDeleteBook(selectBook);
-    }
+    setOpenDeleteConfirm(true);
   };
 
   const handleConfirmClose = () => {
@@ -78,14 +41,9 @@ const Books = () => {
   };
 
   const handleDeleteBook = () => {
-    if (!selectedDeleteBook) {
-      return enqueueSnackbar(`削除に失敗しました`, {
-        variant: "error",
-      });
-    }
     setDeleting(true);
     DeleteBook(me.clientId, {
-      book_id: selectedDeleteBook.id,
+      book_ids: selectedBookIds,
       apiToken: me.apiToken,
     })
       .then(() => {
@@ -96,7 +54,8 @@ const Books = () => {
         setOpenDeleteConfirm(false);
         setDeleting(false);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e.message);
         setDeleting(false);
         enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
       });
@@ -104,16 +63,22 @@ const Books = () => {
 
   return (
     <>
-      {selectBook && (
+      {selectedEditBook && (
         <Update
-          book={selectBook}
+          book={selectedEditBook}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
           onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
         />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
-      <CustomTable headCells={headCells} books={response.books} handleEdit={handleEditBook} handleDelete={handleClickDeleteButton} />
+      <CustomTable
+        books={response.books}
+        handleEdit={handleEditBook}
+        handleDelete={handleClickDeleteButton}
+        selected={selectedBookIds}
+        setSelected={setSelectedBookIds}
+      />
     </>
   );
 };
