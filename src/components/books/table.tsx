@@ -276,8 +276,11 @@ export default function EnhancedTable(props: Props) {
                       <TableCell align="left" sx={{ width: "30%" }}>
                         {book.title}
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "40%" }}>
+                      <TableCell align="left" sx={{ width: "30%" }}>
                         {book.description}
+                      </TableCell>
+                      <TableCell align="left">
+                        {book.createdAt}
                       </TableCell>
                     </TableRow>
                   );
