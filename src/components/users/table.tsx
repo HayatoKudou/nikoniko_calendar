@@ -1,9 +1,9 @@
-import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import { alpha } from "@mui/material/styles";
@@ -21,8 +21,9 @@ import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import { bookStatusColor, bookStatusName } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
+import Button from "@mui/material/Button";
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 type Order = "asc" | "desc";
 
@@ -38,12 +39,14 @@ interface EnhancedTableProps {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  handleCreate: () => void;
   handleDelete: () => void;
 }
 
 interface Props {
-  books: Array<Book>;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
+  users: Array<User>;
+  handleCreate: () => void;
+  handleEdit: (user: User) => void;
   handleDelete: () => void;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
@@ -58,34 +61,22 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "status",
+    id: "name",
     numeric: false,
     disablePadding: true,
-    label: "ステータス",
+    label: "名前",
   },
   {
-    id: "category",
+    id: "email",
     numeric: false,
     disablePadding: false,
-    label: "カテゴリ",
+    label: "メールアドレス",
   },
   {
-    id: "title",
+    id: "role",
     numeric: false,
     disablePadding: false,
-    label: "タイトル",
-  },
-  {
-    id: "description",
-    numeric: false,
-    disablePadding: false,
-    label: "本の説明",
-  },
-  {
-    id: "createdAt",
-    numeric: false,
-    disablePadding: false,
-    label: "登録日",
+    label: "ロール",
   },
 ];
 
@@ -150,19 +141,19 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
-          書籍管理
+          ユーザー管理
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="ユーザー削除">
           <IconButton onClick={() => props.handleDelete()}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
+        <Tooltip title="ユーザー追加">
+          <IconButton onClick={props.handleCreate}>
+            <GroupAddIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -172,7 +163,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 export default function EnhancedTable(props: Props) {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState("status");
+  const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -184,7 +175,7 @@ export default function EnhancedTable(props: Props) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = props.books.map((n: any) => n.id);
+      const newSelecteds = props.users.map((n: any) => n.id);
       props.setSelected(newSelecteds);
       return;
     }
@@ -217,12 +208,12 @@ export default function EnhancedTable(props: Props) {
   };
 
   const isSelected = (id: number) => props.selected.indexOf(id) !== -1;
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.books.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.users.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={props.selected.length} handleDelete={props.handleDelete} />
+        <EnhancedTableToolbar numSelected={props.selected.length} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="small">
             <EnhancedTableHead
@@ -231,53 +222,41 @@ export default function EnhancedTable(props: Props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={props.books.length}
+              rowCount={props.users.length}
               headCells={headCells}
             />
             <TableBody>
               {/*@ts-ignore*/}
-              {stableSort(props.books, getComparator(order, orderBy))
+              {stableSort(props.users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((book: any, index) => {
-                  const isItemSelected = isSelected(book.id);
+                .map((user: any, index) => {
+                  const isItemSelected = isSelected(user.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, book.id)}
+                      onClick={(event) => handleClick(event, user.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={book.title}
+                      key={user.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
+                        <Checkbox color="primary" checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                       </TableCell>
                       <TableCell>
-                        <IconButton onClick={(e) => props.handleEdit(e, book)}>
+                        <IconButton onClick={(e) => props.handleEdit(user)}>
                           <ModeEditIcon />
                         </IconButton>
                       </TableCell>
+                      <TableCell align="center">{user.name}</TableCell>
+                      <TableCell align="center">{user.email}</TableCell>
                       <TableCell align="center">
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
-                          {bookStatusName(book.status)}
-                        </Box>
-                      </TableCell>
-                      <TableCell align="center">{book.category}</TableCell>
-                      <TableCell align="left" sx={{ width: "30%" }}>
-                        {book.title}
-                      </TableCell>
-                      <TableCell align="left" sx={{ width: "40%" }}>
-                        {book.description}
+                        {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
+                        {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
+                        {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
                       </TableCell>
                     </TableRow>
                   );
@@ -293,7 +272,7 @@ export default function EnhancedTable(props: Props) {
         <TablePagination
           rowsPerPageOptions={[25, 50, 100]}
           component="div"
-          count={props.books.length}
+          count={props.users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

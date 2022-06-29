@@ -1,48 +1,75 @@
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
+import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import Config from "../../../config";
+import DeleteUser from "../../api/user/delete";
 import useUsers from "../../api/user/list";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../confirm_dialog";
 import Spinner from "../spinner";
-import CreateUser from "./create_user";
+import CustomTable from "./table";
 import UpdateUser from "./update_user";
+import Box from "@mui/material/Box";
+import CreateUser from "./create_user";
+import Button from "@mui/material/Button";
 
 const Users = () => {
   const [me] = useRecoilState(useMe);
-  const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const [deleting, setDeleting] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
   const [selectUser, setSelectUser] = React.useState<User>();
+  const [selectedUserIds, setSelectedUserIds] = React.useState<number[]>([]);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
+  const [openCreateConfirm, setOpenCreateConfirm] = React.useState<boolean>(false);
   const { loading, error, response, mutate } = useUsers();
-  if (loading) return <Spinner />;
-  if (error) {
-    return <Spinner />;
-  }
+
+  if (deleting || loading || error) return <Spinner />;
 
   const handleEditUser = (user: User) => {
     setUpdateDialogOpen(true);
     setSelectUser(user);
   };
 
+  const handleDeleteConfirmClose = () => {
+    setOpenDeleteConfirm(false);
+  };
+
+  const handleClickDeleteButton = () => {
+    setOpenDeleteConfirm(true);
+  };
+
+  const handleClickCreateButton = () => {
+    setOpenCreateConfirm(true);
+  }
+
+  const handleDeleteUser = () => {
+    setDeleting(true);
+    DeleteUser(me.clientId, {
+      user_ids: selectedUserIds,
+      apiToken: me.apiToken,
+    })
+      .then(() => {
+        enqueueSnackbar("削除しました", {
+          variant: "success",
+        });
+        mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
+        setOpenDeleteConfirm(false);
+        setDeleting(false);
+      })
+      .catch(() => {
+        setDeleting(false);
+        enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
+      });
+  };
+
   return (
     <>
-      <CreateUser
-        open={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-        onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
-      />
+        <CreateUser
+          open={openCreateConfirm}
+          onClose={() => setOpenCreateConfirm(false)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+        />
       {selectUser && (
         <UpdateUser
           user={selectUser}
@@ -51,42 +78,15 @@ const Users = () => {
           onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
         />
       )}
-      <Box sx={{ display: "flex", alignItems: "center", height: "80px" }}>
-        <Typography variant="h4">ユーザー管理</Typography>
-        <Button variant="contained" sx={{ marginLeft: "auto" }} onClick={() => setCreateDialogOpen(true)}>
-          ユーザー追加
-        </Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>名前</TableCell>
-              <TableCell align="right">メールアドレス</TableCell>
-              <TableCell align="center">ロール</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response.users?.map((user: User, index: number) => (
-              <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell>
-                  <IconButton onClick={() => handleEditUser(user)}>
-                    <ModeEditIcon />
-                  </IconButton>
-                </TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell align="right">{user.email}</TableCell>
-                <TableCell align="center">
-                  {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
-                  {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
-                  {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleDeleteConfirmClose} handleSubmit={handleDeleteUser} />
+      <CustomTable
+        users={response.users}
+        handleEdit={handleEditUser}
+        handleDelete={handleClickDeleteButton}
+        handleCreate={handleClickCreateButton}
+        selected={selectedUserIds}
+        setSelected={setSelectedUserIds}
+      />
     </>
   );
 };

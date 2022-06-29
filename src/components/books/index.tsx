@@ -16,14 +16,11 @@ const Books = () => {
   const [deleting, setDeleting] = React.useState<boolean>(false);
   const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
-  const [selectedDeleteBook, setSelectedDeleteBook] = React.useState<Book | null>(null);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
   const { loading, error, response, mutate } = useBooks();
-  if (loading || deleting) return <Spinner />;
-  if (error) {
-    return <Spinner />;
-  }
+
+  if (loading || deleting || error) return <Spinner />;
 
   const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
     e.stopPropagation();
@@ -37,7 +34,6 @@ const Books = () => {
 
   const handleConfirmClose = () => {
     setOpenDeleteConfirm(false);
-    setSelectedDeleteBook(null);
   };
 
   const handleDeleteBook = () => {
@@ -54,8 +50,7 @@ const Books = () => {
         setOpenDeleteConfirm(false);
         setDeleting(false);
       })
-      .catch((e) => {
-        console.log(e.message);
+      .catch(() => {
         setDeleting(false);
         enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
       });
