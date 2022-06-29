@@ -7,11 +7,9 @@ import useUsers from "../../api/user/list";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../confirm_dialog";
 import Spinner from "../spinner";
+import CreateUser from "./create_user";
 import CustomTable from "./table";
 import UpdateUser from "./update_user";
-import Box from "@mui/material/Box";
-import CreateUser from "./create_user";
-import Button from "@mui/material/Button";
 
 const Users = () => {
   const [me] = useRecoilState(useMe);
@@ -41,7 +39,7 @@ const Users = () => {
 
   const handleClickCreateButton = () => {
     setOpenCreateConfirm(true);
-  }
+  };
 
   const handleDeleteUser = () => {
     setDeleting(true);
@@ -65,11 +63,11 @@ const Users = () => {
 
   return (
     <>
-        <CreateUser
-          open={openCreateConfirm}
-          onClose={() => setOpenCreateConfirm(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
-        />
+      <CreateUser
+        open={openCreateConfirm}
+        onClose={() => setOpenCreateConfirm(false)}
+        onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+      />
       {selectUser && (
         <UpdateUser
           user={selectUser}
