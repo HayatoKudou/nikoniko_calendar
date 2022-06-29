@@ -279,9 +279,7 @@ export default function EnhancedTable(props: Props) {
                       <TableCell align="left" sx={{ width: "30%" }}>
                         {book.description}
                       </TableCell>
-                      <TableCell align="left">
-                        {book.createdAt}
-                      </TableCell>
+                      <TableCell align="left">{book.createdAt}</TableCell>
                     </TableRow>
                   );
                 })}

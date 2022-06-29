@@ -21,7 +21,7 @@ const Books = () => {
   const { loading, error, response, mutate } = useBooks();
 
   if (loading || deleting || error) return <Spinner />;
-  console.log(response)
+  console.log(response);
 
   const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
     e.stopPropagation();
