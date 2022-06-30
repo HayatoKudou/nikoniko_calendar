@@ -7,6 +7,7 @@ import useBooks from "../../api/book/list";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
 import ConfirmDialog from "../confirm_dialog";
+import Create from "../dashboard/book_register";
 import Spinner from "../spinner";
 import CustomTable from "./table";
 
@@ -18,15 +19,19 @@ const Books = () => {
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
+  const [createDialogOpen, setCreateDialogOpen] = React.useState<boolean>(false);
   const { loading, error, response, mutate } = useBooks();
 
   if (loading || deleting || error) return <Spinner />;
-  console.log(response);
 
   const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
     e.stopPropagation();
     setSelectedEditBook(book);
     setUpdateDialogOpen(true);
+  };
+
+  const handleClickCreateButton = () => {
+    setCreateDialogOpen(true);
   };
 
   const handleClickDeleteButton = () => {
@@ -35,6 +40,10 @@ const Books = () => {
 
   const handleConfirmClose = () => {
     setOpenDeleteConfirm(false);
+  };
+
+  const handleSuccess = () => {
+    mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
   };
 
   const handleDeleteBook = () => {
@@ -47,9 +56,9 @@ const Books = () => {
         enqueueSnackbar("削除しました", {
           variant: "success",
         });
-        mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
         setOpenDeleteConfirm(false);
         setDeleting(false);
+        handleSuccess();
       })
       .catch(() => {
         setDeleting(false);
@@ -59,6 +68,7 @@ const Books = () => {
 
   return (
     <>
+      <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={handleSuccess} />
       {selectedEditBook && (
         <Update
           book={selectedEditBook}
@@ -70,6 +80,7 @@ const Books = () => {
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
       <CustomTable
         books={response.books}
+        handleCreate={handleClickCreateButton}
         handleEdit={handleEditBook}
         handleDelete={handleClickDeleteButton}
         selected={selectedBookIds}

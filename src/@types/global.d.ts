@@ -22,6 +22,7 @@ interface Book {
   status: number;
   title: string;
   description: string;
+  createdAt: string;
   image: any | null;
   purchaseApplicant: User;
   rentalApplicant: User;

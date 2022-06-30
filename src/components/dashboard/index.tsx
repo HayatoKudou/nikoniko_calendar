@@ -81,6 +81,7 @@ const Dashboard = () => {
       const bookCategories = response.bookCategories.map((bookCategory: BookCategory) => {
         return { label: bookCategory.name };
       });
+      console.log(response.bookCategories);
       setBookCategory(response.bookCategories);
       setTabList(bookCategories);
     }
@@ -96,7 +97,6 @@ const Dashboard = () => {
       setOpenTabValue(newValue);
     }
   };
-  console.log(response);
 
   const bookCategoryFiltered = (): Array<any> => {
     let filtered = response.books;

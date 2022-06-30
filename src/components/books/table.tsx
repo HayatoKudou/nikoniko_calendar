@@ -1,7 +1,8 @@
+import AddIcon from "@mui/icons-material/Add";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import UploadIcon from "@mui/icons-material/Upload";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
@@ -23,6 +24,7 @@ import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
+import CsvDownload from "../csv_download";
 
 type Order = "asc" | "desc";
 
@@ -37,12 +39,15 @@ interface EnhancedTableProps {
 }
 
 interface EnhancedTableToolbarProps {
+  books: Array<Book>;
   numSelected: number;
+  handleCreate: () => void;
   handleDelete: () => void;
 }
 
 interface Props {
   books: Array<Book>;
+  handleCreate: () => void;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
   handleDelete: () => void;
   selected: Array<any>;
@@ -160,11 +165,31 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title="書籍登録">
+            <IconButton onClick={props.handleCreate}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="CSVアップロード">
+            <IconButton>
+              <UploadIcon />
+            </IconButton>
+          </Tooltip>
+          <CsvDownload
+            csvDataGenerator={() => {
+              return props.books.map((book: Book) => {
+                return {
+                  ステータス: book.status,
+                  カテゴリ: book.category,
+                  タイトル: book.title,
+                  本の説明: book.description,
+                  登録日: book.createdAt,
+                };
+              });
+            }}
+          />
+        </>
       )}
     </Toolbar>
   );
@@ -222,7 +247,12 @@ export default function EnhancedTable(props: Props) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={props.selected.length} handleDelete={props.handleDelete} />
+        <EnhancedTableToolbar
+          books={props.books}
+          numSelected={props.selected.length}
+          handleCreate={props.handleCreate}
+          handleDelete={props.handleDelete}
+        />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="small">
             <EnhancedTableHead

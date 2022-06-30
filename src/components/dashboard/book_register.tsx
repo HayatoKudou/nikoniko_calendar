@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/register";
 import { useBookCategories } from "../../store/book/categories";
@@ -30,7 +30,7 @@ interface Props {
 const BookRegister = (props: Props) => {
   const [me] = useRecoilState(useMe);
   const { enqueueSnackbar } = useSnackbar();
-  const [bookCategories] = useRecoilState(useBookCategories);
+  const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>({});
   const [title, setTitle] = React.useState("");

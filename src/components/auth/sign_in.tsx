@@ -37,13 +37,13 @@ const SignIn = () => {
     })
       .then((res) => {
         if (res.succeeded) {
-          setLoading(false);
           enqueueSnackbar("ログインしました。", { variant: "success" });
           setMe(res.user);
           router.push(`/${res.user.clientId}/dashboard`);
         } else {
-          console.log(res.errors);
+          enqueueSnackbar(`ログインに失敗しました`, { variant: "error" });
         }
+        setLoading(false);
       })
       .catch(() => {
         setLoading(false);

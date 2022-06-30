@@ -17,7 +17,7 @@ interface SignInResult {
   client: Client;
 }
 
-const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
+const signIn = async (payload: SignInRequestPayload): Promise<SignInResult> => {
   const endpoint = `${Config.apiOrigin}/api/signIn`;
 
   const res = await fetch(endpoint, {
@@ -44,4 +44,4 @@ const signUp = async (payload: SignInRequestPayload): Promise<SignInResult> => {
   };
 };
 
-export default signUp;
+export default signIn;
