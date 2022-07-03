@@ -215,11 +215,11 @@ const Dashboard = () => {
           <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
             書籍購入申請
           </Button>
-          {me.role.is_book_manager && (
+          {me.role.is_book_manager ? (
             <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
               書籍登録
             </Button>
-          )}
+          ) : (<></>)}
         </Box>
       </Box>
 

@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import signUp, { SignUpRequestErrors } from "../../api/signUp";
+import sign_up, { SignUpRequestErrors } from "../../api/sign_up";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
 import Spinner from "../spinner";
@@ -53,7 +53,7 @@ const SignUp = () => {
   const handleProfileSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    signUp({
+    sign_up({
       plan: formValues.plan,
       name: formValues.name,
       email: formValues.email,

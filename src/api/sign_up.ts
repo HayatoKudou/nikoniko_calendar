@@ -22,7 +22,7 @@ interface SignUpResult {
   errors: Partial<SignUpRequestErrors>;
 }
 
-const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
+const sign_up = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
   const endpoint = `${Config.apiOrigin}/api/signUp`;
 
   const res = await fetch(endpoint, {
@@ -49,4 +49,4 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
   };
 };
 
-export default signUp;
+export default sign_up;

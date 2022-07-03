@@ -8,10 +8,10 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
+import {SnackbarMessage, useSnackbar} from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import signIn from "../../api/signIn";
+import signIn from "../../api/sign_in";
 import { useMe } from "../../store/me";
 import Spinner from "../spinner";
 
@@ -40,7 +40,7 @@ const SignIn = () => {
           setMe(res.user);
           router.push(`/${res.user.clientId}/dashboard`);
         } else {
-          enqueueSnackbar(`ログインに失敗しました`, { variant: "error" });
+          enqueueSnackbar(res.errors as SnackbarMessage, { variant: "error" });
         }
         setLoading(false);
       })
