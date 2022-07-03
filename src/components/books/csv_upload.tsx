@@ -77,9 +77,9 @@ const CsvUpload = (props: Props) => {
       .then((res) => {
         if (res.succeeded) {
           enqueueSnackbar("一括登録に成功しました", { variant: "success" });
-          props.handleSuccess;
+          props.handleSuccess();
         } else {
-          enqueueSnackbar(`一括登録に失敗しました`, { variant: "error" });
+          enqueueSnackbar(res.errors, { variant: "error" });
         }
         setLoading(false);
       })

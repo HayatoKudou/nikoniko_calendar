@@ -219,7 +219,9 @@ const Dashboard = () => {
             <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
               書籍登録
             </Button>
-          ) : (<></>)}
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
 
