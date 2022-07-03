@@ -24,6 +24,7 @@ interface Book {
   description: string;
   createdAt: string;
   image: any | null;
+  url: string | null;
   purchaseApplicant: User;
   rentalApplicant: User;
   reviews: any;

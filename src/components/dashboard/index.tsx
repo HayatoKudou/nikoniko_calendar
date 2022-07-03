@@ -81,7 +81,6 @@ const Dashboard = () => {
       const bookCategories = response.bookCategories.map((bookCategory: BookCategory) => {
         return { label: bookCategory.name };
       });
-      console.log(response.bookCategories);
       setBookCategory(response.bookCategories);
       setTabList(bookCategories);
     }

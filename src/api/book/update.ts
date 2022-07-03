@@ -5,6 +5,7 @@ export interface UpdateBookRequestErrors {
   category: Array<string>;
   title: Array<string>;
   description: Array<string>;
+  url: Array<string>;
 }
 
 interface UpdateBookResult {
@@ -19,6 +20,7 @@ export interface UpdateBookRequestPayload {
   title: string;
   description: string;
   image: any | null;
+  url: string | null;
   apiToken: string;
 }
 

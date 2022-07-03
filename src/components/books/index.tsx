@@ -9,6 +9,7 @@ import Update from "../books/update";
 import ConfirmDialog from "../confirm_dialog";
 import Create from "../dashboard/book_register";
 import Spinner from "../spinner";
+import CsvUpload from "./csv_upload";
 import CustomTable from "./table";
 
 const Books = () => {
@@ -20,6 +21,7 @@ const Books = () => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = React.useState<boolean>(false);
+  const [csvUploadDialogOpen, setCsvUploadDialogOpen] = React.useState<boolean>(false);
   const { loading, error, response, mutate } = useBooks();
 
   if (loading || deleting || error) return <Spinner />;
@@ -32,6 +34,10 @@ const Books = () => {
 
   const handleClickCreateButton = () => {
     setCreateDialogOpen(true);
+  };
+
+  const handleClickCsvUploadButton = () => {
+    setCsvUploadDialogOpen(true);
   };
 
   const handleClickDeleteButton = () => {
@@ -68,6 +74,7 @@ const Books = () => {
 
   return (
     <>
+      <CsvUpload open={csvUploadDialogOpen} handleClose={() => setCsvUploadDialogOpen(false)} />
       <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={handleSuccess} />
       {selectedEditBook && (
         <Update
@@ -80,6 +87,7 @@ const Books = () => {
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
       <CustomTable
         books={response.books}
+        handleCsvUpload={handleClickCsvUploadButton}
         handleCreate={handleClickCreateButton}
         handleEdit={handleEditBook}
         handleDelete={handleClickDeleteButton}

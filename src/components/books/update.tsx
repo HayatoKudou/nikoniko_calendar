@@ -34,6 +34,7 @@ const Update = (props: Props) => {
     description: "",
     image: null,
     apiToken: "",
+    url: "",
   });
   const [UpdateBookRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateBookRequestErrors>>({});
 
@@ -45,6 +46,7 @@ const Update = (props: Props) => {
       title: props.book.title,
       description: props.book.description || "",
       image: props.book.image,
+      url: props.book.url,
       apiToken: me.apiToken,
     });
     setSelectedImage(props.book.image);
@@ -68,6 +70,7 @@ const Update = (props: Props) => {
       title: formValues.title,
       description: formValues.description,
       image: image,
+      url: formValues.url,
       apiToken: formValues.apiToken,
     })
       .then((res) => {

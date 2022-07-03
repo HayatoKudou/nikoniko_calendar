@@ -4,6 +4,7 @@ export interface RegisterBookRequestErrors {
   bookCategoryName: Array<string>;
   title: Array<string>;
   description: Array<string>;
+  url: Array<string>;
 }
 
 interface RegisterBookResult {
@@ -17,6 +18,7 @@ interface RegisterBookRequestPayload {
   title: string;
   description: string;
   image: any | null;
+  url: string | null;
   apiToken: string;
 }
 

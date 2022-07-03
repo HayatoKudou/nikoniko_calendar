@@ -41,6 +41,7 @@ const BookInfo = (props: Props) => {
       title: props.bookInfo.title,
       description: props.bookInfo.description,
       image: "data:image/png;base64," + props.bookInfo.image,
+      url: props.bookInfo.url,
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -120,7 +121,7 @@ const BookInfo = (props: Props) => {
                 閉じる
               </Button>
             ) : (
-              <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1}>
+              <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginRight: 1 }}>
                 {bookStatusName(props.bookInfo.status)}
               </Button>
             )}

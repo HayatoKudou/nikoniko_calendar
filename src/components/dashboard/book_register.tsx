@@ -58,6 +58,7 @@ const BookRegister = (props: Props) => {
       title: title,
       description: formValues.description,
       image: image,
+      url: formValues.url,
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -169,6 +170,7 @@ const BookRegister = (props: Props) => {
             variant="standard"
             margin={"dense"}
           />
+          <FormError errors={registerBookRequestErrors?.url} />
           <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>
           <FormHelperText error={true}>* Amazonのみ対応しています</FormHelperText>
         </Box>

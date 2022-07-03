@@ -43,6 +43,7 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   handleCreate: () => void;
   handleDelete: () => void;
+  handleCsvUpload: () => void;
 }
 
 interface Props {
@@ -50,6 +51,7 @@ interface Props {
   handleCreate: () => void;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
   handleDelete: () => void;
+  handleCsvUpload: () => void;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
 }
@@ -104,14 +106,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
-            color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
           />
         </TableCell>
         <TableCell />
-        {props.headCells.map((headCell: any) => (
+        {props.headCells.map((headCell: HeadCell) => (
           <TableCell
             key={headCell.id}
             align={"center"}
@@ -151,7 +152,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     >
       {numSelected > 0 ? (
         <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {numSelected} 選択中
         </Typography>
       ) : (
         <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
@@ -172,7 +173,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             </IconButton>
           </Tooltip>
           <Tooltip title="CSVアップロード">
-            <IconButton>
+            <IconButton onClick={props.handleCsvUpload}>
               <UploadIcon />
             </IconButton>
           </Tooltip>
@@ -184,7 +185,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                   カテゴリ: book.category,
                   タイトル: book.title,
                   本の説明: book.description,
-                  登録日: book.createdAt,
                 };
               });
             }}
@@ -250,6 +250,7 @@ export default function EnhancedTable(props: Props) {
         <EnhancedTableToolbar
           books={props.books}
           numSelected={props.selected.length}
+          handleCsvUpload={props.handleCsvUpload}
           handleCreate={props.handleCreate}
           handleDelete={props.handleDelete}
         />
@@ -283,13 +284,7 @@ export default function EnhancedTable(props: Props) {
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
+                        <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                       </TableCell>
                       <TableCell>
                         <IconButton onClick={(e) => props.handleEdit(e, book)}>
