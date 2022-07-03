@@ -8,7 +8,6 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import forgetPassword, { ForgetPasswordRequestErrors } from "../../api/forget_password";
-import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -76,7 +75,6 @@ const SignUp = () => {
           </Button>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 };

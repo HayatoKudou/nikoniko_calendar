@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import resetPassword, { ResetPasswordRequestErrors } from "../../api/reset_password";
-import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -121,7 +120,6 @@ const ResetPassword = () => {
           </Button>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 };

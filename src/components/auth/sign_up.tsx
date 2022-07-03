@@ -21,7 +21,6 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import signUp, { SignUpRequestErrors } from "../../api/signUp";
 import { useMe } from "../../store/me";
-import Copyright from "../copyright";
 import FormError from "../form_error";
 import Spinner from "../spinner";
 
@@ -263,7 +262,6 @@ const SignUp = () => {
           )}
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 };

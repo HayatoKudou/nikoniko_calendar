@@ -13,7 +13,6 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import signIn from "../../api/signIn";
 import { useMe } from "../../store/me";
-import Copyright from "../copyright";
 import Spinner from "../spinner";
 
 const SignIn = () => {
@@ -100,7 +99,6 @@ const SignIn = () => {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 };
