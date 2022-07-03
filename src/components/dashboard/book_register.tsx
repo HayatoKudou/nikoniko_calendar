@@ -14,7 +14,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
-import register, { RegisterBookRequestErrors } from "../../api/book/register";
+import register, { RegisterBookRequestErrors } from "../../api/book/create";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";

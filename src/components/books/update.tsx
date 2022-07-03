@@ -4,20 +4,20 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilValue } from "recoil";
 import UpdateBook, { UpdateBookRequestErrors, UpdateBookRequestPayload } from "../../api/book/update";
+import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import FormError from "../form_error";
 import ImageForm from "../image_form";
 import Spinner from "../spinner";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import {useBookCategories} from "../../store/book/categories";
 
 interface Props {
   open: boolean;
@@ -28,7 +28,7 @@ interface Props {
 
 const Update = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<Blob | null>(props.book.image);
@@ -153,15 +153,7 @@ const Update = (props: Props) => {
             variant="standard"
           />
           <FormError errors={UpdateBookRequestErrors?.description} />
-          <TextField
-            margin={"dense"}
-            label="URL"
-            name="url"
-            value={formValues.url}
-            onChange={handleChange}
-            fullWidth
-            variant="standard"
-          />
+          <TextField margin={"dense"} label="URL" name="url" value={formValues.url} onChange={handleChange} fullWidth variant="standard" />
           <FormError errors={UpdateBookRequestErrors?.url} />
         </Box>
       </DialogContent>

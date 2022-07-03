@@ -22,7 +22,7 @@ interface RegisterBookRequestPayload {
   apiToken: string;
 }
 
-const RegisterBook = async (clientId: string, payload: RegisterBookRequestPayload): Promise<RegisterBookResult> => {
+const Create = async (clientId: string, payload: RegisterBookRequestPayload): Promise<RegisterBookResult> => {
   const endpoint = `${Config.apiOrigin}/api/${clientId}/book`;
   const res = await fetch(endpoint, {
     method: "POST",
@@ -50,4 +50,4 @@ const RegisterBook = async (clientId: string, payload: RegisterBookRequestPayloa
   };
 };
 
-export default RegisterBook;
+export default Create;

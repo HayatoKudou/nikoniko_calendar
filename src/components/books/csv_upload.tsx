@@ -10,27 +10,42 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilValue } from "recoil";
+import BulkCreate from "../../api/book/bulk_create";
+import { useMe } from "../../store/me";
+import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
   handleClose: any;
+  handleSuccess: () => void;
 }
 
 interface CSV {
+  カテゴリ: string;
   タイトル: string;
+  本の説明: string;
+  URL: string;
 }
 
-export default function AlertDialog(props: Props) {
+const CsvUpload = (props: Props) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const me = useRecoilValue(useMe);
   const [csvData, setCsvData] = React.useState<Array<CSV> | null>(null);
+  const [loading, setLoading] = React.useState(false);
   const fileReader = new FileReader();
 
+  if (loading) return <Spinner />;
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // @ts-ignore
     if (e.target.files) {
       fileReader.onload = function (event) {
+        const csvString = event.target!.result as string;
+        const replacedResult = csvString.replace(/['"]+/g, "");
         // @ts-ignore
-        csvFileToArray(event.target.result);
+        csvFileToArray(replacedResult);
       };
       fileReader.readAsText(e.target.files[0]);
     }
@@ -39,8 +54,7 @@ export default function AlertDialog(props: Props) {
   const csvFileToArray = (csvString: string) => {
     const csvHeader = csvString.slice(0, csvString.indexOf("\n")).split(",");
     const csvRows = csvString.slice(csvString.indexOf("\n") + 1).split("\n");
-
-    const array = csvRows.map((i) => {
+    const csvArray = csvRows.map((i) => {
       const values = i.split(",");
       return csvHeader.reduce((object, header, index) => {
         // @ts-ignore
@@ -48,27 +62,67 @@ export default function AlertDialog(props: Props) {
         return object;
       }, {});
     }) as Array<CSV>;
-    setCsvData(array);
+    setCsvData(csvArray);
   };
-  console.log(csvData);
+
+  const handleSubmit = () => {
+    if (csvData === null) {
+      return enqueueSnackbar("CSVファイルが選択されていません", { variant: "error" });
+    }
+    setLoading(true);
+    BulkCreate(me.clientId, {
+      books: csvData,
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        if (res.succeeded) {
+          enqueueSnackbar("一括登録に成功しました", { variant: "success" });
+          props.handleSuccess;
+        } else {
+          enqueueSnackbar(`一括登録に失敗しました`, { variant: "error" });
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`一括登録に失敗しました`, { variant: "error" });
+      });
+  };
 
   return (
-    <Dialog open={props.open} onClose={props.handleClose} fullWidth maxWidth={"md"}>
-      <DialogTitle id="alert-dialog-title">{"CSV一括登録"}</DialogTitle>
+    <Dialog open={props.open} onClose={props.handleClose} fullWidth maxWidth={"xl"}>
+      <DialogTitle>{"CSV一括登録"}</DialogTitle>
       <DialogContent>
         <input type={"file"} accept={".csv"} onChange={handleOnChange} />
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small">
+        <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+          <Table sx={{ tableLayout: "fixed" }} size="small">
             <TableHead>
               <TableRow>
-                <TableCell align="center">タイトル</TableCell>
-                <TableCell align="center">Amazon URL</TableCell>
+                <TableCell align="center" sx={{ width: "10%" }}>
+                  カテゴリ
+                </TableCell>
+                <TableCell align="center" sx={{ width: "30%" }}>
+                  タイトル
+                </TableCell>
+                <TableCell align="center" sx={{ width: "30%" }}>
+                  本の説明
+                </TableCell>
+                <TableCell align="center" sx={{ width: "30%" }}>
+                  URL
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {csvData?.map((csv, index) => (
                 <TableRow key={index}>
-                  <TableCell align="right">{csv.タイトル}</TableCell>
+                  <TableCell align="center">{csv.カテゴリ}</TableCell>
+                  <TableCell align="left">{csv.タイトル}</TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "break-word" }}>
+                    {csv.本の説明}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "break-word" }}>
+                    {csv.URL}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -79,10 +133,12 @@ export default function AlertDialog(props: Props) {
         <Button onClick={props.handleClose} variant="contained">
           キャンセル
         </Button>
-        <Button onClick={props.handleClose} variant="contained">
+        <Button onClick={handleSubmit} variant="contained">
           登録
         </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default CsvUpload;

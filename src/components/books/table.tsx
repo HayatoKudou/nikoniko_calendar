@@ -181,10 +181,10 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             csvDataGenerator={() => {
               return props.books.map((book: Book) => {
                 return {
-                  ステータス: book.status,
                   カテゴリ: book.category,
                   タイトル: book.title,
                   本の説明: book.description,
+                  URL: book.url || "",
                 };
               });
             }}
@@ -280,7 +280,7 @@ export default function EnhancedTable(props: Props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={book.title}
+                      key={book.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
