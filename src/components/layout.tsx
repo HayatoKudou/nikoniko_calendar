@@ -12,7 +12,7 @@ import Spinner from "./spinner";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
-  const [me] = useRecoilState(useMe);
+  const [me, setMe] = useRecoilState(useMe);
   const [colorMode] = useRecoilState(useColorMode);
   const [user, setUser] = useState<User | null>(null);
   const theme = createTheme({
@@ -20,8 +20,13 @@ const Layout = ({ children }: any) => {
       mode: colorMode,
     },
   });
-
   const { loading, error, response } = useAuthenticatedAccount();
+
+  React.useEffect(() => {
+    if (response) {
+      setMe(response.user);
+    }
+  }, [response]);
 
   const pathname = router.pathname;
   if (pathname !== "/sign-up" && pathname !== "/sign-in" && pathname !== "/forget-password" && !pathname.match(/reset-password/)) {

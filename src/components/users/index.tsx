@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Config from "../../../config";
 import DeleteUser from "../../api/user/delete";
 import useUsers from "../../api/user/list";
@@ -12,7 +12,7 @@ import CustomTable from "./table";
 import UpdateUser from "./update_user";
 
 const Users = () => {
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [deleting, setDeleting] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);

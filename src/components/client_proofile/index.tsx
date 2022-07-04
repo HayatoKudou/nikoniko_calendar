@@ -1,9 +1,12 @@
 import CheckIcon from "@mui/icons-material/Check";
+import { FormGroup } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
@@ -51,6 +54,7 @@ const Profile = () => {
     plan: "",
     purchaseLimit: 0,
     purchaseLimitUnit: "monthly",
+    privateOwnershipAllow: false,
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
@@ -64,16 +68,24 @@ const Profile = () => {
         plan: response.client.plan,
         purchaseLimit: response.client.purchaseLimit,
         purchaseLimitUnit: response.client.purchaseLimitUnit,
+        privateOwnershipAllow: response.client.privateOwnershipAllow,
       });
     }
   }, [response]);
 
-  if (loading || updating) return <Spinner />;
+  if (loading || error || updating) return <Spinner />;
 
   const handleChange = (e: any) => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -89,6 +101,7 @@ const Profile = () => {
       name: formValues.name,
       purchase_limit: formValues.purchaseLimit,
       purchase_limit_unit: formValues.purchaseLimitUnit,
+      private_ownership_allow: formValues.privateOwnershipAllow,
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -98,6 +111,7 @@ const Profile = () => {
             variant: "success",
           });
           mutate(`${Config.apiOrigin}/api/${me.clientId}/client`);
+          setOpenConfirm(false);
         } else {
           setCreateRequestErrors(res.errors);
           enqueueSnackbar(`更新に失敗しました`, {
@@ -167,6 +181,12 @@ const Profile = () => {
                     ))}
                   </TextField>
                   <FormError errors={createRequestErrors?.purchase_limit_unit} />
+                  <FormGroup sx={{ padding: 1, whiteSpace: "nowrap" }}>
+                    <FormControlLabel
+                      control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
+                      label="個人所有を許可"
+                    />
+                  </FormGroup>
                 </Box>
               </>
             )}
@@ -247,7 +267,7 @@ const Profile = () => {
                 更新する
               </Button>
             </Box>
-            <ConfirmDialog message={"本当に更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+            <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
           </Box>
         </Paper>
       </Grid>

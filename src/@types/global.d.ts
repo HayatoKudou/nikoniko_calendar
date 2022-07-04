@@ -14,6 +14,9 @@ interface User {
 interface Client {
   id: number;
   name: string;
+  purchaseLimit: number;
+  purchaseLimitUnit: string;
+  privateOwnershipAllow: boolean;
 }
 
 interface Book {

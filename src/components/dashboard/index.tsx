@@ -169,7 +169,12 @@ const Dashboard = () => {
       {selectedBook && (
         <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       )}
-      <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
+      <BookPurchaseApply
+        open={applicationDialogOpen}
+        setClose={() => setApplicationDialogOpen(false)}
+        success={handleSuccess}
+        client={response.client}
+      />
       <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>

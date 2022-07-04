@@ -78,7 +78,7 @@ const BookReviews = (props: Props) => {
   return (
     <>
       <Box sx={{ padding: 2 }}>
-        <Rating name="rate" value={formValues.rate} onChange={handleChange} sx={{ display: "flex" }} />
+        <Rating name="rate" value={formValues.rate} onChange={handleChange} sx={{ display: "inline-flex" }} />
         <FormError errors={bookCreateReviewRequestErrors?.rate} />
         <TextField
           onChange={handleChange}

@@ -15,6 +15,7 @@ interface UpdateClientRequestPayload {
   name: string;
   purchase_limit: number;
   purchase_limit_unit: string;
+  private_ownership_allow: boolean;
   apiToken: string;
 }
 

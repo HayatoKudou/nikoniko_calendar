@@ -27,6 +27,7 @@ import Spinner from "../spinner";
 
 interface Props {
   open: boolean;
+  client: Client;
   setClose: () => void;
   success: () => void;
 }
@@ -186,28 +187,30 @@ const BookPurchaseApply = (props: Props) => {
             <FormLabel sx={{ marginRight: 2 }}>所有者</FormLabel>
             <RadioGroup value={formValues.bookOwner} sx={{ display: "inline" }}>
               <FormControlLabel name="bookOwner" value="team" onChange={handleChange} control={<Radio />} label="組織" />
-              <FormControlLabel name="bookOwner" value="personal" onChange={handleChange} control={<Radio />} label="個人" />
+              <FormControlLabel
+                name="bookOwner"
+                value="private"
+                onChange={handleChange}
+                control={<Radio disabled={!props.client.privateOwnershipAllow} />}
+                label="個人"
+              />
             </RadioGroup>
-            {formValues.bookOwner === "personal" && (
-              <TextField onChange={handleChange} value={formValues.price} name="price" autoFocus label="価格" variant="standard" required />
-            )}
+            <TextField onChange={handleChange} value={formValues.price} name="price" autoFocus label="価格" variant="standard" required />
           </FormControl>
 
-          {formValues.bookOwner === "personal" && (
-            <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
-              <Box sx={{ display: "flex" }}>
-                今月の購入上限：<Box sx={{ marginLeft: "auto" }}>¥3000</Box>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                購入残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (3000 - formValues.price)}</Box>
-              </Box>
-              {3000 - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入上限を超えています</Box>}
-              {isNaN(3000 - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
+          <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
+            <Box sx={{ display: "flex" }}>
+              今月の購入上限：<Box sx={{ marginLeft: "auto" }}>{"¥" + props.client.purchaseLimit}</Box>
             </Box>
-          )}
+            <Box sx={{ display: "flex" }}>
+              価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+              購入残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (props.client.purchaseLimit - formValues.price)}</Box>
+            </Box>
+            {props.client.purchaseLimit - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入上限を超えています</Box>}
+            {isNaN(props.client.purchaseLimit - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
+          </Box>
 
           <TextField
             onChange={handleChange}
