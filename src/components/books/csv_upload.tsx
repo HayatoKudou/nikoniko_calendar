@@ -52,10 +52,10 @@ const CsvUpload = (props: Props) => {
   };
 
   const csvFileToArray = (csvString: string) => {
-    const csvHeader = csvString.slice(0, csvString.indexOf("\n")).split(",");
+    const csvHeader = csvString.slice(0, csvString.indexOf("\n")).slice(0, csvString.indexOf("\r")).split(",");
     const csvRows = csvString.slice(csvString.indexOf("\n") + 1).split("\n");
-    const csvArray = csvRows.map((i) => {
-      const values = i.split(",");
+    const csvArray = csvRows.map((row) => {
+      const values = row.split(",");
       return csvHeader.reduce((object, header, index) => {
         // @ts-ignore
         object[header] = values[index];
@@ -115,6 +115,7 @@ const CsvUpload = (props: Props) => {
             <TableBody>
               {csvData?.map((csv, index) => (
                 <TableRow key={index}>
+
                   <TableCell align="center">{csv.カテゴリ}</TableCell>
                   <TableCell align="left">{csv.タイトル}</TableCell>
                   <TableCell align="left" sx={{ overflowWrap: "break-word" }}>

@@ -36,9 +36,9 @@ const SignIn = () => {
     })
       .then((res) => {
         if (res.succeeded) {
-          enqueueSnackbar("ログインしました。", { variant: "success" });
           setMe(res.user);
           router.push(`/${res.user.clientId}/dashboard`);
+          enqueueSnackbar("ログインしました。", { variant: "success" });
         } else {
           enqueueSnackbar(res.errors as SnackbarMessage, { variant: "error" });
         }
