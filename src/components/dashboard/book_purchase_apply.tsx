@@ -165,7 +165,6 @@ const BookPurchaseApply = (props: Props) => {
             variant="standard"
             multiline
             margin={"dense"}
-            required
           />
           <FormError errors={bookPurchaseApplyRequestErrors?.description} />
 

@@ -15,6 +15,9 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
+import Link from "@mui/material/Link";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {useMe} from "../../store/me";
 
 const drawerWidth = 240;
 
@@ -90,6 +93,7 @@ export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const pathname = router.pathname;
+  const me= useRecoilValue(useMe);
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -117,7 +121,7 @@ export default function Sidebar(props: { children: any }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" noWrap component="div" onClick={() => router.push(`/${me.clientId}/dashboard`)}>
             Read Worth
           </Typography>
           {(pathname === "/sign-up" || pathname === "/sign-in") && (

@@ -12,7 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import { useMe } from "../../store/me";
 import { useColorMode } from "../../store/styles/color_mode";
 
@@ -49,7 +49,12 @@ const MenuListIcon = (props: { name: string }) => {
 const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const router = useRouter();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
+  const [selected, setSelected] = React.useState<string>();
+
+  React.useEffect(() => {
+    setSelected(router.asPath)
+  }, [])
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
@@ -60,11 +65,12 @@ const MenuList = (props: { open: boolean }) => {
   };
   const name = colorModeName();
 
-  const routePush = (path: string | null) => {
+  const handleSelect = (path: string | null) => {
     if (path) {
+      setSelected(path)
       router.push(path);
     }
-  };
+  }
 
   let menuList: { name: string; title: string | undefined; path: string | null }[] = [];
 
@@ -83,13 +89,14 @@ const MenuList = (props: { open: boolean }) => {
     <List>
       {menuList.map((menu, index) => (
         <ListItemButton
-          onClick={() => routePush(menu.path)}
+          onClick={() => handleSelect(menu.path)}
           key={index}
           sx={{
             minHeight: 48,
             justifyContent: props.open ? "initial" : "center",
             px: 2.5,
           }}
+          selected={selected == menu.path}
         >
           <ListItemIcon
             sx={{
