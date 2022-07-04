@@ -12,7 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useMe } from "../../store/me";
 import { useColorMode } from "../../store/styles/color_mode";
 
@@ -53,8 +53,8 @@ const MenuList = (props: { open: boolean }) => {
   const [selected, setSelected] = React.useState<string>();
 
   React.useEffect(() => {
-    setSelected(router.asPath)
-  }, [])
+    setSelected(router.asPath);
+  }, []);
 
   const colorModeName = () => {
     if (theme.palette.mode === "dark") {
@@ -67,10 +67,10 @@ const MenuList = (props: { open: boolean }) => {
 
   const handleSelect = (path: string | null) => {
     if (path) {
-      setSelected(path)
+      setSelected(path);
       router.push(path);
     }
-  }
+  };
 
   let menuList: { name: string; title: string | undefined; path: string | null }[] = [];
 

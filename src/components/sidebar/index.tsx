@@ -13,11 +13,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { useRecoilValue } from "recoil";
+import { useMe } from "../../store/me";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
-import Link from "@mui/material/Link";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {useMe} from "../../store/me";
 
 const drawerWidth = 240;
 
@@ -93,7 +92,7 @@ export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const pathname = router.pathname;
-  const me= useRecoilValue(useMe);
+  const me = useRecoilValue(useMe);
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
