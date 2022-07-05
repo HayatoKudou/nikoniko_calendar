@@ -85,7 +85,7 @@ const BookInfo = (props: Props) => {
               <ImageNotSupportedIcon fontSize="large" />
             </Box>
           )}
-          <Box sx={{width: "40%", padding: 2}}>
+          <Box sx={{ width: "40%", padding: 2 }}>
             <Box sx={{ margin: 2, display: "flex", alignItems: "center" }}>
               <Rating name="rate" value={rateAverage} readOnly precision={0.5} />
               <Typography component="span" color="primary">

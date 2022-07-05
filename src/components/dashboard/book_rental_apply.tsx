@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -87,7 +86,7 @@ const BookRentalApply = (props: Props) => {
         <FormError errors={bookRentalApplyRequestErrors.reason} />
       </Box>
 
-      <Box sx={{display: "flex", alignItems: "center"}}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="返却予定日"
@@ -102,7 +101,7 @@ const BookRentalApply = (props: Props) => {
             <FormError errors={bookRentalApplyRequestErrors.expected_return_date} />
           </Box>
         </LocalizationProvider>
-        <Button variant="contained" onClick={handleSubmit} sx={{margin: "16px 0px 16px auto"}}>
+        <Button variant="contained" onClick={handleSubmit} sx={{ margin: "16px 0px 16px auto" }}>
           貸出申請
         </Button>
       </Box>
