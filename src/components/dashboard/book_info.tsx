@@ -28,7 +28,6 @@ const BookInfo = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [me] = useRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
-  const [openRentalForm, setOpenRentalForm] = React.useState<boolean>(false);
 
   if (loading) return <Spinner />;
 
@@ -61,7 +60,6 @@ const BookInfo = (props: Props) => {
   };
 
   const handleClose = () => {
-    setOpenRentalForm(false);
     props.setClose();
   };
 
@@ -76,18 +74,18 @@ const BookInfo = (props: Props) => {
   }
 
   return (
-    <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"md"} scroll={"paper"}>
+    <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"lg"} scroll={"paper"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex" }}>
           {props.bookInfo.image ? (
-            <Box sx={{ padding: 2, textAlign: "center", maxWidth: "30%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
+            <Box sx={{ padding: 2, textAlign: "center", maxWidth: "20%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
           ) : (
-            <Box sx={{ height: "200px", width: "40%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box sx={{ height: "200px", width: "20%", display: "flex", justifyContent: "center", alignItems: "center" }}>
               <ImageNotSupportedIcon fontSize="large" />
             </Box>
           )}
-          <Box>
+          <Box sx={{width: "40%", padding: 2}}>
             <Box sx={{ margin: 2, display: "flex", alignItems: "center" }}>
               <Rating name="rate" value={rateAverage} readOnly precision={0.5} />
               <Typography component="span" color="primary">
@@ -106,28 +104,20 @@ const BookInfo = (props: Props) => {
             {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && props.bookInfo.purchaseApplicant && (
               <Box sx={{ margin: 2 }}>購入申請者: {props.bookInfo.purchaseApplicant.name}</Box>
             )}
-          </Box>
-          <Box sx={{ marginLeft: "auto", marginTop: "auto" }}>
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant?.id === me.id && (
               <BookReturn bookInfo={props.bookInfo} success={props.success} />
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
-              <Button variant="contained" onClick={() => availableBook(props)} sx={{ marginRight: 1 }}>
+              <Button variant="contained" onClick={() => availableBook(props)} sx={{ marginLeft: 2 }}>
                 貸出可能にする
               </Button>
             )}
-            {openRentalForm ? (
-              <Button variant="contained" onClick={() => setOpenRentalForm(false)}>
-                閉じる
-              </Button>
-            ) : (
-              <Button variant="contained" onClick={() => setOpenRentalForm(true)} disabled={props.bookInfo.status !== 1} sx={{ marginRight: 1 }}>
-                {bookStatusName(props.bookInfo.status)}
-              </Button>
-            )}
+          </Box>
+
+          <Box sx={{ width: "40%", padding: 2 }}>
+            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_LEND && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
           </Box>
         </Box>
-        {openRentalForm && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
         <BookReviews bookInfo={props.bookInfo} onSuccess={() => props.success()} />
       </DialogContent>
     </Dialog>

@@ -70,22 +70,24 @@ const BookRentalApply = (props: Props) => {
 
   return (
     <>
-      <Box sx={{ padding: 2 }}>
-        <Box>
-          <TextField
-            onChange={handleChange}
-            value={formValues.reason}
-            name="reason"
-            autoFocus
-            fullWidth
-            label="申請理由"
-            variant="standard"
-            margin={"dense"}
-            multiline
-          />
-          <FormError errors={bookRentalApplyRequestErrors.reason} />
-        </Box>
+      <Box>
+        <TextField
+          onChange={handleChange}
+          value={formValues.reason}
+          name="reason"
+          autoFocus
+          fullWidth
+          label="申請理由"
+          variant="outlined"
+          rows={3}
+          margin={"dense"}
+          multiline
+          required
+        />
+        <FormError errors={bookRentalApplyRequestErrors.reason} />
+      </Box>
 
+      <Box sx={{display: "flex", alignItems: "center"}}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="返却予定日"
@@ -94,18 +96,16 @@ const BookRentalApply = (props: Props) => {
             onChange={(e) => {
               e && setExpectedReturnDate(e);
             }}
-            renderInput={(params) => <TextField {...params} sx={{ marginTop: 2 }} />}
+            renderInput={(params) => <TextField required {...params} sx={{ marginTop: 2 }} />}
           />
           <Box>
             <FormError errors={bookRentalApplyRequestErrors.expected_return_date} />
           </Box>
         </LocalizationProvider>
-      </Box>
-      <DialogActions>
-        <Button variant="contained" onClick={handleSubmit}>
+        <Button variant="contained" onClick={handleSubmit} sx={{margin: "16px 0px 16px auto"}}>
           貸出申請
         </Button>
-      </DialogActions>
+      </Box>
     </>
   );
 };
