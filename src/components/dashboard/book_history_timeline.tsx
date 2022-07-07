@@ -1,6 +1,7 @@
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Timeline from "@mui/lab/Timeline";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
@@ -13,6 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import useBookHistories from "../../api/book/history";
+import styles from "../../styles/components/book_history_timeline.module.scss";
 
 interface Props {
   bookId: number;
@@ -42,7 +44,7 @@ function actionIcon(action: string) {
     case "purchase book":
       return <LocalPostOfficeIcon />;
     case "lend book":
-      return "書籍申請";
+      return <StopCircleIcon />;
     default:
       return "その他";
   }
@@ -54,27 +56,29 @@ const BookHistoryTimeline = (props: Props) => {
   return (
     <>
       {loading || error ? (
-        <Box sx={{ justifyContent: "center", alignItems: "center", display: "flex", height: "100%" }}>
+        <Box className={styles.bookHistoryTimeline__spinner}>
           <CircularProgress size={70} />
         </Box>
       ) : (
-        <Timeline>
-          {response.histories.map((history: BookHistory, index: number) => (
-            <TimelineItem key={index}>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right" variant="body2" color="text.secondary">
-                {history.date}
-                <Box>{history.userName}</Box>
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineDot>{actionIcon(history.action)}</TimelineDot>
-                {response.histories.length != index + 1 && response.histories.length > 1 && <TimelineConnector />}
-              </TimelineSeparator>
-              <TimelineContent sx={{ margin: "auto" }}>
-                <Typography variant="h6">{actionName(history.action)}</Typography>
-              </TimelineContent>
-            </TimelineItem>
-          ))}
-        </Timeline>
+        <Box className={styles.bookHistoryTimeline}>
+          <Timeline>
+            {response.histories.map((history: BookHistory, index: number) => (
+              <TimelineItem key={index}>
+                <TimelineOppositeContent className={styles.bookHistoryTimeline__content} variant="body2" color="text.secondary">
+                  {history.date}
+                  <Box>{history.userName}</Box>
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineDot>{actionIcon(history.action)}</TimelineDot>
+                  {response.histories.length != index + 1 && response.histories.length > 1 && <TimelineConnector />}
+                </TimelineSeparator>
+                <TimelineContent className={styles.bookHistoryTimeline__content}>
+                  <Typography variant="h6">{actionName(history.action)}</Typography>
+                </TimelineContent>
+              </TimelineItem>
+            ))}
+          </Timeline>
+        </Box>
       )}
     </>
   );

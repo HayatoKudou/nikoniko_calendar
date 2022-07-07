@@ -1,0 +1,24 @@
+.bookHistoryTimeline {
+  overflow: scroll;
+  max-height: 300px;
+
+  &__spinner {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100%;
+  }
+
+  &__oppositeContent {
+    margin: auto 0;
+    text-align: right;
+  }
+
+  &__content {
+    margin: auto;
+  }
+}
+
+.bookHistoryTimeline::-webkit-scrollbar {
+  display: none;
+}
