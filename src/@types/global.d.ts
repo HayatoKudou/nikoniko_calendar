@@ -43,3 +43,9 @@ interface Review {
   reviewedAt: string;
   reviewer: string;
 }
+
+interface BookHistory {
+  userName: string;
+  action: string;
+  date: string;
+}

@@ -13,6 +13,7 @@ import UpdateBook from "../../api/book/update";
 import { useMe } from "../../store/me";
 import { bookStatusName, BOOK_STATUS } from "../../util/book";
 import Spinner from "../spinner";
+import BookHistoryTimeline from "./book_history_timeline";
 import BookRentalApply from "./book_rental_apply";
 import BookReturn from "./book_return";
 import BookReviews from "./book_reviews";
@@ -79,43 +80,44 @@ const BookInfo = (props: Props) => {
       <DialogContent>
         <Box sx={{ display: "flex" }}>
           {props.bookInfo.image ? (
-            <Box sx={{ padding: 2, textAlign: "center", maxWidth: "20%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
+            <Box sx={{ padding: 2, textAlign: "center", maxWidth: "25%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
           ) : (
             <Box sx={{ height: "200px", width: "20%", display: "flex", justifyContent: "center", alignItems: "center" }}>
               <ImageNotSupportedIcon fontSize="large" />
             </Box>
           )}
           <Box sx={{ width: "40%", padding: 2 }}>
-            <Box sx={{ margin: 2, display: "flex", alignItems: "center" }}>
+            <Box sx={{ margin: 1, display: "flex", alignItems: "center" }}>
               <Rating name="rate" value={rateAverage} readOnly precision={0.5} />
               <Typography component="span" color="primary">
                 {props.bookInfo.reviews.length}
               </Typography>
             </Box>
-            <Box sx={{ margin: 2 }}>カテゴリ: {props.bookInfo.category}</Box>
-            <Box sx={{ margin: 2, whiteSpace: "pre-wrap", display: "flex" }}>
+            <Box sx={{ margin: 1 }}>カテゴリ: {props.bookInfo.category}</Box>
+            <Box sx={{ margin: 1, whiteSpace: "pre-wrap", display: "flex" }}>
               <Box>本の説明: </Box>
               <Box>{props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
             </Box>
-            <Box sx={{ margin: 2 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
+            <Box sx={{ margin: 1 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant && (
-              <Box sx={{ margin: 2 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
+              <Box sx={{ margin: 1 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && props.bookInfo.purchaseApplicant && (
-              <Box sx={{ margin: 2 }}>購入申請者: {props.bookInfo.purchaseApplicant.name}</Box>
+              <Box sx={{ margin: 1 }}>購入申請者: {props.bookInfo.purchaseApplicant.name}</Box>
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant?.id === me.id && (
               <BookReturn bookInfo={props.bookInfo} success={props.success} />
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && me.role.is_book_manager && (
-              <Button variant="contained" onClick={() => availableBook(props)} sx={{ marginLeft: 2 }}>
+              <Button variant="contained" onClick={() => availableBook(props)} sx={{ marginLeft: 2, marginTop: 2 }}>
                 貸出可能にする
               </Button>
             )}
+            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_LEND && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
           </Box>
 
           <Box sx={{ width: "40%", padding: 2 }}>
-            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_LEND && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
+            <BookHistoryTimeline bookId={props.bookInfo.id} />
           </Box>
         </Box>
         <BookReviews bookInfo={props.bookInfo} onSuccess={() => props.success()} />

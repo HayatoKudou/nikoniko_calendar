@@ -78,7 +78,7 @@ const BookRentalApply = (props: Props) => {
           fullWidth
           label="申請理由"
           variant="outlined"
-          rows={3}
+          rows={2}
           margin={"dense"}
           multiline
           required
