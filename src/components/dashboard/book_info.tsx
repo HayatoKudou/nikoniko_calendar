@@ -75,7 +75,7 @@ const BookInfo = (props: Props) => {
   }
 
   return (
-    <Dialog open={props.open} onClose={handleClose}  maxWidth={"lg"} scroll={"paper"}>
+    <Dialog open={props.open} onClose={handleClose} maxWidth={"lg"} scroll={"paper"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex" }}>
@@ -116,7 +116,7 @@ const BookInfo = (props: Props) => {
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_LEND && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
           </Box>
 
-          <Box sx={{ width: "40%", padding: 2 }}>
+          <Box sx={{ width: "350px", maxWidth: "40%", padding: 2 }}>
             <BookHistoryTimeline bookId={props.bookInfo.id} />
           </Box>
         </Box>

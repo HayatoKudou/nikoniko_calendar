@@ -101,7 +101,7 @@ const BookRentalApply = (props: Props) => {
             <FormError errors={bookRentalApplyRequestErrors.expected_return_date} />
           </Box>
         </LocalizationProvider>
-        <Button variant="contained" onClick={handleSubmit} sx={{ margin: "16px 0px 16px auto" }}>
+        <Button variant="contained" onClick={handleSubmit} sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }}>
           貸出申請
         </Button>
       </Box>
