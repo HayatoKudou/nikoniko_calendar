@@ -75,7 +75,7 @@ const BookInfo = (props: Props) => {
   }
 
   return (
-    <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"lg"} scroll={"paper"}>
+    <Dialog open={props.open} onClose={handleClose}  maxWidth={"lg"} scroll={"paper"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex" }}>
