@@ -15,8 +15,8 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import Update, { UpdateUserRequestErrors, UpdateUserRequestPayload } from "../../api/user/update";
 import { useMe } from "../../store/me";
-import FormError from "../form_error";
-import Spinner from "../spinner";
+import FormError from "../parts/form_error";
+import Spinner from "../parts/spinner";
 
 interface Props {
   open: boolean;

@@ -13,7 +13,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import signIn from "../../api/sign_in";
 import { useMe } from "../../store/me";
-import Spinner from "../spinner";
+import Spinner from "../parts/spinner";
 
 const SignIn = () => {
   const router = useRouter();

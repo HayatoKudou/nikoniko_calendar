@@ -21,9 +21,9 @@ import AmazonImage from "../../api/book/amazon_image";
 import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
-import FormError from "../form_error";
-import ImageForm from "../image_form";
-import Spinner from "../spinner";
+import FormError from "../parts/form_error";
+import ImageForm from "../parts/image_form";
+import Spinner from "../parts/spinner";
 
 interface Props {
   open: boolean;

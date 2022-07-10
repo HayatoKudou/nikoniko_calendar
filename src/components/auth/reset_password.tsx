@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import resetPassword, { ResetPasswordRequestErrors } from "../../api/reset_password";
-import FormError from "../form_error";
-import Spinner from "../spinner";
+import FormError from "../parts/form_error";
+import Spinner from "../parts/spinner";
 
 const ResetPassword = () => {
   const router = useRouter();

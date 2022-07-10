@@ -8,9 +8,9 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
 import { useMe } from "../../store/me";
-import ConfirmDialog from "../confirm_dialog";
-import FormError from "../form_error";
-import Spinner from "../spinner";
+import ConfirmDialog from "../parts/confirm_dialog";
+import FormError from "../parts/form_error";
+import Spinner from "../parts/spinner";
 
 interface Props {
   bookInfo: Book;

@@ -1,7 +1,7 @@
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import Button from "@mui/material/Button";
 import * as React from "react";
-import { base64ToBlob } from "../util/image";
+import { base64ToBlob } from "../../util/image";
 
 interface Props {
   selectedImage: any;

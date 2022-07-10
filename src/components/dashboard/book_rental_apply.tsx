@@ -9,8 +9,8 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import CreateBookRentalApply, { BookRentalApplyRequestErrors } from "../../api/book/rental_apply/create";
 import { useMe } from "../../store/me";
-import FormError from "../form_error";
-import Spinner from "../spinner";
+import FormError from "../parts/form_error";
+import Spinner from "../parts/spinner";
 
 interface Props {
   bookInfo: Book;

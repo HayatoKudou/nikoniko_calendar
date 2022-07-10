@@ -1,0 +1,17 @@
+.booksTable {
+  min-width: 750px;
+
+  &__actionIcon {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    width: 30%;
+    text-align: left;
+  }
+
+  &__toolBar {
+    flex: 1 1 100%;
+  }
+}

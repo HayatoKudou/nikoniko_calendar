@@ -7,8 +7,8 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import Update, { UpdateUserRequestErrors } from "../api/user/update";
-import { useMe } from "../store/me";
+import Update, { UpdateUserRequestErrors } from "../../api/user/update";
+import { useMe } from "../../store/me";
 import FormError from "./form_error";
 import Spinner from "./spinner";
 

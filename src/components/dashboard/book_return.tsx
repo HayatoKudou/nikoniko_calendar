@@ -4,8 +4,8 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import BookReturn from "../../api/book/return";
 import { useMe } from "../../store/me";
-import ConfirmDialog from "../confirm_dialog";
-import Spinner from "../spinner";
+import ConfirmDialog from "../parts/confirm_dialog";
+import Spinner from "../parts/spinner";
 
 interface Props {
   bookInfo: Book;

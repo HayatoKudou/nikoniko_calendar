@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import UpdateBook from "../../api/book/update";
 import { useMe } from "../../store/me";
 import { bookStatusName, BOOK_STATUS } from "../../util/book";
-import Spinner from "../spinner";
+import Spinner from "../parts/spinner";
 import BookHistoryTimeline from "./book_history_timeline";
 import BookRentalApply from "./book_rental_apply";
 import BookReturn from "./book_return";

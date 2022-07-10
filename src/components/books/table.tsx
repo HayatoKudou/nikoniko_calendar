@@ -12,33 +12,21 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
+import styles from "../../styles/components/books/table.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
-import CsvDownload from "../csv_download";
+import CsvDownload from "../parts/csv_download";
+import TableHead from "../parts/table_head";
 
 type Order = "asc" | "desc";
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  headCells: any;
-}
-
-interface EnhancedTableToolbarProps {
+interface TableToolbarProps {
   books: Array<Book>;
   numSelected: number;
   handleCreate: () => void;
@@ -56,7 +44,7 @@ interface Props {
   setSelected: Dispatch<SetStateAction<any>>;
 }
 
-interface HeadCell {
+export interface HeadCell {
   disablePadding: boolean;
   id: string;
   label: string;
@@ -96,49 +84,7 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: any) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        <TableCell />
-        {props.headCells.map((headCell: HeadCell) => (
-          <TableCell
-            key={headCell.id}
-            align={"center"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+const TableToolbar = (props: TableToolbarProps) => {
   const { numSelected } = props;
   return (
     <Toolbar
@@ -151,16 +97,16 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
+        <Typography className={styles.booksTable__toolBar} color="inherit">
           {numSelected} 選択中
         </Typography>
       ) : (
-        <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
+        <Typography className={styles.booksTable__toolBar} variant="h5">
           書籍管理
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="削除">
           <IconButton onClick={() => props.handleDelete()}>
             <DeleteIcon />
           </IconButton>
@@ -195,7 +141,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   );
 };
 
-export default function EnhancedTable(props: Props) {
+const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState("status");
   const [page, setPage] = React.useState(0);
@@ -245,87 +191,83 @@ export default function EnhancedTable(props: Props) {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.books.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar
-          books={props.books}
-          numSelected={props.selected.length}
-          handleCsvUpload={props.handleCsvUpload}
-          handleCreate={props.handleCreate}
-          handleDelete={props.handleDelete}
-        />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="small">
-            <EnhancedTableHead
-              numSelected={props.selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={props.books.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {/*@ts-ignore*/}
-              {stableSort(props.books, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((book: any, index) => {
-                  const isItemSelected = isSelected(book.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <Paper>
+      <TableToolbar
+        books={props.books}
+        numSelected={props.selected.length}
+        handleCsvUpload={props.handleCsvUpload}
+        handleCreate={props.handleCreate}
+        handleDelete={props.handleDelete}
+      />
+      <TableContainer>
+        <Table className={styles.booksTable} size="small">
+          <TableHead
+            numSelected={props.selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={props.books.length}
+            headCells={headCells}
+          />
+          <TableBody>
+            {/*@ts-ignore*/}
+            {stableSort(props.books, getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((book: any, index) => {
+                const isItemSelected = isSelected(book.id);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, book.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={book.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton onClick={(e) => props.handleEdit(e, book)}>
-                          <ModeEditIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
-                          {bookStatusName(book.status)}
-                        </Box>
-                      </TableCell>
-                      <TableCell align="center">{book.category}</TableCell>
-                      <TableCell align="left" sx={{ width: "30%" }}>
-                        {book.title}
-                      </TableCell>
-                      <TableCell align="left" sx={{ width: "30%" }}>
-                        {book.description}
-                      </TableCell>
-                      <TableCell align="left">{book.createdAt}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 33 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[25, 50, 100]}
-          component="div"
-          count={props.books.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, book.id)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={book.id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton onClick={(e) => props.handleEdit(e, book)}>
+                        <ModeEditIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box className={styles.booksTable__actionIcon}>
+                        <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
+                        {bookStatusName(book.status)}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">{book.category}</TableCell>
+                    <TableCell className={styles.booksTable__title}>{book.title}</TableCell>
+                    <TableCell className={styles.booksTable__title}>{book.description}</TableCell>
+                    <TableCell align="left">{book.createdAt}</TableCell>
+                  </TableRow>
+                );
+              })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 33 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[25, 50, 100]}
+        component="div"
+        count={props.books.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
-}
+};
+
+export default CustomTable;

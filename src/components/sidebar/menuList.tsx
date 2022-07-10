@@ -3,6 +3,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import BusinessIcon from "@mui/icons-material/Business";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import List from "@mui/material/List";
@@ -29,6 +30,8 @@ const MenuListIcon = (props: { name: string }) => {
       return <DashboardIcon />;
     case "books":
       return <LibraryBooksIcon />;
+    case "purchaseApplies":
+      return <LocalPostOfficeIcon />;
     case "users":
       return <PeopleIcon />;
     case "profile":
@@ -78,6 +81,7 @@ const MenuList = (props: { open: boolean }) => {
     menuList = [
       { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
       { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
+      { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` },
       { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
       { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
     ];

@@ -15,7 +15,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import BulkCreate from "../../api/book/bulk_create";
 import { useMe } from "../../store/me";
-import Spinner from "../spinner";
+import Spinner from "../parts/spinner";
 
 interface Props {
   open: boolean;

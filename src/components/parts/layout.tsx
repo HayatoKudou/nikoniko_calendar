@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import useAuthenticatedAccount from "../api/me";
-import UserContext from "../context/userContext";
-import { useMe } from "../store/me";
-import { useColorMode } from "../store/styles/color_mode";
-import Sidebar from "./sidebar";
+import useAuthenticatedAccount from "../../api/me";
+import UserContext from "../../context/userContext";
+import { useMe } from "../../store/me";
+import { useColorMode } from "../../store/styles/color_mode";
+import Sidebar from "../sidebar";
 import Spinner from "./spinner";
 
 const Layout = ({ children }: any) => {

@@ -1,4 +1,4 @@
-import Layout from "../components/layout";
+import Layout from "../components/parts/layout";
 import type { NextPage } from "next";
 
 const Index: NextPage = () => {

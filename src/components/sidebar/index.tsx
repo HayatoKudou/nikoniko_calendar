@@ -124,14 +124,14 @@ export default function Sidebar(props: { children: any }) {
             Read Worth
           </Typography>
           {(pathname === "/sign-up" || pathname === "/sign-in") && (
-            <>
+            <Box sx={{ marginLeft: "auto" }}>
               <Button color="inherit" onClick={() => router.push("/sign-up")}>
                 新規登録
               </Button>
               <Button color="inherit" onClick={() => router.push("/sign-in")}>
                 ログイン
               </Button>
-            </>
+            </Box>
           )}
         </Toolbar>
       </AppBar>

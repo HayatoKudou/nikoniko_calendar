@@ -22,9 +22,9 @@ import Config from "../../../config";
 import useClientInfo from "../../api/client/info";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
 import { useMe } from "../../store/me";
-import ConfirmDialog from "../confirm_dialog";
-import FormError from "./../form_error";
-import Spinner from "./../spinner";
+import ConfirmDialog from "../parts/confirm_dialog";
+import FormError from "../parts/form_error";
+import Spinner from "../parts/spinner";
 
 const purchaseLimitUnits = [
   {
