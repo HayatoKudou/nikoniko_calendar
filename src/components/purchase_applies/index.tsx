@@ -7,13 +7,14 @@ import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 import CustomTable from "./table";
+import Update from "./update";
 
 const Books = () => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [deleting, setDeleting] = React.useState<boolean>(false);
-  const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
+  const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<Book>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
@@ -29,27 +30,12 @@ const Books = () => {
 
   if (loading || deleting || error) return <Spinner />;
 
-  const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
+  const handleEditBook = (e: { stopPropagation: any }, purchaseApply: any) => {
     e.stopPropagation();
-    setSelectedEditBook(book);
+    setSelectedEditPurchaseApply(purchaseApply);
     setUpdateDialogOpen(true);
   };
-
-  const handleClickCreateButton = () => {
-    setCreateDialogOpen(true);
-  };
-
-  const handleClickCsvUploadButton = () => {
-    setCsvUploadDialogOpen(true);
-  };
-
-  const handleClickDeleteButton = () => {
-    setOpenDeleteConfirm(true);
-  };
-
-  const handleConfirmClose = () => {
-    setOpenDeleteConfirm(false);
-  };
+  console.log(selectedEditPurchaseApply);
 
   const handleSuccess = () => {
     mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
@@ -58,7 +44,20 @@ const Books = () => {
 
   return (
     <>
-      <CustomTable bookPurchaseApplies={response.bookPurchaseApplies} selected={selectedBookIds} setSelected={setSelectedBookIds} />
+      {selectedEditPurchaseApply && (
+        <Update
+          purchaseApply={selectedEditPurchaseApply}
+          open={updateDialogOpen}
+          onClose={() => setUpdateDialogOpen(false)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+        />
+      )}
+      <CustomTable
+        bookPurchaseApplies={response.bookPurchaseApplies}
+        handleEdit={handleEditBook}
+        selected={selectedBookIds}
+        setSelected={setSelectedBookIds}
+      />
     </>
   );
 };

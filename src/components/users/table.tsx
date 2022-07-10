@@ -42,7 +42,7 @@ interface EnhancedTableToolbarProps {
 interface Props {
   users: Array<User>;
   handleCreate: () => void;
-  handleEdit: (user: User) => void;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, user: User) => void;
   handleDelete: () => void;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
@@ -52,19 +52,16 @@ const headCells: readonly TableHeadCell[] = [
   {
     id: "name",
     numeric: false,
-    disablePadding: true,
     label: "名前",
   },
   {
     id: "email",
     numeric: false,
-    disablePadding: false,
     label: "メールアドレス",
   },
   {
     id: "role",
     numeric: false,
-    disablePadding: false,
     label: "ロール",
   },
 ];
@@ -169,6 +166,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.users.length}
             headCells={headCells}
+            showActionIcon={true}
+            showCheckBox={true}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -192,7 +191,7 @@ const CustomTable = (props: Props) => {
                       <Checkbox color="primary" checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={(e) => props.handleEdit(user)}>
+                      <IconButton onClick={(e) => props.handleEdit(e, user)}>
                         <ModeEditIcon />
                       </IconButton>
                     </TableCell>

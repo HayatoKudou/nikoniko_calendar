@@ -1,4 +1,5 @@
-import Checkbox from "@mui/material/Checkbox";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import styles from "../../styles/components/books/table.module.scss";
+import styles from "../../styles/components/purchase_applies/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
 
@@ -19,25 +20,23 @@ interface Props {
   bookPurchaseApplies: Array<any>;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
 }
 
 const headCells: readonly TableHeadCell[] = [
   {
     id: "userName",
     numeric: false,
-    disablePadding: true,
-    label: "ユーザー名",
+    label: "申請者",
   },
   {
     id: "title",
     numeric: false,
-    disablePadding: false,
     label: "タイトル",
   },
   {
     id: "reason",
     numeric: false,
-    disablePadding: false,
     label: "申請理由",
   },
 ];
@@ -106,29 +105,21 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.bookPurchaseApplies.length}
             headCells={headCells}
+            showActionIcon={true}
+            showCheckBox={false}
           />
           <TableBody>
-            {/*@ts-ignore*/}
             {stableSort(props.bookPurchaseApplies, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((purchaseApply: any, index) => {
-                const isItemSelected = isSelected(purchaseApply.book.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, purchaseApply.book.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={purchaseApply.book.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
+                  <TableRow key={purchaseApply.book.id}>
+                    <TableCell>
+                      <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
+                        <VisibilityIcon />
+                      </IconButton>
                     </TableCell>
-                    <TableCell align="center">{purchaseApply.user.name}</TableCell>
+                    <TableCell align="left">{purchaseApply.user.name}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
                   </TableRow>
@@ -155,4 +146,5 @@ const CustomTable = (props: Props) => {
   );
 };
 
+// @ts-ignore
 export default CustomTable;

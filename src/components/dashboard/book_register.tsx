@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/create";
 import { useBookCategories } from "../../store/book/categories";
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const BookRegister = (props: Props) => {
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
@@ -129,7 +129,7 @@ const BookRegister = (props: Props) => {
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
-              {bookCategories.map((bookCategory: BookCategory, index: number) => (
+              {bookCategories?.map((bookCategory: BookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
                 </MenuItem>

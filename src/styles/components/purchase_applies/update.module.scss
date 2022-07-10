@@ -1,0 +1,28 @@
+.dialog {
+  &__imageContainer {
+    text-align: center;
+  }
+
+  &__image {
+    max-height: 300px;
+    max-width: 250px;
+    margin-bottom: 10px;
+  }
+
+  &__detailContainer {
+    display: flex;
+    margin: 16px;
+  }
+
+  &__detailItem {
+    width: 20%;
+    flex-shrink: 0;
+  }
+
+  &__detailUrl {
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

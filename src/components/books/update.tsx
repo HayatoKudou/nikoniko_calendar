@@ -125,7 +125,7 @@ const Update = (props: Props) => {
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.category} name="category" label="role" variant="standard">
-              {bookCategories.map((bookCategory: BookCategory, index: number) => (
+              {bookCategories?.map((bookCategory: BookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
                 </MenuItem>

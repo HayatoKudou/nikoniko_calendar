@@ -48,31 +48,26 @@ const headCells: readonly TableHeadCell[] = [
   {
     id: "status",
     numeric: false,
-    disablePadding: true,
     label: "ステータス",
   },
   {
     id: "category",
     numeric: false,
-    disablePadding: false,
     label: "カテゴリ",
   },
   {
     id: "title",
     numeric: false,
-    disablePadding: false,
     label: "タイトル",
   },
   {
     id: "description",
     numeric: false,
-    disablePadding: false,
     label: "本の説明",
   },
   {
     id: "createdAt",
     numeric: false,
-    disablePadding: false,
     label: "登録日",
   },
 ];
@@ -202,6 +197,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.books.length}
             headCells={headCells}
+            showActionIcon={true}
+            showCheckBox={true}
           />
           <TableBody>
             {/*@ts-ignore*/}

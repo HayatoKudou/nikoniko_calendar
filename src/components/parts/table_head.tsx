@@ -17,6 +17,8 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
   headCells: any;
+  showActionIcon: boolean;
+  showCheckBox: boolean;
 }
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
@@ -27,21 +29,18 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        <TableCell />
+        {props.showCheckBox && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+            />
+          </TableCell>
+        )}
+        {props.showActionIcon && <TableCell />}
         {props.headCells.map((headCell: any) => (
-          <TableCell
-            key={headCell.id}
-            align={"center"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
+          <TableCell key={headCell.id} align={"center"} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
@@ -61,4 +60,5 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   );
 };
 
+// @ts-ignore
 export default EnhancedTableHead;

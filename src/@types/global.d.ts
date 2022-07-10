@@ -51,7 +51,6 @@ interface BookHistory {
 }
 
 interface TableHeadCell {
-  disablePadding: boolean;
   id: string;
   label: string;
   numeric: boolean;

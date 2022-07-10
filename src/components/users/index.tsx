@@ -24,7 +24,8 @@ const Users = () => {
 
   if (deleting || loading || error) return <Spinner />;
 
-  const handleEditUser = (user: User) => {
+  const handleEditUser = (e: { stopPropagation: any }, user: User) => {
+    e.stopPropagation();
     setUpdateDialogOpen(true);
     setSelectUser(user);
   };
