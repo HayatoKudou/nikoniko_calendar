@@ -49,3 +49,10 @@ interface BookHistory {
   action: string;
   date: string;
 }
+
+interface TableHeadCell {
+  disablePadding: boolean;
+  id: string;
+  label: string;
+  numeric: boolean;
+}

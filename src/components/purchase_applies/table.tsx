@@ -11,6 +11,7 @@ import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import styles from "../../styles/components/books/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
+import TableHead from "../parts/table_head";
 
 type Order = "asc" | "desc";
 
@@ -20,11 +21,47 @@ interface Props {
   setSelected: Dispatch<SetStateAction<any>>;
 }
 
+const headCells: readonly TableHeadCell[] = [
+  {
+    id: "userName",
+    numeric: false,
+    disablePadding: true,
+    label: "ユーザー名",
+  },
+  {
+    id: "title",
+    numeric: false,
+    disablePadding: false,
+    label: "タイトル",
+  },
+  {
+    id: "reason",
+    numeric: false,
+    disablePadding: false,
+    label: "申請理由",
+  },
+];
+
 const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState("status");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelecteds = props.bookPurchaseApplies.map((n: any) => n.id);
+      props.setSelected(newSelecteds);
+      return;
+    }
+    props.setSelected([]);
+  };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     const selectedIndex = props.selected.indexOf(id);
@@ -61,6 +98,15 @@ const CustomTable = (props: Props) => {
       </Typography>
       <TableContainer>
         <Table className={styles.booksTable} size="small">
+          <TableHead
+            numSelected={props.selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={props.bookPurchaseApplies.length}
+            headCells={headCells}
+          />
           <TableBody>
             {/*@ts-ignore*/}
             {stableSort(props.bookPurchaseApplies, getComparator(order, orderBy))

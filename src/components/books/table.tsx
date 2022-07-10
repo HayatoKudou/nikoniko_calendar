@@ -44,14 +44,7 @@ interface Props {
   setSelected: Dispatch<SetStateAction<any>>;
 }
 
-export interface HeadCell {
-  disablePadding: boolean;
-  id: string;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells: readonly TableHeadCell[] = [
   {
     id: "status",
     numeric: false,

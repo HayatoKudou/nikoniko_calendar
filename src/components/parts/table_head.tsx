@@ -6,7 +6,6 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
-import { HeadCell } from "../books/table";
 
 type Order = "asc" | "desc";
 
@@ -36,7 +35,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           />
         </TableCell>
         <TableCell />
-        {props.headCells.map((headCell: HeadCell) => (
+        {props.headCells.map((headCell: any) => (
           <TableCell
             key={headCell.id}
             align={"center"}

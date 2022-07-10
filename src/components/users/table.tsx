@@ -1,7 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
@@ -13,13 +12,12 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
+import styles from "../../styles/components/users/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
 
@@ -50,14 +48,7 @@ interface Props {
   setSelected: Dispatch<SetStateAction<any>>;
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: string;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells: readonly TableHeadCell[] = [
   {
     id: "name",
     numeric: false,
@@ -91,11 +82,11 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
+        <Typography className={styles.booksTable__toolBar} component="div">
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
+        <Typography className={styles.booksTable__toolBar} component="div">
           ユーザー管理
         </Typography>
       )}
@@ -116,7 +107,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   );
 };
 
-export default function EnhancedTable(props: Props) {
+const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
@@ -166,74 +157,73 @@ export default function EnhancedTable(props: Props) {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.users.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={props.selected.length} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="small">
-            <TableHead
-              numSelected={props.selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={props.users.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {/*@ts-ignore*/}
-              {stableSort(props.users, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user: any, index) => {
-                  const isItemSelected = isSelected(user.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <Paper>
+      <EnhancedTableToolbar numSelected={props.selected.length} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
+      <TableContainer>
+        <Table className={styles.booksTable} size="small">
+          <TableHead
+            numSelected={props.selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={props.users.length}
+            headCells={headCells}
+          />
+          <TableBody>
+            {/*@ts-ignore*/}
+            {stableSort(props.users, getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((user: any, index) => {
+                const isItemSelected = isSelected(user.id);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, user.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={user.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox color="primary" checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton onClick={(e) => props.handleEdit(user)}>
-                          <ModeEditIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">{user.name}</TableCell>
-                      <TableCell align="center">{user.email}</TableCell>
-                      <TableCell align="center">
-                        {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
-                        {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
-                        {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 33 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[25, 50, 100]}
-          component="div"
-          count={props.users.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, user.id)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={user.id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox color="primary" checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton onClick={(e) => props.handleEdit(user)}>
+                        <ModeEditIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">{user.name}</TableCell>
+                    <TableCell align="center">{user.email}</TableCell>
+                    <TableCell align="center">
+                      {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
+                      {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
+                      {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 33 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[25, 50, 100]}
+        component="div"
+        count={props.users.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
-}
+};
+export default CustomTable;
