@@ -75,14 +75,14 @@ const BookInfo = (props: Props) => {
   }
 
   return (
-    <Dialog open={props.open} onClose={handleClose} maxWidth={"lg"} scroll={"paper"}>
+    <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"lg"} scroll={"paper"}>
       <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex" }}>
           {props.bookInfo.image ? (
             <Box sx={{ padding: 2, textAlign: "center", maxWidth: "25%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
           ) : (
-            <Box sx={{ height: "200px", width: "20%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box sx={{ height: "300px", width: "20%", display: "flex", justifyContent: "center", alignItems: "center", minWidth: "300px" }}>
               <ImageNotSupportedIcon fontSize="large" />
             </Box>
           )}
