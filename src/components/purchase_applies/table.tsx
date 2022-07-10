@@ -26,24 +26,21 @@ interface Props {
 const headCells: readonly TableHeadCell[] = [
   {
     id: "userName",
-    numeric: false,
     label: "申請者",
   },
   {
     id: "title",
-    numeric: false,
     label: "タイトル",
   },
   {
     id: "reason",
-    numeric: false,
     label: "申請理由",
   },
 ];
 
 const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState("status");
+  const [orderBy, setOrderBy] = React.useState("userName");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -87,9 +84,6 @@ const CustomTable = (props: Props) => {
     setPage(0);
   };
 
-  const isSelected = (id: number) => props.selected.indexOf(id) !== -1;
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.bookPurchaseApplies.length) : 0;
-
   return (
     <Paper>
       <Typography className={styles.booksTable__toolBar} variant="h5">
@@ -113,7 +107,7 @@ const CustomTable = (props: Props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((purchaseApply: any, index) => {
                 return (
-                  <TableRow key={purchaseApply.book.id}>
+                  <TableRow key={purchaseApply.book.id} onClick={(event) => handleClick(event, purchaseApply.book.id)}>
                     <TableCell>
                       <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
                         <VisibilityIcon />
@@ -125,11 +119,6 @@ const CustomTable = (props: Props) => {
                   </TableRow>
                 );
               })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 33 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </TableContainer>

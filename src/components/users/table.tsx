@@ -23,16 +23,6 @@ import TableHead from "../parts/table_head";
 
 type Order = "asc" | "desc";
 
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  headCells: any;
-}
-
 interface EnhancedTableToolbarProps {
   numSelected: number;
   handleCreate: () => void;
@@ -51,17 +41,14 @@ interface Props {
 const headCells: readonly TableHeadCell[] = [
   {
     id: "name",
-    numeric: false,
     label: "名前",
   },
   {
     id: "email",
-    numeric: false,
     label: "メールアドレス",
   },
   {
     id: "role",
-    numeric: false,
     label: "ロール",
   },
 ];

@@ -47,27 +47,22 @@ interface Props {
 const headCells: readonly TableHeadCell[] = [
   {
     id: "status",
-    numeric: false,
     label: "ステータス",
   },
   {
     id: "category",
-    numeric: false,
     label: "カテゴリ",
   },
   {
     id: "title",
-    numeric: false,
     label: "タイトル",
   },
   {
     id: "description",
-    numeric: false,
     label: "本の説明",
   },
   {
     id: "createdAt",
-    numeric: false,
     label: "登録日",
   },
 ];

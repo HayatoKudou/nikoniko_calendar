@@ -53,5 +53,4 @@ interface BookHistory {
 interface TableHeadCell {
   id: string;
   label: string;
-  numeric: boolean;
 }
