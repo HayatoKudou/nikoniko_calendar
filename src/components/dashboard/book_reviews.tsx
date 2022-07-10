@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import DialogActions from "@mui/material/DialogActions";
 import Rating from "@mui/material/Rating";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
@@ -8,6 +7,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
 import { useMe } from "../../store/me";
+import styles from "../../styles/components/dashboards/book_review.module.scss";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
@@ -77,39 +77,38 @@ const BookReviews = (props: Props) => {
 
   return (
     <>
-      <Box sx={{ padding: 2 }}>
-        <Rating name="rate" value={formValues.rate} onChange={handleChange} sx={{ display: "inline-flex" }} />
+      <Box className={styles.review__formContainer}>
+        <Rating name="rate" value={formValues.rate} onChange={handleChange} className={styles.review__ratingForm} />
         <FormError errors={bookCreateReviewRequestErrors?.rate} />
-        <TextField
-          onChange={handleChange}
-          value={formValues.review}
-          name="review"
-          fullWidth
-          label="レビュー"
-          variant="standard"
-          margin={"dense"}
-          multiline
-          required
-        />
-        <FormError errors={bookCreateReviewRequestErrors?.review} />
+        <Box className={styles.review__form}>
+          <TextField
+            onChange={handleChange}
+            value={formValues.review}
+            name="review"
+            fullWidth
+            label="レビュー"
+            variant="standard"
+            multiline
+            required
+          />
+          <FormError errors={bookCreateReviewRequestErrors?.review} />
+          <Button variant="contained" onClick={handleClickOpen} className={styles.review__postButton}>
+            投稿
+          </Button>
+        </Box>
       </Box>
-      <DialogActions>
-        <Button variant="contained" onClick={handleClickOpen}>
-          レビュー投稿
-        </Button>
-      </DialogActions>
       <ConfirmDialog message={"レビューを投稿しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
       {props.bookInfo.reviews.map((review: Review, index: number) => (
-        <Box key={index} sx={{ padding: 1 }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Rating value={review.rate} sx={{ fontSize: "20px" }} readOnly />
-            <Box sx={{ color: "text.secondary", marginLeft: "50px" }}>
+        <Box key={index} className={styles.review__listContainer}>
+          <Box className={styles.review__valueContainer}>
+            <Rating value={review.rate} className={styles.review__ratingReview} readOnly />
+            <Box sx={{ color: "text.secondary" }} className={styles.review__reviewer}>
               {review.reviewer}
               <br />
               {review.reviewedAt}
             </Box>
           </Box>
-          <Box sx={{ whiteSpace: "pre-wrap" }}>{review.review}</Box>
+          <Box className={styles.review__valueReview}>{review.review}</Box>
         </Box>
       ))}
     </>

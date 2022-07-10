@@ -108,4 +108,5 @@ const Update = (props: Props) => {
   );
 };
 
+// @ts-ignore
 export default Update;

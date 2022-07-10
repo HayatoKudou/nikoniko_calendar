@@ -162,8 +162,6 @@ const CustomTable = (props: Props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user: any, index) => {
                 const isItemSelected = isSelected(user.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
                   <TableRow
                     hover
@@ -175,7 +173,7 @@ const CustomTable = (props: Props) => {
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
+                      <Checkbox color="primary" checked={isItemSelected} />
                     </TableCell>
                     <TableCell>
                       <IconButton onClick={(e) => props.handleEdit(e, user)}>

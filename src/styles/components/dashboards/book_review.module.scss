@@ -1,0 +1,40 @@
+.review {
+  &__formContainer {
+    padding: 16px;
+  }
+
+  &__form {
+    display: flex;
+    align-items: center;
+  }
+
+  &__postButton {
+    width: 100px;
+    margin-left: 16px;
+  }
+
+  &__ratingForm {
+    display: inline-flex;
+  }
+
+  &__listContainer {
+    padding: 16px;
+  }
+
+  &__valueContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  &__ratingReview {
+    font-size: 20px;
+  }
+
+  &__reviewer {
+    margin-left: 50px;
+  }
+
+  &__valueReview {
+    white-space: pre-wrap;
+  }
+}
