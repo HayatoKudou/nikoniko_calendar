@@ -1,5 +1,6 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -35,6 +36,10 @@ const headCells: readonly TableHeadCell[] = [
   {
     id: "reason",
     label: "申請理由",
+  },
+  {
+    id: "url",
+    label: "URL",
   },
 ];
 
@@ -113,9 +118,18 @@ const CustomTable = (props: Props) => {
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
-                    <TableCell align="left">{purchaseApply.user.name}</TableCell>
+                    <TableCell align="center">{purchaseApply.user.name}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
+                    <TableCell className={styles.booksTable__title}>
+                      {purchaseApply.book.url ? (
+                        <Link href={purchaseApply.book.url} target={"__blank"}>
+                          {decodeURI(purchaseApply.book.url)}
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
