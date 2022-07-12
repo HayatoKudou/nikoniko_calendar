@@ -1,0 +1,53 @@
+.bookInfo {
+  &__dialogTitle {
+    text-align: center;
+  }
+
+  &__dialogContentBookInfoContainer {
+    display: flex;
+  }
+
+  &__dialogContentBookImage {
+    padding: 16px;
+    text-align: center;
+    max-width: 25%;
+  }
+
+  &__dialogContentBookNonImage {
+    height: 300px;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+  }
+
+  &__dialogContentBookInfo__center {
+    position: relative;
+    width: 40%;
+    padding: 16px;
+  }
+
+  &__dialogContentBookRate {
+    margin: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__dialogContentBookInfo {
+    display: flex;
+    margin: 8px;
+  }
+
+  &__dialogContentBookInfoTitle {
+    width: 25%;
+    flex-shrink: 0;
+  }
+
+  &__dialogContentBookDetail {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

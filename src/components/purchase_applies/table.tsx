@@ -118,7 +118,7 @@ const CustomTable = (props: Props) => {
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
-                    <TableCell align="center">{purchaseApply.user.name}</TableCell>
+                    <TableCell align="left">{purchaseApply.user.name}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
                     <TableCell className={styles.booksTable__title}>

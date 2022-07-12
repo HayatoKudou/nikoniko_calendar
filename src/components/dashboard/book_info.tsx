@@ -11,6 +11,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import UpdateBook from "../../api/book/update";
 import { useMe } from "../../store/me";
+import styles from "../../styles/components/dashboards/book_info.module.scss";
 import { bookStatusName, BOOK_STATUS } from "../../util/book";
 import Spinner from "../parts/spinner";
 import BookHistoryTimeline from "./book_history_timeline";
@@ -76,29 +77,38 @@ const BookInfo = (props: Props) => {
 
   return (
     <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={"lg"} scroll={"paper"}>
-      <DialogTitle sx={{ textAlign: "center" }}>{props.bookInfo.title}</DialogTitle>
+      <DialogTitle className={styles.bookInfo__dialogTitle}>{props.bookInfo.title}</DialogTitle>
       <DialogContent>
-        <Box sx={{ display: "flex" }}>
+        <Box className={styles.bookInfo__dialogContentBookInfoContainer}>
           {props.bookInfo.image ? (
-            <Box sx={{ padding: 2, textAlign: "center", maxWidth: "25%" }} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
+            <Box className={styles.bookInfo__dialogContentBookImage} component="img" src={`data:image/png;base64, ${props.bookInfo.image}`} />
           ) : (
-            <Box sx={{ height: "300px", width: "20%", display: "flex", justifyContent: "center", alignItems: "center", minWidth: "300px" }}>
+            <Box className={styles.bookInfo__dialogContentBookNonImage}>
               <ImageNotSupportedIcon fontSize="large" />
             </Box>
           )}
-          <Box sx={{ width: "40%", padding: 2 }}>
-            <Box sx={{ margin: 1, display: "flex", alignItems: "center" }}>
+          <Box className={styles.bookInfo__dialogContentBookInfo__center}>
+            <Box className={styles.bookInfo__dialogContentBookRate}>
               <Rating name="rate" value={rateAverage} readOnly precision={0.5} />
               <Typography component="span" color="primary">
                 {props.bookInfo.reviews.length}
               </Typography>
             </Box>
-            <Box sx={{ margin: 1 }}>カテゴリ: {props.bookInfo.category}</Box>
-            <Box sx={{ margin: 1, whiteSpace: "pre-wrap", display: "flex" }}>
-              <Box>本の説明: </Box>
-              <Box>{props.bookInfo.description ? props.bookInfo.description : "なし"}</Box>
+            <Box className={styles.bookInfo__dialogContentBookInfo}>
+              <Typography className={styles.bookInfo__dialogContentBookInfoTitle}>カテゴリ</Typography>
+              <Typography>{props.bookInfo.category}</Typography>
             </Box>
-            <Box sx={{ margin: 1 }}>ステータス: {bookStatusName(props.bookInfo.status)}</Box>
+            <Box className={styles.bookInfo__dialogContentBookInfo}>
+              <Typography className={styles.bookInfo__dialogContentBookInfoTitle}>本の説明</Typography>
+              <Typography className={styles.bookInfo__dialogContentBookDetail}>
+                {props.bookInfo.description ? props.bookInfo.description : "なし"}
+              </Typography>
+            </Box>
+            <Box className={styles.bookInfo__dialogContentBookInfo}>
+              <Typography className={styles.bookInfo__dialogContentBookInfoTitle}>ステータス</Typography>
+              <Typography>{bookStatusName(props.bookInfo.status)}</Typography>
+            </Box>
+
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant && (
               <Box sx={{ margin: 1 }}>貸出者: {props.bookInfo.rentalApplicant.name}</Box>
             )}

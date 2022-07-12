@@ -68,7 +68,7 @@ const BookRentalApply = (props: Props) => {
   };
 
   return (
-    <>
+    <Box sx={{ position: "absolute", bottom: "16px", width: "90%" }}>
       <Box>
         <TextField
           onChange={handleChange}
@@ -105,7 +105,7 @@ const BookRentalApply = (props: Props) => {
           貸出申請
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 
