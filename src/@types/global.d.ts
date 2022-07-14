@@ -31,6 +31,7 @@ interface Book {
   purchaseApplicant: User;
   rentalApplicant: User;
   reviews: any;
+  rentalCount: number;
 }
 
 interface BookCategory {

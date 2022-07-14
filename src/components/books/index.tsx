@@ -7,9 +7,9 @@ import useBooks from "../../api/book/list";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
-import Create from "../dashboard/book_register";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
+import Create from "./create";
 import CsvUpload from "./csv_upload";
 import CustomTable from "./table";
 

@@ -27,7 +27,7 @@ interface Props {
   success: () => void;
 }
 
-const BookRegister = (props: Props) => {
+const Create = (props: Props) => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const bookCategories = useRecoilValue(useBookCategories);
@@ -187,4 +187,4 @@ const BookRegister = (props: Props) => {
   );
 };
 
-export default BookRegister;
+export default Create;

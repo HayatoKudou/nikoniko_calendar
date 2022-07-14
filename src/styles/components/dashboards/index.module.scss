@@ -1,0 +1,32 @@
+.dashboard {
+  &__head {
+    border-bottom: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
+    display: flex;
+  }
+
+  &__bookCategoryForm {
+    display: flex;
+    align-items: center;
+  }
+
+  &__bookCategoryInput {
+    min-width: 150px;
+  }
+
+  &__headRight {
+    margin-left: auto;
+    display: flex;
+  }
+
+  &__sortForm {
+    margin-right: 8px;
+    min-width: 150px;
+  }
+
+  &__purchaseApplyButton {
+    margin-right: 8px;
+    white-space: nowrap;
+    height: 40px;
+  }
+}

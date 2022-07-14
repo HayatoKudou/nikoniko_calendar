@@ -10,8 +10,11 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
+import Select from "@mui/material/Select";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
@@ -26,12 +29,12 @@ import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
+import styles from "../../styles/components/dashboards/index.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
-import BookRegister from "./book_register";
 import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
@@ -39,6 +42,8 @@ interface TabPanelProps {
   index: string;
   value: string;
 }
+
+const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -66,14 +71,14 @@ const Dashboard = () => {
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState<boolean>(false);
   const [applicationDialogOpen, setApplicationDialogOpen] = React.useState<boolean>(false);
-  const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
-  const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState(false);
+  const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState<boolean>(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
   const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
   const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
   const [bookSearchStringInput, setBookSearchStringInput] = React.useState<string>("");
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
+  const [bookSortedOption, setBookSortedOption] = React.useState<string>("新しい順");
 
   const { loading, error, response, mutate } = useBooks();
   React.useEffect(() => {
@@ -112,6 +117,41 @@ const Dashboard = () => {
     return filtered.filter((book: Book) => {
       return book.category === openTabValue;
     });
+  };
+
+  const bookSorted = (filtered: Array<any>): Array<any> => {
+    switch (bookSortedOption) {
+      case "新しい順":
+        return filtered.sort((a: Book, b: Book) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      case "古い順":
+        return filtered.sort((a: Book, b: Book) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      case "評価順":
+        return filtered.sort((a: Book, b: Book) => {
+          let rateAverage_A = 0;
+          let rateAverage_B = 0;
+          if (a.reviews.length > 0) {
+            const rateSum_A = a.reviews
+              .map((review: Review) => review.rate)
+              .reduce((a: number, b: number) => {
+                return a + b;
+              });
+            rateAverage_A = rateSum_A / a.reviews.length;
+          }
+          if (b.reviews.length > 0) {
+            const rateSum_B = b.reviews
+              .map((review: Review) => review.rate)
+              .reduce((a: number, b: number) => {
+                return a + b;
+              });
+            rateAverage_B = rateSum_B / b.reviews.length;
+          }
+          return rateAverage_B - rateAverage_A;
+        });
+      case "貸出順":
+        return filtered.sort((a: Book, b: Book) => b.rentalCount - a.rentalCount);
+      default:
+        return filtered;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -160,7 +200,6 @@ const Dashboard = () => {
     mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
     setBookInfoDialogOpen(false);
     setApplicationDialogOpen(false);
-    setRegisterDialogOpen(false);
   };
 
   return (
@@ -175,15 +214,14 @@ const Dashboard = () => {
         success={handleSuccess}
         client={response.client}
       />
-      <BookRegister open={registerDialogOpen} setClose={() => setRegisterDialogOpen(false)} success={handleSuccess} />
 
-      <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
-        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{ maxWidth: "65%" }}>
+      <Box className={styles.dashboard__head}>
+        <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}
           {me.role.is_book_manager && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box className={styles.dashboard__bookCategoryForm}>
               <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
                 {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
               </IconButton>
@@ -193,7 +231,7 @@ const Dashboard = () => {
                     value={bookCategoryFormValue}
                     onChange={(e) => setBookCategoryFormValue(e.target.value)}
                     size="small"
-                    sx={{ minWidth: "150px" }}
+                    className={styles.dashboard__bookCategoryInput}
                   />
                   <FormError errors={bookCategoryFormError["name"]} />
                 </form>
@@ -202,7 +240,16 @@ const Dashboard = () => {
           )}
         </Tabs>
 
-        <Box sx={{ marginLeft: "auto", maxWidth: "35%" }}>
+        <Box className={styles.dashboard__headRight}>
+          <FormControl className={styles.dashboard__sortForm} size="small">
+            <Select value={bookSortedOption}>
+              {sortOptions.map((sortOption) => (
+                <MenuItem key={sortOption} value={sortOption} onClick={() => setBookSortedOption(sortOption)}>
+                  {sortOption}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             value={bookSearchStringInput}
             onChange={(e) => setBookSearchStringInput(e.target.value)}
@@ -217,22 +264,15 @@ const Dashboard = () => {
               ),
             }}
           />
-          <Button variant="contained" sx={{ marginRight: 1 }} onClick={() => setApplicationDialogOpen(true)}>
+          <Button variant="contained" onClick={() => setApplicationDialogOpen(true)} className={styles.dashboard__purchaseApplyButton}>
             書籍購入申請
           </Button>
-          {me.role.is_book_manager ? (
-            <Button variant="contained" onClick={() => setRegisterDialogOpen(true)}>
-              書籍登録
-            </Button>
-          ) : (
-            <></>
-          )}
         </Box>
       </Box>
 
       {tabList.map((tab, index) => (
         <TabPanel value={openTabValue} index={tab.label} key={index}>
-          {bookCategoryFiltered().map((book: Book, index: number) => {
+          {bookSorted(bookCategoryFiltered()).map((book: Book, index: number) => {
             let rateAverage = 0;
             if (book.reviews.length > 0) {
               const rateSum = book.reviews
