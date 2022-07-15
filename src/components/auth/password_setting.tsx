@@ -8,18 +8,18 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import resetPassword, { ResetPasswordRequestErrors } from "../../api/auth/reset_password";
+import PasswordSettingApi, { PasswordSettingRequestErrors } from "../../api/auth/password_setting";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
-const ResetPassword = () => {
+const PasswordSetting = () => {
   const router = useRouter();
-  const token = router.query.token;
   const { enqueueSnackbar } = useSnackbar();
-  const [loading, setLoading] = React.useState(false);
-  const [resetPasswordRequestErrors, setResetPasswordRequestErrors] = React.useState<Partial<ResetPasswordRequestErrors>>({});
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
+  const [resetPasswordRequestErrors, setResetPasswordRequestErrors] = React.useState<Partial<PasswordSettingRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
-    email: "",
     password: "",
     password_confirmation: "",
   });
@@ -29,10 +29,7 @@ const ResetPassword = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    resetPassword({
-      // @ts-ignore
-      token: token,
-      email: formValues.email,
+    PasswordSettingApi({
       password: formValues.password,
       password_confirmation: formValues.password_confirmation,
     })
@@ -65,31 +62,13 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main">
       <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            onChange={handleChange}
-            value={formValues.email}
-            fullWidth
-            label="メールアドレス"
-            name="email"
-            autoComplete="email"
-            inputProps={{ minLength: 1, maxLength: 255 }}
-            required
-            margin={"dense"}
-          />
-          <FormError errors={resetPasswordRequestErrors?.email} />
           <TextField
             type={"password"}
             onChange={handleChange}
@@ -115,13 +94,14 @@ const ResetPassword = () => {
             margin={"dense"}
           />
           <FormError errors={resetPasswordRequestErrors?.password_confirmation} />
-          <Button onClick={handleSubmit} variant="contained" sx={{ float: "right", marginTop: 2 }}>
-            {"パスワードリセット"}
+          <Button onClick={() => setOpenConfirm(true)} variant="contained" sx={{ marginTop: 2 }} fullWidth>
+            {"パスワード設定"}
           </Button>
         </Box>
       </Box>
+      <ConfirmDialog message={"パスワードを設定しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
     </Container>
   );
 };
 
-export default ResetPassword;
+export default PasswordSetting;

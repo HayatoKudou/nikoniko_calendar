@@ -1,4 +1,4 @@
-import Layout from "../../components/parts/layout";
+import Layout from "../../components/layout";
 import PurchaseApplies from "../../components/purchase_applies/index";
 import type { NextPage } from "next";
 

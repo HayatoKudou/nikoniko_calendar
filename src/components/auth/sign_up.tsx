@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import sign_up, { SignUpRequestErrors } from "../../api/sign_up";
+import sign_up, { SignUpRequestErrors } from "../../api/auth/sign_up";
 import { useMe } from "../../store/me";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";

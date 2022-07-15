@@ -7,7 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import forgetPassword, { ForgetPasswordRequestErrors } from "../../api/forget_password";
+import forgetPassword, { ForgetPasswordRequestErrors } from "../../api/auth/forget_password";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 

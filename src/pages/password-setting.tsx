@@ -1,10 +1,10 @@
-import ResendEmailVerify from "../components/auth/forget_password";
+import PasswordSetting from "../components/auth/password_setting";
 import Layout from "../components/layout";
 
 const Index = () => {
   return (
     <Layout>
-      <ResendEmailVerify />
+      <PasswordSetting />
     </Layout>
   );
 };

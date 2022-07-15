@@ -1,20 +1,20 @@
-import Config from "../../config";
+import Config from "../../../config";
 
-interface ForgetPasswordRequestPayload {
+interface EmailResendVerifyRequestPayload {
   email: string;
 }
 
-export interface ForgetPasswordRequestErrors {
+export interface EmailResendVerifyRequestErrors {
   email: Array<string>;
 }
 
-interface ForgetPasswordResult {
+interface EmailResendVerifyResult {
   succeeded: boolean;
-  errors: Partial<ForgetPasswordRequestErrors>;
+  errors: Partial<EmailResendVerifyRequestErrors>;
 }
 
-const forgetPassword = async (payload: ForgetPasswordRequestPayload): Promise<ForgetPasswordResult> => {
-  const endpoint = `${Config.apiOrigin}/api/forgot-password`;
+const emailResendVerify = async (payload: EmailResendVerifyRequestPayload): Promise<EmailResendVerifyResult> => {
+  const endpoint = `${Config.apiOrigin}/api/email/verify/resend`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -35,4 +35,4 @@ const forgetPassword = async (payload: ForgetPasswordRequestPayload): Promise<Fo
   };
 };
 
-export default forgetPassword;
+export default emailResendVerify;

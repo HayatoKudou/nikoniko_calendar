@@ -8,7 +8,7 @@ interface Props {
   open: boolean;
   message: string;
   onClose: () => void;
-  handleSubmit: () => void;
+  handleSubmit: any;
 }
 
 const ConfirmDialog = (props: Props) => {

@@ -1,4 +1,4 @@
-import Layout from "../../components/parts/layout";
+import Layout from "../../components/layout";
 import Profile from "../../components/parts/profile";
 import type { NextPage } from "next";
 

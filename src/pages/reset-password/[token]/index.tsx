@@ -1,5 +1,5 @@
 import ResetPassword from "../../../components/auth/reset_password";
-import Layout from "../../../components/parts/layout";
+import Layout from "../../../components/layout";
 
 const Index = () => {
   return (

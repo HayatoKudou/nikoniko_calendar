@@ -1,4 +1,4 @@
-import Layout from "../../components/parts/layout";
+import Layout from "../../components/layout";
 import Users from "../../components/users";
 
 const Index = () => {

@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import useAuthenticatedAccount from "../../api/me";
-import UserContext from "../../context/userContext";
-import { useMe } from "../../store/me";
-import { useColorMode } from "../../store/styles/color_mode";
-import Sidebar from "../sidebar";
-import Spinner from "./spinner";
+import useAuthenticatedAccount from "../api/me";
+import UserContext from "../context/userContext";
+import { useMe } from "../store/me";
+import { useColorMode } from "../store/styles/color_mode";
+import Spinner from "./parts/spinner";
+import Sidebar from "./sidebar";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
@@ -28,8 +28,10 @@ const Layout = ({ children }: any) => {
     }
   }, [response]);
 
+  const authExclusionPath = ["/sign-up", "/sign-in", "/forget-password", "/password-setting"];
+
   const pathname = router.pathname;
-  if (pathname !== "/sign-up" && pathname !== "/sign-in" && pathname !== "/forget-password" && !pathname.match(/reset-password/)) {
+  if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
     if (loading) return <Spinner />;
     if (error || !response) {
       router.push("/sign-in");

@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { SnackbarMessage, useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import signIn from "../../api/sign_in";
+import signIn from "../../api/auth/sign_in";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 
