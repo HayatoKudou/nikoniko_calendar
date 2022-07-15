@@ -61,8 +61,6 @@ const CreateUser = (props: Props) => {
     Create(me.clientId, {
       name: formValues.name,
       email: formValues.email,
-      password: formValues.password,
-      password_confirmation: formValues.password_confirmation,
       roles: formValues.roles,
       apiToken: me.apiToken,
     })
@@ -118,35 +116,6 @@ const CreateUser = (props: Props) => {
           variant="standard"
         />
         <FormError errors={createUserRequestErrors?.email} />
-
-        <TextField
-          type={"password"}
-          onChange={handleChange}
-          value={formValues.password}
-          fullWidth
-          label="パスワード"
-          name="password"
-          autoComplete="password"
-          inputProps={{ minLength: 1, maxLength: 255 }}
-          required
-          variant="standard"
-          margin={"dense"}
-        />
-        <FormError errors={createUserRequestErrors?.password} />
-
-        <TextField
-          type={"password"}
-          value={formValues.password_confirmation}
-          fullWidth
-          onChange={handleChange}
-          name={"password_confirmation"}
-          label={"パスワード確認"}
-          inputProps={{ minLength: 1, maxLength: 255 }}
-          required
-          variant="standard"
-          margin={"dense"}
-        />
-        <FormError errors={createUserRequestErrors?.password_confirmation} />
 
         <FormControl sx={{ minWidth: 300, display: "block", marginTop: 1 }}>
           <InputLabel sx={{ left: "-15px" }}>ロール</InputLabel>
