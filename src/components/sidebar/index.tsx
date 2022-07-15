@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { useMe } from "../../store/me";
+import StyleSetting from "../dashboard/style_setting";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
 
@@ -120,9 +121,15 @@ export default function Sidebar(props: { children: any }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" onClick={() => router.push(`/${me.clientId}/dashboard`)}>
+          <Typography
+            variant="h6"
+            noWrap
+            onClick={() => router.push(`/${me.clientId}/dashboard`)}
+            sx={{ flexGrow: 1, alignSelf: "flex-end", margin: "auto 0" }}
+          >
             Read Worth
           </Typography>
+          <StyleSetting />
           {(pathname === "/sign-up" || pathname === "/sign-in") && (
             <Box sx={{ marginLeft: "auto" }}>
               <Button color="inherit" onClick={() => router.push("/sign-up")}>

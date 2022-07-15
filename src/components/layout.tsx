@@ -4,7 +4,6 @@ import { useState } from "react";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import useAuthenticatedAccount from "../api/me";
-import UserContext from "../context/userContext";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Spinner from "./parts/spinner";
@@ -42,17 +41,10 @@ const Layout = ({ children }: any) => {
     }
   }
 
-  const userContextValue = {
-    user: user,
-    setUser: setUser,
-  };
-
   return (
-    <UserContext.Provider value={userContextValue}>
-      <ThemeProvider theme={theme}>
-        <Sidebar>{children}</Sidebar>
-      </ThemeProvider>
-    </UserContext.Provider>
+    <ThemeProvider theme={theme}>
+      <Sidebar>{children}</Sidebar>
+    </ThemeProvider>
   );
 };
 

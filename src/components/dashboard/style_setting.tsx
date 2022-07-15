@@ -1,3 +1,5 @@
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -8,15 +10,19 @@ import IconButton from "@mui/material/IconButton";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Slider from "@mui/material/Slider";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
+import { useColorMode } from "../../store/styles/color_mode";
 import { useImageSize } from "../../store/styles/image_size";
 
 const StyleSetting = () => {
   const [open, setOpen] = React.useState(false);
   const [imageSize, setImageSize] = useRecoilState(useImageSize);
   const [bookCardStyle, setBookCardStyle] = useRecoilState(useBookCardStyle);
+  const [colorMode, setColorMode] = useRecoilState(useColorMode);
 
   const handleImageSizeSlider = (e: any) => {
     const value = e.target.value;
@@ -27,21 +33,29 @@ const StyleSetting = () => {
     setImageSize(size);
   };
 
+  const handleColorMode = () => {
+    setColorMode(colorMode === "light" ? "dark" : "light");
+  };
+
   return (
-    <div>
-      <IconButton
-        onClick={() => setOpen(true)}
-        sx={{
-          position: "fixed",
-          right: "10px",
-          "z-index": 2,
-          top: "50%",
-        }}
-      >
-        <SettingsIcon sx={{ fontSize: "60px" }} />
+    <>
+      <IconButton onClick={() => setOpen(true)} size="large" edge="end" color="inherit">
+        <SettingsIcon sx={{ fontSize: "40px" }} />
       </IconButton>
-      <Drawer anchor={"right"} open={open} onClose={() => setOpen(!open)}>
-        <Box sx={{ width: 300, marginTop: 10 }}>
+      <Drawer anchor={"right"} open={open} onClose={() => setOpen(!open)} sx={{ zIndex: 1201 }}>
+        <Box sx={{ width: 300, marginTop: 3 }}>
+          <Box sx={{ padding: 2 }}>
+            <ToggleButtonGroup value={colorMode} exclusive onChange={handleColorMode}>
+              <ToggleButton value="light">
+                <Brightness4Icon />
+                ライトモード
+              </ToggleButton>
+              <ToggleButton value="dark">
+                <Brightness7Icon />
+                ダークモード
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
           <Box sx={{ padding: 2 }}>
             <FormLabel>画像サイズ</FormLabel>
             <Slider
@@ -57,7 +71,7 @@ const StyleSetting = () => {
           </Box>
           <Box sx={{ padding: 2 }}>
             <FormControl>
-              <FormLabel>スタイル</FormLabel>
+              <FormLabel>カードスタイル</FormLabel>
               <RadioGroup value={bookCardStyle}>
                 <FormControlLabel value="rich" onChange={() => setBookCardStyle("rich")} control={<Radio />} label="リッチ" />
                 <FormControlLabel value="simple" onChange={() => setBookCardStyle("simple")} control={<Radio />} label="シンプル" />
@@ -66,7 +80,7 @@ const StyleSetting = () => {
           </Box>
         </Box>
       </Drawer>
-    </div>
+    </>
   );
 };
 

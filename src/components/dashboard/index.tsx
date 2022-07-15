@@ -35,7 +35,6 @@ import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
-import StyleSetting from "./style_setting";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -204,7 +203,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <StyleSetting />
       {selectedBook && (
         <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       )}

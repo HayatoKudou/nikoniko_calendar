@@ -1,5 +1,3 @@
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 import BusinessIcon from "@mui/icons-material/Business";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -13,18 +11,10 @@ import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useMe } from "../../store/me";
-import { useColorMode } from "../../store/styles/color_mode";
 
 const MenuListIcon = (props: { name: string }) => {
-  const [colorMode, setColorMode] = useRecoilState(useColorMode);
-  const theme = useTheme();
-
-  const handleColorMode = () => {
-    setColorMode(colorMode === "light" ? "dark" : "light");
-  };
-
   switch (props.name) {
     case "dashboard":
       return <DashboardIcon />;
@@ -38,12 +28,6 @@ const MenuListIcon = (props: { name: string }) => {
       return <ManageAccountsIcon />;
     case "clientProfile":
       return <BusinessIcon />;
-    case "paletteMode":
-      if (theme.palette.mode === "dark") {
-        return <Brightness7Icon onClick={handleColorMode} />;
-      } else {
-        return <Brightness4Icon onClick={handleColorMode} />;
-      }
     default:
       return <></>;
   }
@@ -66,7 +50,6 @@ const MenuList = (props: { open: boolean }) => {
       return "ダークモード";
     }
   };
-  const name = colorModeName();
 
   const handleSelect = (path: string | null) => {
     if (path) {
@@ -87,7 +70,6 @@ const MenuList = (props: { open: boolean }) => {
     ];
     if (me.role.is_client_manager) menuList.push({ name: "clientProfile", title: "組織設定", path: `/${me.clientId}/client-profile` });
   }
-  menuList.push({ name: "paletteMode", title: name, path: null });
 
   return (
     <List>
