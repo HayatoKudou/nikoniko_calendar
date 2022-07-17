@@ -6,8 +6,14 @@ import DialogContent from "@mui/material/DialogContent";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useRecoilValue } from "recoil";
+import Allow from "../../../api/book/purchase_apply/allow";
+import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
+import ConfirmDialog from "../../parts/confirm_dialog";
+import Spinner from "../../parts/spinner";
 
 interface Props {
   bookImage: Blob | null;
@@ -16,12 +22,37 @@ interface Props {
 }
 
 const Step1 = (props: Props) => {
+  const me = useRecoilValue(useMe);
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
+
+  if (loading) return <Spinner />;
+
   const handleReject = () => {
     console.log("handleReject");
   };
 
+  const handleSubmit = () => {
+    setLoading(true);
+    Allow(me.clientId, props.purchaseApply.book.id, {
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        enqueueSnackbar("承認しました", { variant: "success" });
+        setOpenConfirm(false);
+        props.setActiveStep(2);
+        setLoading(false);
+      })
+      .catch(() => {
+        enqueueSnackbar(`承認に失敗しました`, { variant: "error" });
+        setLoading(false);
+      });
+  };
+
   return (
     <>
+      <ConfirmDialog message={"本当に承認しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       <DialogContent>
         <Grid container>
           <Grid item xs={4} className={styles.dialog__imageContainer}>
@@ -35,6 +66,10 @@ const Step1 = (props: Props) => {
             <Box className={styles.dialog__detailContainer}>
               <Typography className={styles.dialog__detailItem}>申請者</Typography>
               <Typography>{props.purchaseApply.user.name}</Typography>
+            </Box>
+            <Box className={styles.dialog__detailContainer}>
+              <Typography className={styles.dialog__detailItem}>価格</Typography>
+              <Typography>{"¥ " + props.purchaseApply.price}</Typography>
             </Box>
             <Box className={styles.dialog__detailContainer}>
               <Typography className={styles.dialog__detailItem}>タイトル</Typography>
@@ -59,7 +94,7 @@ const Step1 = (props: Props) => {
         <Button onClick={handleReject} variant="contained" sx={{ width: "100px" }} color={"error"}>
           {"却下"}
         </Button>
-        <Button onClick={() => props.setActiveStep(2)} variant="contained" sx={{ width: "100px" }}>
+        <Button onClick={() => setOpenConfirm(true)} variant="contained" sx={{ width: "100px" }}>
           {"承認"}
         </Button>
       </DialogActions>

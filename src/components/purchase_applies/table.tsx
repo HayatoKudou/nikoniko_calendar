@@ -30,6 +30,10 @@ const headCells: readonly TableHeadCell[] = [
     label: "申請者",
   },
   {
+    id: "price",
+    label: "価格",
+  },
+  {
     id: "title",
     label: "タイトル",
   },
@@ -112,13 +116,14 @@ const CustomTable = (props: Props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((purchaseApply: any, index) => {
                 return (
-                  <TableRow key={purchaseApply.book.id} onClick={(event) => handleClick(event, purchaseApply.book.id)}>
+                  <TableRow key={index} onClick={(event) => handleClick(event, purchaseApply.book.id)}>
                     <TableCell>
                       <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell align="left">{purchaseApply.user.name}</TableCell>
+                    <TableCell align="left">{purchaseApply.price}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
                     <TableCell className={styles.booksTable__title}>

@@ -43,14 +43,6 @@ const MenuList = (props: { open: boolean }) => {
     setSelected(router.asPath);
   }, []);
 
-  const colorModeName = () => {
-    if (theme.palette.mode === "dark") {
-      return "ライトモード";
-    } else if (theme.palette.mode === "light") {
-      return "ダークモード";
-    }
-  };
-
   const handleSelect = (path: string | null) => {
     if (path) {
       setSelected(path);
@@ -81,6 +73,9 @@ const MenuList = (props: { open: boolean }) => {
             minHeight: 48,
             justifyContent: props.open ? "initial" : "center",
             px: 2.5,
+            // '&.Mui-selected': {
+            //   backgroundColor: 'primary'
+            // }
           }}
           selected={selected == menu.path}
         >

@@ -21,6 +21,7 @@ import AmazonImage from "../../api/book/amazon_image";
 import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
@@ -39,9 +40,10 @@ const BookPurchaseApply = (props: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [bookPurchaseApplyRequestErrors, setBookPurchaseApplyRequestErrors] = React.useState<Partial<BookPurchaseApplyRequestErrors>>({});
   const [title, setTitle] = React.useState("");
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     bookOwner: "team",
-    bookCategoryName: "",
+    bookCategoryName: "ALL",
     title: "",
     description: "",
     url: "",
@@ -65,6 +67,7 @@ const BookPurchaseApply = (props: Props) => {
       bookCategoryName: formValues.bookCategoryName,
       title: title,
       reason: formValues.reason,
+      price: formValues.price,
       description: formValues.description,
       image: image,
       apiToken: me.apiToken,
@@ -94,6 +97,7 @@ const BookPurchaseApply = (props: Props) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setOpenConfirm(false);
     if (selectedImage) {
       const reader = new FileReader();
       reader.readAsDataURL(selectedImage);
@@ -126,6 +130,7 @@ const BookPurchaseApply = (props: Props) => {
 
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
+      <ConfirmDialog message={"申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       <DialogTitle>書籍申請</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
@@ -153,8 +158,9 @@ const BookPurchaseApply = (props: Props) => {
             variant="standard"
             margin={"dense"}
             required
+            helperText={bookPurchaseApplyRequestErrors?.title}
+            error={bookPurchaseApplyRequestErrors?.title !== undefined}
           />
-          <FormError errors={bookPurchaseApplyRequestErrors?.title} />
 
           <TextField
             onChange={handleChange}
@@ -165,8 +171,9 @@ const BookPurchaseApply = (props: Props) => {
             variant="standard"
             multiline
             margin={"dense"}
+            helperText={bookPurchaseApplyRequestErrors?.description}
+            error={bookPurchaseApplyRequestErrors?.description !== undefined}
           />
-          <FormError errors={bookPurchaseApplyRequestErrors?.description} />
 
           <TextField
             onChange={handleChange}
@@ -179,8 +186,9 @@ const BookPurchaseApply = (props: Props) => {
             multiline
             margin={"dense"}
             required
+            helperText={bookPurchaseApplyRequestErrors?.reason}
+            error={bookPurchaseApplyRequestErrors?.reason !== undefined}
           />
-          <FormError errors={bookPurchaseApplyRequestErrors?.reason} />
 
           <FormControl sx={{ display: "block", marginTop: 1 }}>
             <FormLabel sx={{ marginRight: 2 }}>所有者</FormLabel>
@@ -194,7 +202,17 @@ const BookPurchaseApply = (props: Props) => {
                 label="個人"
               />
             </RadioGroup>
-            <TextField onChange={handleChange} value={formValues.price} name="price" autoFocus label="価格" variant="standard" required />
+            <TextField
+              onChange={handleChange}
+              value={formValues.price}
+              name="price"
+              autoFocus
+              label="価格"
+              variant="standard"
+              required
+              helperText={bookPurchaseApplyRequestErrors?.price}
+              error={bookPurchaseApplyRequestErrors?.price !== undefined}
+            />
           </FormControl>
 
           <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
@@ -230,7 +248,7 @@ const BookPurchaseApply = (props: Props) => {
         <Button onClick={props.setClose} variant="contained">
           キャンセル
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={() => setOpenConfirm(true)} variant="contained">
           申請する
         </Button>
       </DialogActions>

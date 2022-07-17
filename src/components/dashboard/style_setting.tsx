@@ -45,12 +45,12 @@ const StyleSetting = () => {
       <Drawer anchor={"right"} open={open} onClose={() => setOpen(!open)} sx={{ zIndex: 1201 }}>
         <Box sx={{ width: 300, marginTop: 3 }}>
           <Box sx={{ padding: 2 }}>
-            <ToggleButtonGroup value={colorMode} exclusive onChange={handleColorMode}>
-              <ToggleButton value="light">
+            <ToggleButtonGroup value={colorMode} onChange={handleColorMode}>
+              <ToggleButton value="light" color={"primary"}>
                 <Brightness4Icon />
                 ライトモード
               </ToggleButton>
-              <ToggleButton value="dark">
+              <ToggleButton value="dark" color={"primary"}>
                 <Brightness7Icon />
                 ダークモード
               </ToggleButton>
