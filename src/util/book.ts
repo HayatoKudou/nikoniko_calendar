@@ -33,12 +33,12 @@ export const bookStatusName = (status: number) => {
 export const bookPurchaseAllowStep = (step: number) => {
   switch (step) {
     case 0:
-      return "申請却下済み";
+      return "却下済";
     case 1:
       return "申請許可";
     case 2:
       return "購入確認";
     case 3:
-      return "入荷のお知らせ";
+      return "通知";
   }
 };

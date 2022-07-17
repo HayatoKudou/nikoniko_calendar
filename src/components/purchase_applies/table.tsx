@@ -121,7 +121,7 @@ const CustomTable = (props: Props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((purchaseApply: any, index) => {
                 return (
-                  <TableRow key={index} onClick={(event) => handleClick(event, purchaseApply.book.id)}>
+                  <TableRow key={index} onClick={(event: any) => handleClick(event, purchaseApply.book.id)} sx={{backgroundColor: purchaseApply.step === 0 ? 'text.disabled' : ''}}>
                     <TableCell>
                       <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
                         <VisibilityIcon />

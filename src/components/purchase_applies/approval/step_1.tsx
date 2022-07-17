@@ -10,6 +10,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Allow from "../../../api/book/purchase_apply/allow";
+import Reject from "../../../api/book/purchase_apply/reject";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
@@ -19,18 +20,34 @@ interface Props {
   bookImage: Blob | null;
   purchaseApply: PurchaseApply;
   onSuccess: () => void;
+  onClose: () => void;
 }
 
 const Step1 = (props: Props) => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
-  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
+  const [openAllowConfirm, setOpenAllowConfirm] = React.useState<boolean>(false);
+  const [openRejectConfirm, setOpenRejectConfirm] = React.useState<boolean>(false);
 
   if (loading) return <Spinner />;
 
   const handleReject = () => {
-    console.log("handleReject");
+    setLoading(true);
+    Reject(me.clientId, props.purchaseApply.book.id, {
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        enqueueSnackbar("却下しました", { variant: "success" });
+        setOpenAllowConfirm(false);
+        setLoading(false);
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch(() => {
+        enqueueSnackbar(`却下に失敗しました`, { variant: "error" });
+        setLoading(false);
+      });
   };
 
   const handleSubmit = () => {
@@ -40,7 +57,7 @@ const Step1 = (props: Props) => {
     })
       .then((res) => {
         enqueueSnackbar("承認しました", { variant: "success" });
-        setOpenConfirm(false);
+        setOpenAllowConfirm(false);
         setLoading(false);
         props.onSuccess();
       })
@@ -52,7 +69,8 @@ const Step1 = (props: Props) => {
 
   return (
     <>
-      <ConfirmDialog message={"本当に承認しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"本当に承認しますか？"} open={openAllowConfirm} onClose={() => setOpenAllowConfirm(false)} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"本当に却下しますか？"} open={openRejectConfirm} onClose={() => setOpenRejectConfirm(false)} handleSubmit={handleReject} />
       <DialogContent>
         <Grid container>
           <Grid item xs={4} className={styles.dialog__imageContainer}>
@@ -91,10 +109,10 @@ const Step1 = (props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleReject} variant="contained" sx={{ width: "100px" }} color={"error"}>
+        <Button onClick={() => setOpenRejectConfirm(true)} variant="contained" sx={{ width: "100px" }} color={"error"}>
           {"却下"}
         </Button>
-        <Button onClick={() => setOpenConfirm(true)} variant="contained" sx={{ width: "100px" }}>
+        <Button onClick={() => setOpenAllowConfirm(true)} variant="contained" sx={{ width: "100px" }}>
           {"承認"}
         </Button>
       </DialogActions>

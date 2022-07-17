@@ -15,18 +15,21 @@ import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
 import Spinner from "../../parts/spinner";
+import Reject from "../../../api/book/purchase_apply/reject";
 
 interface Props {
   bookImage: Blob | null;
   purchaseApply: PurchaseApply;
   onSuccess: () => void;
+  onClose: () => void;
 }
 
-const Step1 = (props: Props) => {
+const Step2 = (props: Props) => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
-  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
+  const [openDoneConfirm, setOpenDoneConfirm] = React.useState<boolean>(false);
+  const [openRejectConfirm, setOpenRejectConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     location: "",
   });
@@ -35,7 +38,21 @@ const Step1 = (props: Props) => {
   if (loading) return <Spinner />;
 
   const handleReject = () => {
-    console.log("handleReject");
+    setLoading(true);
+    Reject(me.clientId, props.purchaseApply.book.id, {
+      apiToken: me.apiToken,
+    })
+      .then((res) => {
+        enqueueSnackbar("却下しました", { variant: "success" });
+        setOpenDoneConfirm(false);
+        setLoading(false);
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch(() => {
+        enqueueSnackbar(`却下に失敗しました`, { variant: "error" });
+        setLoading(false);
+      });
   };
 
   const handleSubmit = () => {
@@ -47,7 +64,7 @@ const Step1 = (props: Props) => {
       .then((res) => {
         if (res.succeeded) {
           enqueueSnackbar("記録しました", { variant: "success" });
-          setOpenConfirm(false);
+          setOpenDoneConfirm(false);
           props.onSuccess();
         } else {
           setBookPurchaseDoneRequestErrors(res.errors);
@@ -70,7 +87,8 @@ const Step1 = (props: Props) => {
 
   return (
     <>
-      <ConfirmDialog message={"購入が完了しましたか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"購入が完了しましたか？"} open={openDoneConfirm} onClose={() => setOpenDoneConfirm(false)} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"本当に却下しますか？"} open={openRejectConfirm} onClose={() => setOpenRejectConfirm(false)} handleSubmit={handleReject} />
       <DialogContent>
         <Grid container>
           <Grid item xs={4} className={styles.dialog__imageContainer}>
@@ -120,10 +138,10 @@ const Step1 = (props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleReject} variant="contained" sx={{ width: "100px" }} color={"error"}>
+        <Button onClick={() => setOpenRejectConfirm(true)} variant="contained" sx={{ width: "100px" }} color={"error"}>
           {"却下"}
         </Button>
-        <Button onClick={() => setOpenConfirm(true)} variant="contained" sx={{ width: "100px" }}>
+        <Button onClick={() => setOpenDoneConfirm(true)} variant="contained" sx={{ width: "100px" }}>
           {"購入済み"}
         </Button>
       </DialogActions>
@@ -131,4 +149,4 @@ const Step1 = (props: Props) => {
   );
 };
 
-export default Step1;
+export default Step2;
