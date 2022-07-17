@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import styles from "../../styles/components/purchase_applies/table.module.scss";
+import { bookPurchaseAllowStep } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
 
@@ -25,6 +26,10 @@ interface Props {
 }
 
 const headCells: readonly TableHeadCell[] = [
+  {
+    id: "step",
+    label: "ステップ",
+  },
   {
     id: "userName",
     label: "申請者",
@@ -49,7 +54,7 @@ const headCells: readonly TableHeadCell[] = [
 
 const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState("userName");
+  const [orderBy, setOrderBy] = React.useState("step");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -122,8 +127,9 @@ const CustomTable = (props: Props) => {
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
+                    <TableCell align="left">{bookPurchaseAllowStep(purchaseApply.step)}</TableCell>
                     <TableCell align="left">{purchaseApply.user.name}</TableCell>
-                    <TableCell align="left">{purchaseApply.price}</TableCell>
+                    <TableCell align="left">{"¥ " + purchaseApply.price}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
                     <TableCell className={styles.booksTable__title}>

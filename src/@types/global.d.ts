@@ -55,3 +55,11 @@ interface TableHeadCell {
   id: string;
   label: string;
 }
+
+interface PurchaseApply {
+  price: number;
+  reason: string;
+  step: number;
+  user: User;
+  book: Book;
+}

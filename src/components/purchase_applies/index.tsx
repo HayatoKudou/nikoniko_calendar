@@ -8,17 +8,25 @@ import Spinner from "../parts/spinner";
 import Approval from "./approval/index";
 import CustomTable from "./table";
 
-const Books = () => {
+const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
   const [, setBookCategory] = useRecoilState(useBookCategories);
-  const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<Book>();
+  const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
-  const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
+  const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
   const { loading, error, response, mutate } = usePurchaseApplies();
 
   React.useEffect(() => {
     if (response) {
       setBookCategory(response.bookCategories);
+      // ステップ更新用
+      if (selectedEditPurchaseApply) {
+        response.bookPurchaseApplies.forEach((purchaseApply: any) => {
+          if (purchaseApply.book.id === selectedEditPurchaseApply.book.id) {
+            setSelectedEditPurchaseApply(purchaseApply);
+          }
+        });
+      }
     }
   }, [response]);
 
@@ -27,7 +35,7 @@ const Books = () => {
   const handleEditBook = (e: { stopPropagation: any }, purchaseApply: any) => {
     e.stopPropagation();
     setSelectedEditPurchaseApply(purchaseApply);
-    setUpdateDialogOpen(true);
+    setApprovalOpen(true);
   };
 
   return (
@@ -35,8 +43,8 @@ const Books = () => {
       {selectedEditPurchaseApply && (
         <Approval
           purchaseApply={selectedEditPurchaseApply}
-          open={updateDialogOpen}
-          onClose={() => setUpdateDialogOpen(false)}
+          open={approvalOpen}
+          onClose={() => setApprovalOpen(false)}
           onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
         />
       )}
@@ -50,4 +58,4 @@ const Books = () => {
   );
 };
 
-export default Books;
+export default PurchaseApplies;

@@ -130,7 +130,7 @@ const BookPurchaseApply = (props: Props) => {
 
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
-      <ConfirmDialog message={"申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+      <ConfirmDialog message={"本当に申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       <DialogTitle>書籍申請</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
