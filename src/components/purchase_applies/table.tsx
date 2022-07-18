@@ -22,10 +22,14 @@ interface Props {
   bookPurchaseApplies: Array<any>;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: PurchaseApply) => void;
 }
 
 const headCells: readonly TableHeadCell[] = [
+  {
+    id: "createdAt",
+    label: "申請日",
+  },
   {
     id: "step",
     label: "ステップ",
@@ -53,8 +57,8 @@ const headCells: readonly TableHeadCell[] = [
 ];
 
 const CustomTable = (props: Props) => {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState("step");
+  const [order, setOrder] = React.useState<Order>("desc");
+  const [orderBy, setOrderBy] = React.useState("createdAt");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -119,14 +123,16 @@ const CustomTable = (props: Props) => {
           <TableBody>
             {stableSort(props.bookPurchaseApplies, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((purchaseApply: any, index) => {
+              //@ts-ignore
+              .map((purchaseApply: PurchaseApply) => {
                 return (
-                  <TableRow key={index} onClick={(event: any) => handleClick(event, purchaseApply.book.id)} sx={{backgroundColor: purchaseApply.step === 0 ? 'text.disabled' : ''}}>
+                  <TableRow key={purchaseApply.book.id} onClick={(event: any) => handleClick(event, String(purchaseApply.book.id))} sx={{backgroundColor: purchaseApply.step === 0 ? 'text.disabled' : ''}}>
                     <TableCell>
                       <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
+                    <TableCell align="left">{purchaseApply.createdAt}</TableCell>
                     <TableCell align="left">{bookPurchaseAllowStep(purchaseApply.step)}</TableCell>
                     <TableCell align="left">{purchaseApply.user.name}</TableCell>
                     <TableCell align="left">{"¥ " + purchaseApply.price}</TableCell>

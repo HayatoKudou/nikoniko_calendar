@@ -60,6 +60,7 @@ interface PurchaseApply {
   price: number;
   reason: string;
   step: number;
+  createdAt: string;
   user: User;
   book: Book;
 }
