@@ -28,8 +28,16 @@ const Approval = (props: Props) => {
     <Dialog open={props.open} onClose={props.onClose} fullWidth maxWidth={"md"}>
       <DialogTitle>申請許可</DialogTitle>
       <Steper activeStep={activeStep - 1} />
-      {activeStep === 1 ? <Step1 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} /> : <></>}
-      {activeStep === 2 ? <Step2 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} /> : <></>}
+      {activeStep === 1 ? (
+        <Step1 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
+      ) : (
+        <></>
+      )}
+      {activeStep === 2 ? (
+        <Step2 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
+      ) : (
+        <></>
+      )}
     </Dialog>
   );
 };

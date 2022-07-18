@@ -69,8 +69,18 @@ const Step1 = (props: Props) => {
 
   return (
     <>
-      <ConfirmDialog message={"本当に承認しますか？"} open={openAllowConfirm} onClose={() => setOpenAllowConfirm(false)} handleSubmit={handleSubmit} />
-      <ConfirmDialog message={"本当に却下しますか？"} open={openRejectConfirm} onClose={() => setOpenRejectConfirm(false)} handleSubmit={handleReject} />
+      <ConfirmDialog
+        message={"本当に承認しますか？"}
+        open={openAllowConfirm}
+        onClose={() => setOpenAllowConfirm(false)}
+        handleSubmit={handleSubmit}
+      />
+      <ConfirmDialog
+        message={"本当に却下しますか？"}
+        open={openRejectConfirm}
+        onClose={() => setOpenRejectConfirm(false)}
+        handleSubmit={handleReject}
+      />
       <DialogContent>
         <Grid container>
           <Grid item xs={4} className={styles.dialog__imageContainer}>

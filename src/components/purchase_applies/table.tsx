@@ -1,3 +1,4 @@
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
@@ -23,6 +24,7 @@ interface Props {
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: PurchaseApply) => void;
+  handleInit: (purchaseApply: PurchaseApply) => void;
 }
 
 const headCells: readonly TableHeadCell[] = [
@@ -126,11 +128,21 @@ const CustomTable = (props: Props) => {
               //@ts-ignore
               .map((purchaseApply: PurchaseApply) => {
                 return (
-                  <TableRow key={purchaseApply.book.id} onClick={(event: any) => handleClick(event, String(purchaseApply.book.id))} sx={{backgroundColor: purchaseApply.step === 0 ? 'text.disabled' : ''}}>
+                  <TableRow
+                    key={purchaseApply.book.id}
+                    onClick={(event: any) => handleClick(event, String(purchaseApply.book.id))}
+                    sx={{ backgroundColor: purchaseApply.step === 0 ? "text.disabled" : "" }}
+                  >
                     <TableCell>
-                      <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
-                        <VisibilityIcon />
-                      </IconButton>
+                      {purchaseApply.step === 0 ? (
+                        <IconButton onClick={(e) => props.handleInit(purchaseApply)}>
+                          <ChangeCircleIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
+                          <VisibilityIcon />
+                        </IconButton>
+                      )}
                     </TableCell>
                     <TableCell align="left">{purchaseApply.createdAt}</TableCell>
                     <TableCell align="left">{bookPurchaseAllowStep(purchaseApply.step)}</TableCell>

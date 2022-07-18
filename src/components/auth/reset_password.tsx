@@ -65,7 +65,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <Box
         sx={{
@@ -115,7 +115,7 @@ const ResetPassword = () => {
             margin={"dense"}
           />
           <FormError errors={resetPasswordRequestErrors?.password_confirmation} />
-          <Button onClick={handleSubmit} variant="contained" sx={{ float: "right", marginTop: 2 }}>
+          <Button onClick={handleSubmit} variant="contained" sx={{ marginTop: 2, width: "100%" }}>
             {"パスワードリセット"}
           </Button>
         </Box>

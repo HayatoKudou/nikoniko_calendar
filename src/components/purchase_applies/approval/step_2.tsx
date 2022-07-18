@@ -11,11 +11,11 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Done, { BookPurchaseDoneRequestErrors } from "../../../api/book/purchase_apply/done";
+import Reject from "../../../api/book/purchase_apply/reject";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
 import Spinner from "../../parts/spinner";
-import Reject from "../../../api/book/purchase_apply/reject";
 
 interface Props {
   bookImage: Blob | null;
@@ -87,8 +87,18 @@ const Step2 = (props: Props) => {
 
   return (
     <>
-      <ConfirmDialog message={"購入が完了しましたか？"} open={openDoneConfirm} onClose={() => setOpenDoneConfirm(false)} handleSubmit={handleSubmit} />
-      <ConfirmDialog message={"本当に却下しますか？"} open={openRejectConfirm} onClose={() => setOpenRejectConfirm(false)} handleSubmit={handleReject} />
+      <ConfirmDialog
+        message={"購入が完了しましたか？"}
+        open={openDoneConfirm}
+        onClose={() => setOpenDoneConfirm(false)}
+        handleSubmit={handleSubmit}
+      />
+      <ConfirmDialog
+        message={"本当に却下しますか？"}
+        open={openRejectConfirm}
+        onClose={() => setOpenRejectConfirm(false)}
+        handleSubmit={handleReject}
+      />
       <DialogContent>
         <Grid container>
           <Grid item xs={4} className={styles.dialog__imageContainer}>

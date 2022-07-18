@@ -1,6 +1,5 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import useAuthenticatedAccount from "../api/me";
@@ -13,7 +12,6 @@ const Layout = ({ children }: any) => {
   const router = useRouter();
   const [me, setMe] = useRecoilState(useMe);
   const [colorMode] = useRecoilState(useColorMode);
-  const [user, setUser] = useState<User | null>(null);
   const theme = createTheme({
     palette: {
       mode: colorMode,
