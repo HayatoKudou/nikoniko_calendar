@@ -11,7 +11,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Done, { BookPurchaseDoneRequestErrors } from "../../../api/book/purchase_apply/done";
-import Reject from "../../../api/book/purchase_apply/reject";
+import Refuse from "../../../api/book/purchase_apply/refuse";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
@@ -29,7 +29,7 @@ const Step2 = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const [openDoneConfirm, setOpenDoneConfirm] = React.useState<boolean>(false);
-  const [openRejectConfirm, setOpenRejectConfirm] = React.useState<boolean>(false);
+  const [openRefuseConfirm, setOpenRefuseConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     location: "",
   });
@@ -37,9 +37,9 @@ const Step2 = (props: Props) => {
 
   if (loading) return <Spinner />;
 
-  const handleReject = () => {
+  const handleRefuse = () => {
     setLoading(true);
-    Reject(me.clientId, props.purchaseApply.book.id, {
+    Refuse(me.clientId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -95,9 +95,9 @@ const Step2 = (props: Props) => {
       />
       <ConfirmDialog
         message={"本当に却下しますか？"}
-        open={openRejectConfirm}
-        onClose={() => setOpenRejectConfirm(false)}
-        handleSubmit={handleReject}
+        open={openRefuseConfirm}
+        onClose={() => setOpenRefuseConfirm(false)}
+        handleSubmit={handleRefuse}
       />
       <DialogContent>
         <Grid container>
@@ -148,7 +148,7 @@ const Step2 = (props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpenRejectConfirm(true)} variant="contained" sx={{ width: "100px" }} color={"error"}>
+        <Button onClick={() => setOpenRefuseConfirm(true)} variant="contained" sx={{ width: "100px" }} color={"error"}>
           {"却下"}
         </Button>
         <Button onClick={() => setOpenDoneConfirm(true)} variant="contained" sx={{ width: "100px" }}>

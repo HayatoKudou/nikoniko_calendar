@@ -30,7 +30,7 @@ export const bookStatusName = (status: number) => {
   }
 };
 
-export const bookPurchaseAllowStep = (step: number) => {
+export const bookPurchaseAcceptStep = (step: number) => {
   switch (step) {
     case 0:
       return "却下済";

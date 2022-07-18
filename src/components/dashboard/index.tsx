@@ -46,11 +46,10 @@ const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
-    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+    <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 2 }}>
           <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
             {children}
           </Typography>
@@ -240,7 +239,7 @@ const Dashboard = () => {
 
         <Box className={styles.dashboard__headRight}>
           <FormControl className={styles.dashboard__sortForm} size="small">
-            <Select value={bookSortedOption}>
+            <Select value={bookSortedOption} sx={{ color: "text.secondary" }}>
               {sortOptions.map((sortOption) => (
                 <MenuItem key={sortOption} value={sortOption} onClick={() => setBookSortedOption(sortOption)}>
                   {sortOption}

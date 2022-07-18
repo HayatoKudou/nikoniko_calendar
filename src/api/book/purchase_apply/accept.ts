@@ -1,11 +1,11 @@
 import Config from "../../../../config";
 
-interface BookPurchaseAllowRequestPayload {
+interface BookPurchaseAcceptRequestPayload {
   apiToken: string;
 }
 
-const AllowBookPurchase = async (clientId: string, bookId: number, payload: BookPurchaseAllowRequestPayload) => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/allow`;
+const AcceptBookPurchase = async (clientId: string, bookId: number, payload: BookPurchaseAcceptRequestPayload) => {
+  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/accept`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -22,4 +22,4 @@ const AllowBookPurchase = async (clientId: string, bookId: number, payload: Book
   return res.json();
 };
 
-export default AllowBookPurchase;
+export default AcceptBookPurchase;

@@ -1,4 +1,4 @@
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import styles from "../../styles/components/purchase_applies/table.module.scss";
-import { bookPurchaseAllowStep } from "../../util/book";
+import { bookPurchaseAcceptStep } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
 
@@ -136,7 +136,7 @@ const CustomTable = (props: Props) => {
                     <TableCell>
                       {purchaseApply.step === 0 ? (
                         <IconButton onClick={(e) => props.handleInit(purchaseApply)}>
-                          <ChangeCircleIcon />
+                          <RefreshIcon />
                         </IconButton>
                       ) : (
                         <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
@@ -145,7 +145,7 @@ const CustomTable = (props: Props) => {
                       )}
                     </TableCell>
                     <TableCell align="left">{purchaseApply.createdAt}</TableCell>
-                    <TableCell align="left">{bookPurchaseAllowStep(purchaseApply.step)}</TableCell>
+                    <TableCell align="left">{bookPurchaseAcceptStep(purchaseApply.step)}</TableCell>
                     <TableCell align="left">{purchaseApply.user.name}</TableCell>
                     <TableCell align="left">{"¥ " + purchaseApply.price}</TableCell>
                     <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>

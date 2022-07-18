@@ -1,7 +1,3 @@
-import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Timeline from "@mui/lab/Timeline";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
@@ -15,39 +11,10 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import useBookHistories from "../../api/book/history";
 import styles from "../../styles/components/book_history_timeline.module.scss";
+import { historyActionName, historyActionIcon } from "../../util/bookHistory";
 
 interface Props {
   bookId: number;
-}
-
-function actionName(action: string): string {
-  switch (action) {
-    case "create book":
-      return "登録";
-    case "return book":
-      return "返却";
-    case "purchase book":
-      return "購入申請";
-    case "lend book":
-      return "貸出";
-    default:
-      return "その他";
-  }
-}
-
-function actionIcon(action: string) {
-  switch (action) {
-    case "create book":
-      return <DeliveryDiningIcon />;
-    case "return book":
-      return <KeyboardReturnIcon />;
-    case "purchase book":
-      return <LocalPostOfficeIcon />;
-    case "lend book":
-      return <StopCircleIcon />;
-    default:
-      return "その他";
-  }
 }
 
 const BookHistoryTimeline = (props: Props) => {
@@ -69,11 +36,11 @@ const BookHistoryTimeline = (props: Props) => {
                   <Box>{history.userName}</Box>
                 </TimelineOppositeContent>
                 <TimelineSeparator>
-                  <TimelineDot>{actionIcon(history.action)}</TimelineDot>
+                  <TimelineDot>{historyActionIcon(history.action)}</TimelineDot>
                   {response.histories.length != index + 1 && response.histories.length > 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent className={styles.bookHistoryTimeline__content}>
-                  <Typography variant="h6">{actionName(history.action)}</Typography>
+                  <Typography>{historyActionName(history.action)}</Typography>
                 </TimelineContent>
               </TimelineItem>
             ))}
