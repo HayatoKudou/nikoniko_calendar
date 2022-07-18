@@ -48,7 +48,7 @@ const BookReturnForm = (props: Props) => {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen} sx={{ marginLeft: 2 }}>
+      <Button variant="contained" onClick={handleClickOpen} sx={{ width: "100px" }}>
         返却
       </Button>
       <ConfirmDialog message={"本当に返却しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />

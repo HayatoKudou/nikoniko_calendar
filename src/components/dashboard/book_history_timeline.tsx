@@ -20,6 +20,11 @@ interface Props {
 const BookHistoryTimeline = (props: Props) => {
   const { loading, error, response } = useBookHistories(props.bookId);
 
+  const sorted = (histories: BookHistory[]): BookHistory[] => {
+    console.log(histories)
+    return histories.sort((a: BookHistory, b: BookHistory) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
   return (
     <>
       {loading || error ? (
@@ -29,10 +34,10 @@ const BookHistoryTimeline = (props: Props) => {
       ) : (
         <Box className={styles.bookHistoryTimeline}>
           <Timeline>
-            {response.histories.map((history: BookHistory, index: number) => (
+            {sorted(response.histories).map((history: BookHistory, index: number) => (
               <TimelineItem key={index}>
                 <TimelineOppositeContent className={styles.bookHistoryTimeline__content} variant="body2" color="text.secondary">
-                  {history.date}
+                  {history.createdAt}
                   <Box>{history.userName}</Box>
                 </TimelineOppositeContent>
                 <TimelineSeparator>

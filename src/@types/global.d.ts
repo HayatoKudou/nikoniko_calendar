@@ -48,7 +48,7 @@ interface Review {
 interface BookHistory {
   userName: string;
   action: string;
-  date: string;
+  createdAt: string;
 }
 
 interface TableHeadCell {
