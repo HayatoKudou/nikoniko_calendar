@@ -41,7 +41,7 @@ const purchaseLimitUnits = [
   },
 ];
 
-const tabList = [{ label: "基本情報" }, { label: "プラン選択" }];
+const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { label: "通知設定" }];
 
 const Profile = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -188,6 +188,11 @@ const Profile = () => {
                     />
                   </FormGroup>
                 </Box>
+                <Box sx={{ textAlign: "right", margin: 2 }}>
+                  <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
+                    更新する
+                  </Button>
+                </Box>
               </>
             )}
 
@@ -259,14 +264,29 @@ const Profile = () => {
                     </Card>
                   </Grid>
                 </Box>
+                <Box sx={{ textAlign: "right", margin: 2 }}>
+                  <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
+                    更新する
+                  </Button>
+                </Box>
               </>
             )}
 
-            <Box sx={{ textAlign: "right", margin: 2 }}>
-              <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
-                更新する
-              </Button>
-            </Box>
+            {openTabValue === "通知設定" && (
+              <a
+                target={"_blank"}
+                href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email&user_scope="
+                rel="noreferrer"
+              >
+                <img
+                  alt="Add to Slack"
+                  height="40"
+                  width="139"
+                  src="https://platform.slack-edge.com/img/add_to_slack.png"
+                  srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                />
+              </a>
+            )}
             <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
           </Box>
         </Paper>
