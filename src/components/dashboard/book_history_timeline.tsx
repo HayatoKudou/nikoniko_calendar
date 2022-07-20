@@ -21,7 +21,6 @@ const BookHistoryTimeline = (props: Props) => {
   const { loading, error, response } = useBookHistories(props.bookId);
 
   const sorted = (histories: BookHistory[]): BookHistory[] => {
-    console.log(histories);
     return histories.sort((a: BookHistory, b: BookHistory) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   };
 

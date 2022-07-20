@@ -4,7 +4,8 @@ import * as React from "react";
 import { base64ToBlob } from "../../../util/image";
 import Step1 from "./step_1";
 import Step2 from "./step_2";
-import Steper from "./steper";
+import Step3 from "./step_3";
+import Stepper from "./stepper";
 
 interface Props {
   open: boolean;
@@ -27,14 +28,13 @@ const Approval = (props: Props) => {
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth maxWidth={"md"}>
       <DialogTitle>申請許可</DialogTitle>
-      <Steper activeStep={activeStep - 1} />
+      <Stepper activeStep={activeStep - 1} />
       {activeStep === 1 ? (
         <Step1 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
-      ) : (
-        <></>
-      )}
-      {activeStep === 2 ? (
+      ) : activeStep === 2 ? (
         <Step2 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
+      ) : activeStep === 3 ? (
+        <Step3 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
       ) : (
         <></>
       )}

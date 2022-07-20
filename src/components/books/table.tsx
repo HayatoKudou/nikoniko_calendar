@@ -47,6 +47,10 @@ interface Props {
 
 const headCells: readonly TableHeadCell[] = [
   {
+    id: "createdAt",
+    label: "登録日",
+  },
+  {
     id: "status",
     label: "ステータス",
   },
@@ -61,10 +65,6 @@ const headCells: readonly TableHeadCell[] = [
   {
     id: "description",
     label: "本の説明",
-  },
-  {
-    id: "createdAt",
-    label: "登録日",
   },
 ];
 
@@ -119,7 +119,7 @@ const TableToolbar = (props: TableToolbarProps) => {
 
 const CustomTable = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState("status");
+  const [orderBy, setOrderBy] = React.useState("createdAt");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -214,6 +214,7 @@ const CustomTable = (props: Props) => {
                         <ModeEditIcon />
                       </IconButton>
                     </TableCell>
+                    <TableCell align="left">{book.createdAt}</TableCell>
                     <TableCell align="center">
                       <Box className={styles.booksTable__actionIcon}>
                         <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
@@ -223,7 +224,6 @@ const CustomTable = (props: Props) => {
                     <TableCell align="center">{book.category}</TableCell>
                     <TableCell className={styles.booksTable__title}>{book.title}</TableCell>
                     <TableCell className={styles.booksTable__title}>{book.description}</TableCell>
-                    <TableCell align="left">{book.createdAt}</TableCell>
                   </TableRow>
                 );
               })}

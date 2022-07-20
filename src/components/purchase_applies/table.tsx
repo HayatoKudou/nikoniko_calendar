@@ -1,5 +1,5 @@
+import EditIcon from "@mui/icons-material/Edit";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
@@ -11,7 +11,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Dispatch, SetStateAction } from "react";
 import styles from "../../styles/components/purchase_applies/table.module.scss";
 import { bookPurchaseAcceptStep } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
@@ -21,8 +20,6 @@ type Order = "asc" | "desc";
 
 interface Props {
   bookPurchaseApplies: Array<any>;
-  selected: Array<any>;
-  setSelected: Dispatch<SetStateAction<any>>;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: PurchaseApply) => void;
   handleInit: (purchaseApply: PurchaseApply) => void;
 }
@@ -34,7 +31,7 @@ const headCells: readonly TableHeadCell[] = [
   },
   {
     id: "step",
-    label: "ステップ",
+    label: "次のステップ",
   },
   {
     id: "userName",
@@ -70,31 +67,6 @@ const CustomTable = (props: Props) => {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = props.bookPurchaseApplies.map((n: any) => n.id);
-      props.setSelected(newSelecteds);
-      return;
-    }
-    props.setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    const selectedIndex = props.selected.indexOf(id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(props.selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(props.selected.slice(1));
-    } else if (selectedIndex === props.selected.length - 1) {
-      newSelected = newSelected.concat(props.selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(props.selected.slice(0, selectedIndex), props.selected.slice(selectedIndex + 1));
-    }
-    props.setSelected(newSelected);
-  };
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -112,11 +84,10 @@ const CustomTable = (props: Props) => {
       <TableContainer>
         <Table className={styles.booksTable} size="small">
           <TableHead
-            numSelected={props.selected.length}
             order={order}
             orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
+            numSelected={0}
             rowCount={props.bookPurchaseApplies.length}
             headCells={headCells}
             showActionIcon={true}
@@ -128,11 +99,7 @@ const CustomTable = (props: Props) => {
               //@ts-ignore
               .map((purchaseApply: PurchaseApply) => {
                 return (
-                  <TableRow
-                    key={purchaseApply.book.id}
-                    onClick={(event: any) => handleClick(event, String(purchaseApply.book.id))}
-                    sx={{ backgroundColor: purchaseApply.step === 0 ? "text.disabled" : "" }}
-                  >
+                  <TableRow key={purchaseApply.book.id} sx={{ backgroundColor: purchaseApply.step === 0 ? "text.disabled" : "" }}>
                     <TableCell>
                       {purchaseApply.step === 0 ? (
                         <IconButton onClick={(e) => props.handleInit(purchaseApply)}>
@@ -140,7 +107,7 @@ const CustomTable = (props: Props) => {
                         </IconButton>
                       ) : (
                         <IconButton onClick={(e) => props.handleEdit(e, purchaseApply)}>
-                          <VisibilityIcon />
+                          <EditIcon />
                         </IconButton>
                       )}
                     </TableCell>

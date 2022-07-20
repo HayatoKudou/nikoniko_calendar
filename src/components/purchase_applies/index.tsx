@@ -16,7 +16,6 @@ const PurchaseApplies = () => {
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<PurchaseApply>();
   const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
-  const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
   const [openInitConfirm, setOpenInitConfirm] = React.useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -51,7 +50,6 @@ const PurchaseApplies = () => {
   };
 
   const handleInit = () => {
-    console.log(selectedInitPurchaseApply);
     if (!selectedInitPurchaseApply) {
       return;
     }
@@ -60,7 +58,7 @@ const PurchaseApplies = () => {
       apiToken: me.apiToken,
     })
       .then(() => {
-        enqueueSnackbar("却下を取り消しました", { variant: "success" });
+        enqueueSnackbar("申請却下を取り消しました", { variant: "success" });
         setInitializing(false);
         setOpenInitConfirm(false);
         mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`);
@@ -74,7 +72,12 @@ const PurchaseApplies = () => {
 
   return (
     <>
-      <ConfirmDialog message={"却下を取り消しますか？"} open={openInitConfirm} onClose={() => setOpenInitConfirm(false)} handleSubmit={handleInit} />
+      <ConfirmDialog
+        message={"申請却下を取り消しますか？"}
+        open={openInitConfirm}
+        onClose={() => setOpenInitConfirm(false)}
+        handleSubmit={handleInit}
+      />
       {selectedEditPurchaseApply && (
         <Approval
           purchaseApply={selectedEditPurchaseApply}
@@ -83,13 +86,7 @@ const PurchaseApplies = () => {
           onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
         />
       )}
-      <CustomTable
-        bookPurchaseApplies={response.bookPurchaseApplies}
-        handleEdit={handleEdit}
-        handleInit={handleInitClick}
-        selected={selectedBookIds}
-        setSelected={setSelectedBookIds}
-      />
+      <CustomTable bookPurchaseApplies={response.bookPurchaseApplies} handleEdit={handleEdit} handleInit={handleInitClick} />
     </>
   );
 };
