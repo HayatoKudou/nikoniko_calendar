@@ -1,5 +1,5 @@
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
@@ -81,11 +81,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="ユーザー追加">
-          <IconButton onClick={props.handleCreate}>
-            <GroupAddIcon />
-          </IconButton>
-        </Tooltip>
+        <Chip icon={<AddIcon />} label="ユーザー追加" onClick={props.handleCreate} />
       )}
     </Toolbar>
   );
@@ -183,9 +179,9 @@ const CustomTable = (props: Props) => {
                     <TableCell align="center">{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
                     <TableCell align="center">
-                      {user.role.is_account_manager ? <Chip label="アカウント管理" /> : null}
-                      {user.role.is_book_manager ? <Chip label="書籍管理" /> : null}
-                      {user.role.is_client_manager ? <Chip label="組織管理" /> : null}
+                      {user.role.is_account_manager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.is_book_manager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.is_client_manager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
                     </TableCell>
                   </TableRow>
                 );

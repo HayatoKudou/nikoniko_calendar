@@ -174,8 +174,8 @@ const Profile = () => {
                   <FormError errors={createRequestErrors?.purchase_limit} />
                   <Box sx={{ padding: 2 }}>/</Box>
                   <TextField select name={"purchaseLimitUnit"} value={formValues.purchaseLimitUnit} onChange={handleChange} sx={{ minWidth: "80px" }}>
-                    {purchaseLimitUnits.map((purchaseLimitUnit) => (
-                      <MenuItem key={purchaseLimitUnit.value} value={purchaseLimitUnit.value}>
+                    {purchaseLimitUnits.map((purchaseLimitUnit, index) => (
+                      <MenuItem key={index} value={purchaseLimitUnit.value}>
                         {purchaseLimitUnit.label}
                       </MenuItem>
                     ))}

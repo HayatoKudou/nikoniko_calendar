@@ -5,6 +5,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import UploadIcon from "@mui/icons-material/Upload";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import { alpha } from "@mui/material/styles";
@@ -96,16 +97,8 @@ const TableToolbar = (props: TableToolbarProps) => {
         </Tooltip>
       ) : (
         <>
-          <Tooltip title="書籍登録">
-            <IconButton onClick={props.handleCreate}>
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="CSVアップロード">
-            <IconButton onClick={props.handleCsvUpload}>
-              <UploadIcon />
-            </IconButton>
-          </Tooltip>
+          <Chip icon={<AddIcon />} label="書籍登録" onClick={props.handleCreate} sx={{ margin: "2px" }} />
+          <Chip icon={<UploadIcon />} label="CSVアップロード" onClick={props.handleCsvUpload} sx={{ margin: "2px" }} />
           <CsvDownload
             csvDataGenerator={() => {
               return props.books.map((book: Book) => {

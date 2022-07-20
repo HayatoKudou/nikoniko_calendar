@@ -39,8 +39,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           </TableCell>
         )}
         {props.showActionIcon && <TableCell />}
-        {props.headCells.map((headCell: any) => (
-          <TableCell key={headCell.id} align={"center"} sortDirection={orderBy === headCell.id ? order : false}>
+        {props.headCells.map((headCell: any, index: number) => (
+          <TableCell key={index} align={"center"} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
