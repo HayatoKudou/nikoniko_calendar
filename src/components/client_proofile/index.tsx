@@ -275,7 +275,7 @@ const Profile = () => {
             {openTabValue === "通知設定" && (
               <a
                 target={"_blank"}
-                href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email&user_scope="
+                href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
                 rel="noreferrer"
               >
                 <img

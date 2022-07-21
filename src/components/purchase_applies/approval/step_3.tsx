@@ -27,7 +27,8 @@ const Step3 = (props: Props) => {
   const [openNotificationConfirm, setOpenNotificationConfirm] = React.useState<boolean>(false);
   const [openRefuseConfirm, setOpenRefuseConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
-    message: `【 入荷のお知らせ 】\n【タイトル】${props.purchaseApply.book.title}\n【本の置き場所】${props.purchaseApply.location}`,
+    title: `【 書籍追加のお知らせ 】`,
+    message: `【タイトル】${props.purchaseApply.book.title}\n【本の置き場所】${props.purchaseApply.location}`,
   });
   const [bookPurchaseNotificationRequestErrors, setBookPurchaseNotificationRequestErrors] = React.useState<
     Partial<BookPurchaseNotificationRequestErrors>
@@ -38,6 +39,7 @@ const Step3 = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     Notification(me.clientId, props.purchaseApply.book.id, {
+      title: formValues.title,
       message: formValues.message,
       apiToken: me.apiToken,
     })
@@ -92,13 +94,26 @@ const Step3 = (props: Props) => {
           <Grid item xs={8}>
             <TextField
               onChange={handleChange}
+              value={formValues.title}
+              name="title"
+              label="タイトル"
+              fullWidth
+              variant="outlined"
+              multiline
+              margin={"dense"}
+              helperText={bookPurchaseNotificationRequestErrors?.title}
+              error={bookPurchaseNotificationRequestErrors?.title !== undefined}
+            />
+            <TextField
+              onChange={handleChange}
               value={formValues.message}
               name="message"
-              label="通知内容"
+              label="メッセージ"
               fullWidth
               variant="outlined"
               multiline
               rows={7}
+              margin={"dense"}
               helperText={bookPurchaseNotificationRequestErrors?.message}
               error={bookPurchaseNotificationRequestErrors?.message !== undefined}
             />

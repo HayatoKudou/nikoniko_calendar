@@ -1,6 +1,7 @@
 import Config from "../../../../config";
 
 export interface BookPurchaseNotificationRequestErrors {
+  title: Array<string>;
   message: Array<string>;
 }
 
@@ -10,6 +11,7 @@ interface BookPurchaseNotificationResult {
 }
 
 interface BookPurchaseNotificationRequestPayload {
+  title: string;
   message: string;
   apiToken: string;
 }

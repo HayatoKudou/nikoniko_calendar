@@ -5,6 +5,7 @@ export interface BookPurchaseApplyRequestErrors {
   title: Array<string>;
   reason: Array<string>;
   price: Array<string>;
+  url: Array<string>;
   description: Array<string>;
 }
 
@@ -20,6 +21,7 @@ interface BookPurchaseApplyRequestPayload {
   reason: string;
   price: number;
   description: string;
+  url: string;
   image: any | null;
   apiToken: string;
 }

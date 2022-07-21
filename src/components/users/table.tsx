@@ -67,7 +67,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     >
       {numSelected > 0 ? (
         <Typography className={styles.booksTable__toolBar} component="div">
-          {numSelected} selected
+          {numSelected} 選択中
         </Typography>
       ) : (
         <Typography className={styles.booksTable__toolBar} component="h5">

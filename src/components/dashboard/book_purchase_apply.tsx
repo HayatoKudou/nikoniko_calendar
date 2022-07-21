@@ -69,6 +69,7 @@ const BookPurchaseApply = (props: Props) => {
       reason: formValues.reason,
       price: formValues.price,
       description: formValues.description,
+      url: formValues.url,
       image: image,
       apiToken: me.apiToken,
     })
