@@ -27,7 +27,7 @@ const Step3 = (props: Props) => {
   const [openNotificationConfirm, setOpenNotificationConfirm] = React.useState<boolean>(false);
   const [openRefuseConfirm, setOpenRefuseConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
-    title: `【 書籍追加のお知らせ 】`,
+    title: `書籍追加のお知らせ`,
     message: `【タイトル】${props.purchaseApply.book.title}\n【本の置き場所】${props.purchaseApply.location}`,
   });
   const [bookPurchaseNotificationRequestErrors, setBookPurchaseNotificationRequestErrors] = React.useState<
