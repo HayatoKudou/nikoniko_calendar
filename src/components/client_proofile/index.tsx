@@ -127,171 +127,165 @@ const Profile = () => {
   };
 
   return (
-    <>
-      <Box sx={{ display: "flex", alignItems: "center", height: "80px" }}>
-        <Typography variant="h4">組織設定</Typography>
-      </Box>
+    <Grid container sx={{ display: "block", width: "80%", margin: "0 auto" }}>
+      <Paper>
+        <Box sx={{ padding: 2 }}>
+          <Tabs value={openTabValue} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
+            {tabList.map((tab, index: number) => (
+              <Tab label={tab.label} key={index} value={tab.label} />
+            ))}
+          </Tabs>
 
-      <Grid container sx={{ display: "block", width: "70%", margin: "0 auto" }}>
-        <Paper>
-          <Box sx={{ padding: 2 }}>
-            <Tabs value={openTabValue} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
-              {tabList.map((tab, index: number) => (
-                <Tab label={tab.label} key={index} value={tab.label} />
-              ))}
-            </Tabs>
+          {openTabValue === "基本情報" && (
+            <>
+              <TextField
+                value={formValues.name}
+                fullWidth
+                onChange={handleChange}
+                name={"name"}
+                label={"組織名"}
+                required
+                inputProps={{ minLength: 1, maxLength: 255 }}
+                variant="standard"
+                margin={"normal"}
+              />
+              <FormError errors={createRequestErrors?.name} />
 
-            {openTabValue === "基本情報" && (
-              <>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
-                  value={formValues.name}
+                  value={formValues.purchaseLimit}
                   fullWidth
                   onChange={handleChange}
-                  name={"name"}
-                  label={"組織名"}
+                  name={"purchaseLimit"}
+                  label={"購入補助金上限"}
                   required
-                  inputProps={{ minLength: 1, maxLength: 255 }}
                   variant="standard"
                   margin={"normal"}
+                  type={"number"}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">¥</InputAdornment>,
+                  }}
                 />
-                <FormError errors={createRequestErrors?.name} />
-
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TextField
-                    value={formValues.purchaseLimit}
-                    fullWidth
-                    onChange={handleChange}
-                    name={"purchaseLimit"}
-                    label={"購入補助金上限"}
-                    required
-                    variant="standard"
-                    margin={"normal"}
-                    type={"number"}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">¥</InputAdornment>,
-                    }}
+                <FormError errors={createRequestErrors?.purchase_limit} />
+                <Box sx={{ padding: 2 }}>/</Box>
+                <TextField select name={"purchaseLimitUnit"} value={formValues.purchaseLimitUnit} onChange={handleChange} sx={{ minWidth: "80px" }}>
+                  {purchaseLimitUnits.map((purchaseLimitUnit, index) => (
+                    <MenuItem key={index} value={purchaseLimitUnit.value}>
+                      {purchaseLimitUnit.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <FormError errors={createRequestErrors?.purchase_limit_unit} />
+                <FormGroup sx={{ padding: 1, whiteSpace: "nowrap" }}>
+                  <FormControlLabel
+                    control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
+                    label="個人所有を許可"
                   />
-                  <FormError errors={createRequestErrors?.purchase_limit} />
-                  <Box sx={{ padding: 2 }}>/</Box>
-                  <TextField select name={"purchaseLimitUnit"} value={formValues.purchaseLimitUnit} onChange={handleChange} sx={{ minWidth: "80px" }}>
-                    {purchaseLimitUnits.map((purchaseLimitUnit, index) => (
-                      <MenuItem key={index} value={purchaseLimitUnit.value}>
-                        {purchaseLimitUnit.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <FormError errors={createRequestErrors?.purchase_limit_unit} />
-                  <FormGroup sx={{ padding: 1, whiteSpace: "nowrap" }}>
-                    <FormControlLabel
-                      control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
-                      label="個人所有を許可"
-                    />
-                  </FormGroup>
-                </Box>
-                <Box sx={{ textAlign: "right", margin: 2 }}>
-                  <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
-                    更新する
-                  </Button>
-                </Box>
-              </>
-            )}
+                </FormGroup>
+              </Box>
+              <Box sx={{ textAlign: "right", margin: 2 }}>
+                <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
+                  更新する
+                </Button>
+              </Box>
+            </>
+          )}
 
-            {openTabValue === "プラン選択" && (
-              <>
-                <Grid item xs={12} md={12}>
-                  <Box>{"現在の登録ユーザー人数： " + response.client.users + "人"}</Box>
-                  <Box>{"現在の登録書籍数： " + response.client.books + "冊"}</Box>
+          {openTabValue === "プラン選択" && (
+            <>
+              <Grid item xs={12} md={12}>
+                <Box>{"現在の登録ユーザー人数： " + response.client.users + "人"}</Box>
+                <Box>{"現在の登録書籍数： " + response.client.books + "冊"}</Box>
+              </Grid>
+              <Box sx={{ justifyContent: "center", display: "flex" }}>
+                <Grid item xs={12} md={4}>
+                  <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
+                    <CardHeader title={"FREE"}></CardHeader>
+                    <CardContent>
+                      <Box px={1}>
+                        <Typography variant="h3" component="h2" gutterBottom={true}>
+                          ¥0
+                          <Typography variant="h6" color="textSecondary" component="span">
+                            / 月
+                          </Typography>
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          ユーザー上限: 30
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          書籍上限: 100
+                        </Typography>
+                      </Box>
+                      <Button
+                        variant="outlined"
+                        name="plan"
+                        value="free"
+                        onClick={handleChange}
+                        endIcon={formValues.plan === "free" && <CheckIcon />}
+                      >
+                        Select plan
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </Grid>
-                <Box sx={{ justifyContent: "center", display: "flex" }}>
-                  <Grid item xs={12} md={4}>
-                    <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
-                      <CardHeader title={"FREE"}></CardHeader>
-                      <CardContent>
-                        <Box px={1}>
-                          <Typography variant="h3" component="h2" gutterBottom={true}>
-                            ¥0
-                            <Typography variant="h6" color="textSecondary" component="span">
-                              / 月
-                            </Typography>
+                <Grid item xs={12} md={4}>
+                  <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
+                    <CardHeader title={"BETA"}></CardHeader>
+                    <CardContent>
+                      <Box px={1}>
+                        <Typography variant="h3" component="h2" gutterBottom={true}>
+                          ¥0
+                          <Typography variant="h6" color="textSecondary" component="span">
+                            / 月
                           </Typography>
-                          <Typography color="textSecondary" variant="subtitle1" component="p">
-                            ユーザー上限: 30
-                          </Typography>
-                          <Typography color="textSecondary" variant="subtitle1" component="p">
-                            書籍上限: 100
-                          </Typography>
-                        </Box>
-                        <Button
-                          variant="outlined"
-                          name="plan"
-                          value="free"
-                          onClick={handleChange}
-                          endIcon={formValues.plan === "free" && <CheckIcon />}
-                        >
-                          Select plan
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>
-                      <CardHeader title={"BETA"}></CardHeader>
-                      <CardContent>
-                        <Box px={1}>
-                          <Typography variant="h3" component="h2" gutterBottom={true}>
-                            ¥0
-                            <Typography variant="h6" color="textSecondary" component="span">
-                              / 月
-                            </Typography>
-                          </Typography>
-                          <Typography color="textSecondary" variant="subtitle1" component="p">
-                            ユーザー上限: 無制限
-                          </Typography>
-                          <Typography color="textSecondary" variant="subtitle1" component="p">
-                            書籍上限: 無制限
-                          </Typography>
-                        </Box>
-                        <Button
-                          variant="outlined"
-                          name="plan"
-                          value="beta"
-                          onClick={handleChange}
-                          endIcon={formValues.plan === "beta" && <CheckIcon />}
-                        >
-                          Select plan
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Box>
-                <Box sx={{ textAlign: "right", margin: 2 }}>
-                  <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
-                    更新する
-                  </Button>
-                </Box>
-              </>
-            )}
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          ユーザー上限: 無制限
+                        </Typography>
+                        <Typography color="textSecondary" variant="subtitle1" component="p">
+                          書籍上限: 無制限
+                        </Typography>
+                      </Box>
+                      <Button
+                        variant="outlined"
+                        name="plan"
+                        value="beta"
+                        onClick={handleChange}
+                        endIcon={formValues.plan === "beta" && <CheckIcon />}
+                      >
+                        Select plan
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Box>
+              <Box sx={{ textAlign: "right", margin: 2 }}>
+                <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)}>
+                  更新する
+                </Button>
+              </Box>
+            </>
+          )}
 
-            {openTabValue === "通知設定" && (
-              <a
-                target={"_blank"}
-                href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
-                rel="noreferrer"
-              >
-                <img
-                  alt="Add to Slack"
-                  height="40"
-                  width="139"
-                  src="https://platform.slack-edge.com/img/add_to_slack.png"
-                  srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-                />
-              </a>
-            )}
-            <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
-          </Box>
-        </Paper>
-      </Grid>
-    </>
+          {openTabValue === "通知設定" && (
+            <a
+              target={"_blank"}
+              href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
+              rel="noreferrer"
+            >
+              <img
+                alt="Add to Slack"
+                height="40"
+                width="139"
+                src="https://platform.slack-edge.com/img/add_to_slack.png"
+                srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+              />
+            </a>
+          )}
+          <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+        </Box>
+      </Paper>
+    </Grid>
   );
 };
 

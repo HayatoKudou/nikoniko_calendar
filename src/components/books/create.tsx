@@ -146,8 +146,9 @@ const Create = (props: Props) => {
             variant="standard"
             margin={"dense"}
             required
+            helperText={registerBookRequestErrors?.title}
+            error={registerBookRequestErrors?.title !== undefined}
           />
-          <FormError errors={registerBookRequestErrors?.title} />
 
           <TextField
             onChange={handleChange}
@@ -158,7 +159,10 @@ const Create = (props: Props) => {
             variant="standard"
             multiline
             margin={"dense"}
+            helperText={registerBookRequestErrors?.description}
+            error={registerBookRequestErrors?.description !== undefined}
           />
+
           <TextField
             onChange={handleChange}
             onBlur={fetchBookImage}
@@ -169,8 +173,10 @@ const Create = (props: Props) => {
             fullWidth
             variant="standard"
             margin={"dense"}
+            helperText={registerBookRequestErrors?.url}
+            error={registerBookRequestErrors?.url !== undefined}
           />
-          <FormError errors={registerBookRequestErrors?.url} />
+
           <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>
           <FormHelperText error={true}>* Amazonのみ対応しています</FormHelperText>
         </Box>

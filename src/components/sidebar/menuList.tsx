@@ -73,9 +73,9 @@ const MenuList = (props: { open: boolean }) => {
             minHeight: 48,
             justifyContent: props.open ? "initial" : "center",
             px: 2.5,
-            // '&.Mui-selected': {
-            //   backgroundColor: 'primary'
-            // }
+            "&.Mui-selected": {
+              backgroundColor: theme.palette.mode === "light" ? "#455a6494" : "",
+            },
           }}
           selected={selected == menu.path}
         >

@@ -6,9 +6,10 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import CreateBookRentalApply, { BookRentalApplyRequestErrors } from "../../api/book/rental_apply/create";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
@@ -21,9 +22,10 @@ const BookRentalApply = (props: Props) => {
   const initDate = new Date();
   initDate.setDate(initDate.getDate() + 7);
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState(false);
   const [expectedReturnDate, setExpectedReturnDate] = React.useState<Date>(initDate);
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     reason: "",
   });
@@ -40,6 +42,7 @@ const BookRentalApply = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
+    setOpenConfirm(false);
     CreateBookRentalApply(me.clientId, props.bookInfo.id, {
       reason: formValues.reason,
       expected_return_date: expectedReturnDate,
@@ -76,14 +79,15 @@ const BookRentalApply = (props: Props) => {
           name="reason"
           autoFocus
           fullWidth
-          label="申請理由"
+          label="貸出理由"
           variant="outlined"
           rows={2}
           margin={"dense"}
           multiline
           required
+          helperText={bookRentalApplyRequestErrors?.reason}
+          error={bookRentalApplyRequestErrors?.reason !== undefined}
         />
-        <FormError errors={bookRentalApplyRequestErrors.reason} />
       </Box>
 
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -101,9 +105,10 @@ const BookRentalApply = (props: Props) => {
             <FormError errors={bookRentalApplyRequestErrors.expected_return_date} />
           </Box>
         </LocalizationProvider>
-        <Button variant="contained" onClick={handleSubmit} sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }}>
+        <Button variant="contained" onClick={() => setOpenConfirm(true)} sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }}>
           貸出申請
         </Button>
+        <ConfirmDialog message={"本当に貸出申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       </Box>
     </Box>
   );

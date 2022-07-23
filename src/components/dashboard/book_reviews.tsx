@@ -90,8 +90,9 @@ const BookReviews = (props: Props) => {
             variant="standard"
             multiline
             required
+            helperText={bookCreateReviewRequestErrors?.review}
+            error={bookCreateReviewRequestErrors?.review !== undefined}
           />
-          <FormError errors={bookCreateReviewRequestErrors?.review} />
           <Button variant="contained" onClick={handleClickOpen} className={styles.review__postButton}>
             投稿
           </Button>
