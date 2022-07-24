@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import Config from "../../../config";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
 import usePurchaseApplies from "../../api/book/purchase_apply/list";
@@ -13,7 +13,7 @@ import CustomTable from "./table";
 
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
-  const [, setBookCategory] = useRecoilState(useBookCategories);
+  const setBookCategory = useSetRecoilState(useBookCategories);
   const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<PurchaseApply>();
   const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
   const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
@@ -80,6 +80,7 @@ const PurchaseApplies = () => {
       />
       {selectedEditPurchaseApply && (
         <Approval
+          canNotification={response.slackCredentialExists}
           purchaseApply={selectedEditPurchaseApply}
           open={approvalOpen}
           onClose={() => setApprovalOpen(false)}

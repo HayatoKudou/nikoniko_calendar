@@ -74,7 +74,7 @@ const MenuList = (props: { open: boolean }) => {
             justifyContent: props.open ? "initial" : "center",
             px: 2.5,
             "&.Mui-selected": {
-              backgroundColor: theme.palette.mode === "light" ? "#455a6494" : "",
+              backgroundColor: theme.palette.mode === "light" ? "#455a6478" : "",
             },
           }}
           selected={selected == menu.path}

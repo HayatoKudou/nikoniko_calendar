@@ -9,6 +9,7 @@ import Stepper from "./stepper";
 
 interface Props {
   open: boolean;
+  canNotification: boolean;
   purchaseApply: any;
   onSuccess: () => void;
   onClose: () => void;
@@ -34,7 +35,13 @@ const Approval = (props: Props) => {
       ) : activeStep === 2 ? (
         <Step2 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
       ) : activeStep === 3 ? (
-        <Step3 bookImage={bookImage} purchaseApply={props.purchaseApply} onSuccess={props.onSuccess} onClose={props.onClose} />
+        <Step3
+          bookImage={bookImage}
+          purchaseApply={props.purchaseApply}
+          onSuccess={props.onSuccess}
+          onClose={props.onClose}
+          canNotification={props.canNotification}
+        />
       ) : (
         <></>
       )}

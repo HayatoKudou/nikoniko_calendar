@@ -268,19 +268,25 @@ const Profile = () => {
           )}
 
           {openTabValue === "通知設定" && (
-            <a
-              target={"_blank"}
-              href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
-              rel="noreferrer"
-            >
-              <img
-                alt="Add to Slack"
-                height="40"
-                width="139"
-                src="https://platform.slack-edge.com/img/add_to_slack.png"
-                srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-              />
-            </a>
+            <>
+              <Typography sx={{ margin: 2 }}>
+                購入申請通知・入荷通知で利用するSlackチャンネルと連携
+                <br />※ 連携後、チャンネルにアプリを追加してください
+              </Typography>
+              <a
+                target={"_blank"}
+                href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
+                rel="noreferrer"
+              >
+                <img
+                  alt="Add to Slack"
+                  height="40"
+                  width="139"
+                  src="https://platform.slack-edge.com/img/add_to_slack.png"
+                  srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                />
+              </a>
+            </>
           )}
           <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
         </Box>

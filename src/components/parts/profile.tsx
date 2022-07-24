@@ -77,7 +77,7 @@ const Profile = () => {
   };
 
   return (
-    <Grid container sx={{ display: "block", width: "70%", margin: "0 auto" }}>
+    <Grid container sx={{ display: "block", width: "80%", margin: "0 auto" }}>
       <Paper>
         <Box sx={{ padding: 2 }}>
           <TextField

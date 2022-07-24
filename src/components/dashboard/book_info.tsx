@@ -48,7 +48,7 @@ const BookInfo = (props: Props) => {
     return (
       <Box className={styles.bookInfo__dialogContentBookInfo}>
         <Typography className={styles.bookInfo__dialogContentBookInfoTitle}>{props.title}</Typography>
-        <Typography>{props.value}</Typography>
+        <Typography className={styles.bookInfo__dialogContentBookDetail}>{props.value}</Typography>
       </Box>
     );
   };

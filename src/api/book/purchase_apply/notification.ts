@@ -3,6 +3,7 @@ import Config from "../../../../config";
 export interface BookPurchaseNotificationRequestErrors {
   title: Array<string>;
   message: Array<string>;
+  slack: string;
 }
 
 interface BookPurchaseNotificationResult {
