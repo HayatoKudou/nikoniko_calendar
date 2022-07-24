@@ -158,7 +158,7 @@ const Update = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} variant="contained">
+        <Button onClick={props.onClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
         <Button onClick={handleSubmit} variant="contained">

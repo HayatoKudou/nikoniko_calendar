@@ -163,7 +163,7 @@ const UpdateUser = (props: Props) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} variant="contained">
+        <Button onClick={props.onClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
         <Button onClick={handleSubmit} variant="contained">

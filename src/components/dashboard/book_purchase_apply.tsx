@@ -246,7 +246,7 @@ const BookPurchaseApply = (props: Props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.setClose} variant="contained">
+        <Button onClick={props.setClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
         <Button onClick={() => setOpenConfirm(true)} variant="contained">
