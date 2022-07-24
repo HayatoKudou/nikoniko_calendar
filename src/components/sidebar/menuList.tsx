@@ -56,10 +56,10 @@ const MenuList = (props: { open: boolean }) => {
     menuList = [
       { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
       { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
-      { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` },
       { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
       { name: "profile", title: "プロフィール", path: `/${me.clientId}/profile` },
     ];
+    if (me.role.is_book_manager) menuList.push({ name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` });
     if (me.role.is_client_manager) menuList.push({ name: "clientProfile", title: "組織設定", path: `/${me.clientId}/client-profile` });
   }
 

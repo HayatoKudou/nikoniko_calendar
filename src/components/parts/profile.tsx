@@ -8,6 +8,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import Update, { UpdateUserRequestErrors } from "../../api/user/update";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "./confirm_dialog";
 import FormError from "./form_error";
 import Spinner from "./spinner";
 
@@ -24,6 +25,7 @@ const Profile = () => {
     apiToken: "",
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+  const [openUpdateConfirm, setOpenUpdateConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setFormValues({
@@ -68,6 +70,7 @@ const Profile = () => {
             variant: "error",
           });
         }
+        setOpenUpdateConfirm(false);
         setLoading(false);
       })
       .catch(() => {
@@ -135,9 +138,15 @@ const Profile = () => {
           <FormError errors={createRequestErrors?.password_confirmation} />
 
           <Box sx={{ textAlign: "right", margin: 2 }}>
-            <Button type={"submit"} variant={"contained"} onClick={handleSubmit}>
+            <Button type={"submit"} variant={"contained"} onClick={() => setOpenUpdateConfirm(true)}>
               更新する
             </Button>
+            <ConfirmDialog
+              message={"本当に更新しますか？"}
+              open={openUpdateConfirm}
+              onClose={() => setOpenUpdateConfirm(false)}
+              handleSubmit={handleSubmit}
+            />
           </Box>
         </Box>
       </Paper>

@@ -130,7 +130,7 @@ const CsvUpload = (props: Props) => {
         </TableContainer>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose} variant="contained" color={"error"} >
+        <Button onClick={props.handleClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
         <Button onClick={handleSubmit} variant="contained">

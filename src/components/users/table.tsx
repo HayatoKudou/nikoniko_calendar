@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
@@ -14,9 +15,10 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
+import { useRecoilValue } from "recoil";
+import { useMe } from "../../store/me";
 import styles from "../../styles/components/users/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
@@ -55,6 +57,7 @@ const headCells: readonly TableHeadCell[] = [
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const { numSelected } = props;
+  const me = useRecoilValue(useMe);
   return (
     <Toolbar
       sx={{
@@ -65,23 +68,17 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography className={styles.booksTable__toolBar} component="div">
-          {numSelected} 選択中
-        </Typography>
-      ) : (
-        <Typography className={styles.booksTable__toolBar} component="h5">
-          ユーザー管理
-        </Typography>
-      )}
+      <Box className={styles.booksTable__toolBar}>{numSelected > 0 ? numSelected + " 選択中" : "ユーザー管理"}</Box>
       {numSelected > 0 ? (
         <Tooltip title="ユーザー削除">
           <IconButton onClick={() => props.handleDelete()}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-      ) : (
+      ) : me.role.is_account_manager ? (
         <Chip icon={<AddIcon />} label="ユーザー追加" onClick={props.handleCreate} />
+      ) : (
+        <></>
       )}
     </Toolbar>
   );
@@ -92,6 +89,7 @@ const CustomTable = (props: Props) => {
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const me = useRecoilValue(useMe);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -109,6 +107,9 @@ const CustomTable = (props: Props) => {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    if (!me.role.is_account_manager) {
+      return;
+    }
     const selectedIndex = props.selected.indexOf(id);
     let newSelected: string[] = [];
 
@@ -149,8 +150,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.users.length}
             headCells={headCells}
-            showActionIcon={true}
-            showCheckBox={true}
+            showActionIcon={me.role.is_account_manager}
+            showCheckBox={me.role.is_account_manager}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -168,14 +169,20 @@ const CustomTable = (props: Props) => {
                     key={user.id}
                     selected={isItemSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isItemSelected} />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton onClick={(e) => props.handleEdit(e, user)}>
-                        <ModeEditIcon />
-                      </IconButton>
-                    </TableCell>
+                    {me.role.is_account_manager ? (
+                      <>
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isItemSelected} />
+                        </TableCell>
+                        <TableCell>
+                          <IconButton onClick={(e) => props.handleEdit(e, user)}>
+                            <ModeEditIcon />
+                          </IconButton>
+                        </TableCell>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <TableCell align="center">{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
                     <TableCell align="center">

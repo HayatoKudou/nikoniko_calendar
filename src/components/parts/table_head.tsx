@@ -29,7 +29,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        {props.showCheckBox && (
+        {props.showCheckBox ? (
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -37,8 +37,10 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               onChange={onSelectAllClick}
             />
           </TableCell>
+        ) : (
+          <></>
         )}
-        {props.showActionIcon && <TableCell />}
+        {props.showActionIcon ? <TableCell /> : <></>}
         {props.headCells.map((headCell: any, index: number) => (
           <TableCell key={index} align={"center"} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel

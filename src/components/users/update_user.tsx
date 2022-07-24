@@ -15,6 +15,7 @@ import * as React from "react";
 import { useRecoilState } from "recoil";
 import Update, { UpdateUserRequestErrors, UpdateUserRequestPayload } from "../../api/user/update";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
@@ -39,6 +40,7 @@ const UpdateUser = (props: Props) => {
     apiToken: "",
   });
   const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+  const [openUpdateConfirm, setOpenUpdateConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const roles: Array<string> = [];
@@ -98,6 +100,7 @@ const UpdateUser = (props: Props) => {
             variant: "error",
           });
         }
+        setOpenUpdateConfirm(false);
         setLoading(false);
       })
       .catch(() => {
@@ -166,9 +169,15 @@ const UpdateUser = (props: Props) => {
         <Button onClick={props.onClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={() => setOpenUpdateConfirm(true)} variant="contained">
           更新する
         </Button>
+        <ConfirmDialog
+          message={"本当に更新しますか？"}
+          open={openUpdateConfirm}
+          onClose={() => setOpenUpdateConfirm(false)}
+          handleSubmit={handleSubmit}
+        />
       </DialogActions>
     </Dialog>
   );
