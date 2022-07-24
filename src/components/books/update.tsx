@@ -12,9 +12,11 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import AmazonImage from "../../api/book/amazon_image";
 import UpdateBook, { UpdateBookRequestErrors, UpdateBookRequestPayload } from "../../api/book/update";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
@@ -43,6 +45,7 @@ const Update = (props: Props) => {
     apiToken: "",
   });
   const [UpdateBookRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateBookRequestErrors>>({});
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setFormValues({
@@ -93,6 +96,7 @@ const Update = (props: Props) => {
             variant: "error",
           });
         }
+        setOpenConfirm(false);
         setLoading(false);
       })
       .catch(() => {
@@ -111,6 +115,21 @@ const Update = (props: Props) => {
       };
     } else {
       handleUpdate(null);
+    }
+  };
+
+  const fetchBookImage = () => {
+    if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
+      const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
+      const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
+
+      AmazonImage(dp)
+        .then((blob) => {
+          setSelectedImage(blob);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -153,7 +172,16 @@ const Update = (props: Props) => {
             variant="standard"
           />
           <FormError errors={UpdateBookRequestErrors?.description} />
-          <TextField margin={"dense"} label="URL" name="url" value={formValues.url} onChange={handleChange} fullWidth variant="standard" />
+          <TextField
+            onBlur={fetchBookImage}
+            margin={"dense"}
+            label="URL"
+            name="url"
+            value={formValues.url}
+            onChange={handleChange}
+            fullWidth
+            variant="standard"
+          />
           <FormError errors={UpdateBookRequestErrors?.url} />
         </Box>
       </DialogContent>
@@ -161,9 +189,10 @@ const Update = (props: Props) => {
         <Button onClick={props.onClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={() => setOpenConfirm(true)} variant="contained">
           更新する
         </Button>
+        <ConfirmDialog message={"更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       </DialogActions>
     </Dialog>
   );

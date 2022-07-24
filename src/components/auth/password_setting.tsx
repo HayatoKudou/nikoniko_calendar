@@ -47,6 +47,7 @@ const PasswordSetting = () => {
             variant: "error",
           });
         }
+        setOpenConfirm(false);
       })
       .catch(() => {
         setLoading(false);
