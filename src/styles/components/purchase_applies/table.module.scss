@@ -1,5 +1,6 @@
 .booksTable {
   min-width: 750px;
+  //table-layout: fixed;
 
   &__actionIcon {
     display: flex;
@@ -7,8 +8,13 @@
   }
 
   &__title {
-    width: 15%;
+    width: 20%;
     text-align: left;
+    word-break: break-all;
+
+    //overflow: hidden;
+    //text-overflow: ellipsis;
+    //white-space: nowrap;
   }
 
   &__toolBar {
