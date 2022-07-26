@@ -64,7 +64,7 @@ const FeedBack = () => {
 
   return (
     <>
-      <Tooltip title="レイアウト設定">
+      <Tooltip title="フィードバック">
         <IconButton onClick={() => setDialogOpen(true)} size="large" edge="end" color="inherit">
           <FeedbackIcon sx={{ fontSize: "30px" }} />
         </IconButton>
