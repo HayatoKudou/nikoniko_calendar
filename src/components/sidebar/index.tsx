@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { useMe } from "../../store/me";
-import StyleSetting from "../dashboard/style_setting";
+import StyleSetting from "../style_setting";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
 

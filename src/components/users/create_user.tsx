@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Create, { CreateUserRequestErrors } from "../../api/user/create";
 import { useMe } from "../../store/me";
 import FormError from "../parts/form_error";
@@ -26,7 +26,7 @@ interface Props {
 
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     name: "",
@@ -67,7 +67,7 @@ const CreateUser = (props: Props) => {
       .then((res) => {
         if (res.succeeded) {
           setCreateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの登録に成功しました。", {
+          enqueueSnackbar("ユーザーの登録に成功しました。メールから認証を完了させてください。", {
             variant: "success",
           });
           props.onSuccess();

@@ -12,17 +12,20 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Slider from "@mui/material/Slider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import { useBookCardStyle } from "../../store/styles/book_card_style";
-import { useColorMode } from "../../store/styles/color_mode";
-import { useImageSize } from "../../store/styles/image_size";
+import { useBookCardStyle } from "../store/styles/book_card_style";
+import { useColorMode } from "../store/styles/color_mode";
+import { useImageSize } from "../store/styles/image_size";
+import FeedBack from "./feed_back";
 
 const StyleSetting = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
   const [imageSize, setImageSize] = useRecoilState(useImageSize);
   const [bookCardStyle, setBookCardStyle] = useRecoilState(useBookCardStyle);
   const [colorMode, setColorMode] = useRecoilState(useColorMode);
+  const [openFeedBackDialog, setOpenFeedBackDialog] = React.useState<boolean>(false);
 
   const handleImageSizeSlider = (e: any) => {
     const value = e.target.value;
@@ -39,9 +42,12 @@ const StyleSetting = () => {
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)} size="large" edge="end" color="inherit">
-        <SettingsIcon sx={{ fontSize: "40px" }} />
-      </IconButton>
+      <FeedBack />
+      <Tooltip title="レイアウト設定">
+        <IconButton onClick={() => setOpen(true)} size="large" edge="end" color="inherit">
+          <SettingsIcon sx={{ fontSize: "30px" }} />
+        </IconButton>
+      </Tooltip>
       <Drawer anchor={"right"} open={open} onClose={() => setOpen(!open)} sx={{ zIndex: 1201 }}>
         <Box sx={{ width: 300, marginTop: 3 }}>
           <Box sx={{ padding: 2 }}>
