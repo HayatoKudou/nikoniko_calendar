@@ -17,6 +17,7 @@ import Create, { CreateUserRequestErrors } from "../../api/user/create";
 import { useMe } from "../../store/me";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
+import ConfirmDialog from "../parts/confirm_dialog";
 
 interface Props {
   open: boolean;
@@ -28,6 +29,7 @@ const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     name: "",
     email: "",
@@ -78,6 +80,7 @@ const CreateUser = (props: Props) => {
             variant: "error",
           });
         }
+        setOpenConfirm(false)
         setLoading(false);
       })
       .catch(() => {
@@ -146,9 +149,10 @@ const CreateUser = (props: Props) => {
         <Button onClick={props.onClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={() => setOpenConfirm(true)} variant="contained">
           登録する
         </Button>
+        <ConfirmDialog message={"ユーザー登録しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       </DialogActions>
     </Dialog>
   );

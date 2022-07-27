@@ -7,9 +7,9 @@ import useUsers from "../../api/user/list";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import CreateUser from "./create_user";
+import CreateUser from "./create";
 import CustomTable from "./table";
-import UpdateUser from "./update_user";
+import UpdateUser from "./update";
 
 const Users = () => {
   const me = useRecoilValue(useMe);

@@ -20,6 +20,7 @@ import { useMe } from "../../store/me";
 import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
+import ConfirmDialog from "../parts/confirm_dialog";
 
 interface Props {
   open: boolean;
@@ -34,6 +35,7 @@ const Create = (props: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>({});
   const [title, setTitle] = React.useState("");
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     bookCategoryName: "",
     title: "",
@@ -75,6 +77,7 @@ const Create = (props: Props) => {
             variant: "error",
           });
         }
+        setOpenConfirm(false)
         setLoading(false);
       })
       .catch(() => {
@@ -185,9 +188,10 @@ const Create = (props: Props) => {
         <Button onClick={props.setClose} variant="contained" color={"error"}>
           キャンセル
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={() => setOpenConfirm(true)} variant="contained">
           登録する
         </Button>
+        <ConfirmDialog message={"書籍登録しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       </DialogActions>
     </Dialog>
   );

@@ -16,6 +16,8 @@ import { useRecoilValue } from "recoil";
 import BulkCreate from "../../api/book/bulk_create";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   open: boolean;
@@ -94,6 +96,7 @@ const CsvUpload = (props: Props) => {
       <DialogTitle>{"CSV一括登録"}</DialogTitle>
       <DialogContent>
         <input type={"file"} accept={".csv"} onChange={handleOnChange} />
+        <Typography variant={"body2"} sx={{marginTop: 1}}>※ カテゴリ・タイトル・本の説明・URLをヘッダに指定してください</Typography>
         <TableContainer component={Paper} sx={{ marginTop: 2 }}>
           <Table sx={{ tableLayout: "fixed" }} size="small">
             <TableHead>
