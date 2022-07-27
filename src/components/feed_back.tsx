@@ -1,4 +1,5 @@
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,10 +13,6 @@ import * as React from "react";
 import Send, { FeedBackRequestErrors } from "../api/feed_back/send";
 import ConfirmDialog from "./parts/confirm_dialog";
 import Spinner from "./parts/spinner";
-
-const handleSubmit = () => {
-  console.log("handleSubmit");
-};
 
 const FeedBack = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -65,7 +62,7 @@ const FeedBack = () => {
   return (
     <>
       <Tooltip title="フィードバック">
-        <IconButton onClick={() => setDialogOpen(true)} size="large" edge="end" color="inherit">
+        <IconButton onClick={() => setDialogOpen(true)} color="inherit">
           <FeedbackIcon sx={{ fontSize: "30px" }} />
         </IconButton>
       </Tooltip>
@@ -91,7 +88,7 @@ const FeedBack = () => {
           <Button onClick={() => setDialogOpen(false)} variant="contained" color={"error"}>
             キャンセル
           </Button>
-          <Button onClick={() => setOpenConfirm(true)} variant="contained">
+          <Button onClick={() => setOpenConfirm(true)} variant="contained" endIcon={<SendIcon />}>
             送信
           </Button>
         </DialogActions>

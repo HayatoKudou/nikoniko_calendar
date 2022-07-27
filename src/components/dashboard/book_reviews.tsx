@@ -1,3 +1,4 @@
+import SendIcon from "@mui/icons-material/Send";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Rating from "@mui/material/Rating";
@@ -93,7 +94,7 @@ const BookReviews = (props: Props) => {
             helperText={bookCreateReviewRequestErrors?.review}
             error={bookCreateReviewRequestErrors?.review !== undefined}
           />
-          <Button variant="contained" onClick={handleClickOpen} className={styles.review__postButton}>
+          <Button variant="contained" onClick={handleClickOpen} className={styles.review__postButton} endIcon={<SendIcon />}>
             投稿
           </Button>
         </Box>

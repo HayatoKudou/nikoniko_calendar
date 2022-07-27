@@ -44,7 +44,7 @@ const StyleSetting = () => {
     <>
       <FeedBack />
       <Tooltip title="レイアウト設定">
-        <IconButton onClick={() => setOpen(true)} size="large" edge="end" color="inherit">
+        <IconButton onClick={() => setOpen(true)} color="inherit">
           <SettingsIcon sx={{ fontSize: "30px" }} />
         </IconButton>
       </Tooltip>

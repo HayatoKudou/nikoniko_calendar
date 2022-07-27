@@ -1,3 +1,4 @@
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import Button from "@mui/material/Button";
 import { useSnackbar } from "notistack";
 import * as React from "react";
@@ -48,7 +49,7 @@ const BookReturnForm = (props: Props) => {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen} sx={{ width: "100px" }}>
+      <Button variant="contained" onClick={handleClickOpen} sx={{ width: "100px", marginTop: 2, minWidth: "100px" }} endIcon={<KeyboardReturnIcon />}>
         返却
       </Button>
       <ConfirmDialog message={"本当に返却しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />

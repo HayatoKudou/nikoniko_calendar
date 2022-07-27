@@ -1,3 +1,4 @@
+import { AccountCircle } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -8,16 +9,17 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useMe } from "../../store/me";
 import StyleSetting from "../style_setting";
 import MenuList from "./menuList";
-import MenuList2 from "./menuList2";
 
 const drawerWidth = 240;
 
@@ -94,7 +96,9 @@ export default function Sidebar(props: { children: any }) {
   const router = useRouter();
   const pathname = router.pathname;
   const me = useRecoilValue(useMe);
+  const resetMe = useResetRecoilState(useMe);
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -104,6 +108,28 @@ export default function Sidebar(props: { children: any }) {
     setOpen(false);
   };
 
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const logout = () => {
+    resetMe();
+    router.push("/sign-in");
+  };
+
+  const isMenuOpen = Boolean(anchorEl);
+  const renderMenu = (
+    <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={handleMenuClose}>
+      <MenuItem onClick={() => router.push(`/${me.clientId}/profile`)}>プロフィール設定</MenuItem>
+      {me.role.is_client_manager && <MenuItem onClick={() => router.push(`/${me.clientId}/client-profile`)}>組織設定</MenuItem>}
+      <MenuItem onClick={logout}>ログアウト</MenuItem>
+    </Menu>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -111,7 +137,6 @@ export default function Sidebar(props: { children: any }) {
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
@@ -140,6 +165,10 @@ export default function Sidebar(props: { children: any }) {
             </Box>
           )}
           <StyleSetting />
+          <IconButton onClick={handleProfileMenuOpen} color="inherit">
+            <AccountCircle sx={{ fontSize: "30px" }} />
+          </IconButton>
+          {renderMenu}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -148,7 +177,6 @@ export default function Sidebar(props: { children: any }) {
         </DrawerHeader>
         <MenuList open={open} />
         <Divider />
-        <MenuList2 open={open} />
       </Drawer>
       <Box sx={{ width: "100%", margin: "72px auto 0 auto", padding: 2 }}>{props.children}</Box>
     </Box>
