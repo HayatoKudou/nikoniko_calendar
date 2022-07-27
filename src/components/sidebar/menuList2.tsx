@@ -5,16 +5,18 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import Send, { FeedBackRequestErrors } from "../api/feed_back/send";
-import ConfirmDialog from "./parts/confirm_dialog";
-import Spinner from "./parts/spinner";
+import Send, { FeedBackRequestErrors } from "../../api/feed_back/send";
+import ConfirmDialog from "../parts/confirm_dialog";
+import Spinner from "../parts/spinner";
 
-const FeedBack = () => {
+const MenuList = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
@@ -61,11 +63,27 @@ const FeedBack = () => {
 
   return (
     <>
-      <Tooltip title="フィードバック">
-        <IconButton onClick={() => setDialogOpen(true)} color="inherit">
-          <FeedbackIcon sx={{ fontSize: "30px" }} />
-        </IconButton>
-      </Tooltip>
+      <List>
+        <ListItemButton
+          sx={{
+            minHeight: 48,
+            justifyContent: props.open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            onClick={() => setDialogOpen(true)}
+            sx={{
+              minWidth: 0,
+              mr: props.open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <FeedbackIcon />
+          </ListItemIcon>
+          <ListItemText primary={"フィードバック"} sx={{ opacity: props.open ? 1 : 0 }} />
+        </ListItemButton>
+      </List>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>
         <DialogContent>
@@ -103,4 +121,4 @@ const FeedBack = () => {
   );
 };
 
-export default FeedBack;
+export default MenuList;

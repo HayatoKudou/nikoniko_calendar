@@ -18,7 +18,6 @@ import { useRecoilState } from "recoil";
 import { useBookCardStyle } from "../store/styles/book_card_style";
 import { useColorMode } from "../store/styles/color_mode";
 import { useImageSize } from "../store/styles/image_size";
-import FeedBack from "./feed_back";
 
 const StyleSetting = () => {
   const [open, setOpen] = React.useState<boolean>(false);
@@ -42,7 +41,6 @@ const StyleSetting = () => {
 
   return (
     <>
-      <FeedBack />
       <Tooltip title="レイアウト設定">
         <IconButton onClick={() => setOpen(true)} color="inherit">
           <SettingsIcon sx={{ fontSize: "30px" }} />
