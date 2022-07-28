@@ -172,12 +172,6 @@ const ClientProfile = (props: Props) => {
 
                 {formValues.enablePurchaseLimit && (
                   <>
-                    <FormGroup sx={{ whiteSpace: "nowrap" }}>
-                      <FormControlLabel
-                        control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
-                        label="個人所有を許可"
-                      />
-                    </FormGroup>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <TextField
                         value={formValues.purchaseLimit}
@@ -212,6 +206,13 @@ const ClientProfile = (props: Props) => {
                     </Box>
                   </>
                 )}
+
+                <FormGroup sx={{ whiteSpace: "nowrap" }}>
+                  <FormControlLabel
+                    control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
+                    label="個人所有を許可"
+                  />
+                </FormGroup>
               </>
             )}
 
