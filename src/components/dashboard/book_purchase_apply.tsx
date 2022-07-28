@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
@@ -34,7 +34,7 @@ interface Props {
 }
 
 const BookPurchaseApply = (props: Props) => {
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
@@ -216,19 +216,21 @@ const BookPurchaseApply = (props: Props) => {
             />
           </FormControl>
 
-          <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
-            <Box sx={{ display: "flex" }}>
-              今月の購入上限：<Box sx={{ marginLeft: "auto" }}>{"¥" + props.client.purchaseLimit}</Box>
+          {props.client.enablePurchaseLimit ? (
+            <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
+              <Box sx={{ display: "flex" }}>
+                現在の購入補助上限：<Box sx={{ marginLeft: "auto" }}>{"¥" + me.purchase_balance}</Box>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                書籍の価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                購入補助残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (me.purchase_balance - formValues.price)}</Box>
+              </Box>
+              {me.purchase_balance - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入補助残高を超えています</Box>}
+              {isNaN(me.purchase_balance - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
             </Box>
-            <Box sx={{ display: "flex" }}>
-              価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              購入残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (props.client.purchaseLimit - formValues.price)}</Box>
-            </Box>
-            {props.client.purchaseLimit - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入上限を超えています</Box>}
-            {isNaN(props.client.purchaseLimit - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
-          </Box>
+          ) : <></>}
 
           <TextField
             onChange={handleChange}

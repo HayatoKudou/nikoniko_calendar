@@ -11,6 +11,7 @@ export const useMe = atom({
     name: "",
     email: "",
     apiToken: "",
+    purchase_balance: 0,
     role: {
       is_account_manager: false,
       is_book_manager: false,

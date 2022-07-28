@@ -116,7 +116,7 @@ export default function Sidebar(props: { children: any }) {
   const renderMenu = (
     <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={() => setAnchorEl(null)}>
       <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-      {me.role.is_client_manager && <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem>}
+      {me.role.is_client_manager ? <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem> : <></>}
       <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
       <ConfirmDialog message={"ログアウトしますか？"} open={openLogoutConfirm} onClose={() => setOpenLogoutConfirm(false)} handleSubmit={logout} />
     </Menu>
@@ -124,8 +124,6 @@ export default function Sidebar(props: { children: any }) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
-      <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
       <CssBaseline />
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
@@ -160,11 +158,15 @@ export default function Sidebar(props: { children: any }) {
           )}
           <StyleSetting />
           {me.id && (
-            <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
-              <AccountCircle sx={{ fontSize: "30px" }} />
-            </IconButton>
+            <>
+              <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
+              <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
+              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
+                <AccountCircle sx={{ fontSize: "30px" }} />
+              </IconButton>
+              {renderMenu}
+            </>
           )}
-          {renderMenu}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={sideDrawerOpen}>

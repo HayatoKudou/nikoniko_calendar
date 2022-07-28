@@ -13,6 +13,7 @@ interface UpdateClientResult {
 
 interface UpdateClientRequestPayload {
   name: string;
+  enable_purchase_limit: boolean;
   purchase_limit: number;
   purchase_limit_unit: string;
   private_ownership_allow: boolean;
