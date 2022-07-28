@@ -31,7 +31,6 @@ import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
 import styles from "../../styles/components/dashboards/index.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
-import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
@@ -49,7 +48,7 @@ function TabPanel(props: TabPanelProps) {
   return (
     <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
-        <Box>
+        <Box sx={{ p: 1 }}>
           <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
             {children}
           </Typography>
@@ -229,8 +228,9 @@ const Dashboard = () => {
                     onChange={(e) => setBookCategoryFormValue(e.target.value)}
                     size="small"
                     className={styles.dashboard__bookCategoryInput}
+                    helperText={bookCategoryFormError?.name}
+                    error={bookCategoryFormError?.name !== undefined}
                   />
-                  <FormError errors={bookCategoryFormError["name"]} />
                 </form>
               )}
             </Box>

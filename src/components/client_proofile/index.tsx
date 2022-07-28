@@ -25,7 +25,6 @@ import useClientInfo from "../../api/client/info";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
-import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
 interface Props {
@@ -125,6 +124,7 @@ const ClientProfile = (props: Props) => {
             variant: "error",
           });
         }
+        setOpenConfirm(false);
         setUpdating(false);
       })
       .catch(() => {
@@ -156,8 +156,9 @@ const ClientProfile = (props: Props) => {
                   inputProps={{ minLength: 1, maxLength: 255 }}
                   variant="standard"
                   margin={"normal"}
+                  helperText={createRequestErrors?.name}
+                  error={createRequestErrors?.name !== undefined}
                 />
-                <FormError errors={createRequestErrors?.name} />
 
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <TextField
@@ -170,20 +171,26 @@ const ClientProfile = (props: Props) => {
                     variant="standard"
                     margin={"normal"}
                     type={"number"}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">¥</InputAdornment>,
-                    }}
+                    InputProps={{ startAdornment: <InputAdornment position="start">¥</InputAdornment> }}
+                    helperText={createRequestErrors?.purchase_limit}
+                    error={createRequestErrors?.purchase_limit !== undefined}
                   />
-                  <FormError errors={createRequestErrors?.purchase_limit} />
                   <Box sx={{ padding: 2 }}>/</Box>
-                  <TextField select name={"purchaseLimitUnit"} value={formValues.purchaseLimitUnit} onChange={handleChange} sx={{ minWidth: "80px" }}>
+                  <TextField
+                    select
+                    name={"purchaseLimitUnit"}
+                    value={formValues.purchaseLimitUnit}
+                    onChange={handleChange}
+                    sx={{ minWidth: "80px" }}
+                    helperText={createRequestErrors?.purchase_limit_unit}
+                    error={createRequestErrors?.purchase_limit_unit !== undefined}
+                  >
                     {purchaseLimitUnits.map((purchaseLimitUnit, index) => (
                       <MenuItem key={index} value={purchaseLimitUnit.value}>
                         {purchaseLimitUnit.label}
                       </MenuItem>
                     ))}
                   </TextField>
-                  <FormError errors={createRequestErrors?.purchase_limit_unit} />
                   <FormGroup sx={{ padding: 1, whiteSpace: "nowrap" }}>
                     <FormControlLabel
                       control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
@@ -291,9 +298,11 @@ const ClientProfile = (props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)} sx={{ marginBottom: 1, marginRight: 1 }}>
-          更新する
-        </Button>
+        {openTabValue !== "通知設定" && (
+          <Button type={"submit"} variant={"contained"} onClick={() => setOpenConfirm(true)} sx={{ marginBottom: 1, marginRight: 1 }}>
+            更新する
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

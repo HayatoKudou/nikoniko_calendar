@@ -11,7 +11,6 @@ import { useRecoilState } from "recoil";
 import Update, { UpdateUserRequestErrors } from "../../api/user/update";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
-import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
 interface Props {
@@ -101,8 +100,9 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
+              helperText={createRequestErrors?.name}
+              error={createRequestErrors?.name !== undefined}
             />
-            <FormError errors={createRequestErrors?.name} />
 
             <TextField
               value={formValues.email}
@@ -114,8 +114,9 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
+              helperText={createRequestErrors?.email}
+              error={createRequestErrors?.email !== undefined}
             />
-            <FormError errors={createRequestErrors?.email} />
 
             <TextField
               type={"password"}
@@ -128,8 +129,9 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
+              helperText={createRequestErrors?.password}
+              error={createRequestErrors?.password !== undefined}
             />
-            <FormError errors={createRequestErrors?.password} />
 
             <TextField
               type={"password"}
@@ -142,8 +144,9 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
+              helperText={createRequestErrors?.password_confirmation}
+              error={createRequestErrors?.password_confirmation !== undefined}
             />
-            <FormError errors={createRequestErrors?.password_confirmation} />
 
             <ConfirmDialog
               message={"本当に更新しますか？"}
