@@ -15,9 +15,9 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Create, { CreateUserRequestErrors } from "../../api/user/create";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
-import ConfirmDialog from "../parts/confirm_dialog";
 
 interface Props {
   open: boolean;
@@ -80,7 +80,7 @@ const CreateUser = (props: Props) => {
             variant: "error",
           });
         }
-        setOpenConfirm(false)
+        setOpenConfirm(false);
         setLoading(false);
       })
       .catch(() => {

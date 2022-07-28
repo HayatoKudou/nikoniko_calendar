@@ -18,8 +18,10 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useMe } from "../../store/me";
+import ClientProfile from "../client_proofile";
 import ConfirmDialog from "../parts/confirm_dialog";
 import StyleSetting from "../style_setting";
+import MeProfile from "../users/profile";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
 
@@ -99,25 +101,11 @@ export default function Sidebar(props: { children: any }) {
   const pathname = router.pathname;
   const me = useRecoilValue(useMe);
   const resetMe = useResetRecoilState(useMe);
-  const [open, setOpen] = React.useState(false);
+  const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openLogoutConfirm, setOpenLogoutConfirm] = React.useState<boolean>(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [openMeProfile, setOpenMeProfile] = React.useState<boolean>(false);
+  const [openClientProfile, setOpenClientProfile] = React.useState<boolean>(false);
 
   const logout = () => {
     resetMe();
@@ -126,9 +114,9 @@ export default function Sidebar(props: { children: any }) {
 
   const isMenuOpen = Boolean(anchorEl);
   const renderMenu = (
-    <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={handleMenuClose}>
-      <MenuItem onClick={() => router.push(`/${me.clientId}/profile`)}>プロフィール設定</MenuItem>
-      {me.role.is_client_manager && <MenuItem onClick={() => router.push(`/${me.clientId}/client-profile`)}>組織設定</MenuItem>}
+    <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={() => setAnchorEl(null)}>
+      <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
+      {me.role.is_client_manager && <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem>}
       <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
       <ConfirmDialog message={"ログアウトしますか？"} open={openLogoutConfirm} onClose={() => setOpenLogoutConfirm(false)} handleSubmit={logout} />
     </Menu>
@@ -136,16 +124,18 @@ export default function Sidebar(props: { children: any }) {
 
   return (
     <Box sx={{ display: "flex" }}>
+      <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
+      <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
+      <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
           <IconButton
             color="inherit"
-            onClick={handleDrawerOpen}
+            onClick={() => setSideDrawerOpen(true)}
             edge="start"
             sx={{
               marginRight: 5,
-              ...(open && { display: "none" }),
+              ...(sideDrawerOpen && { display: "none" }),
             }}
           >
             <MenuIcon />
@@ -170,20 +160,20 @@ export default function Sidebar(props: { children: any }) {
           )}
           <StyleSetting />
           {me.id && (
-            <IconButton onClick={handleProfileMenuOpen} color="inherit">
+            <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
               <AccountCircle sx={{ fontSize: "30px" }} />
             </IconButton>
           )}
           {renderMenu}
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={sideDrawerOpen}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+          <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
         </DrawerHeader>
-        <MenuList open={open} />
+        <MenuList open={sideDrawerOpen} />
         <Divider />
-        <MenuList2 open={open} />
+        <MenuList2 open={sideDrawerOpen} />
       </Drawer>
       <Box sx={{ width: "100%", margin: "72px auto 0 auto", padding: 2 }}>{props.children}</Box>
     </Box>

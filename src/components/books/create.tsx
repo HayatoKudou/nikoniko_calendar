@@ -17,10 +17,10 @@ import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/create";
 import { useBookCategories } from "../../store/book/categories";
 import { useMe } from "../../store/me";
+import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
-import ConfirmDialog from "../parts/confirm_dialog";
 
 interface Props {
   open: boolean;
@@ -77,7 +77,7 @@ const Create = (props: Props) => {
             variant: "error",
           });
         }
-        setOpenConfirm(false)
+        setOpenConfirm(false);
         setLoading(false);
       })
       .catch(() => {

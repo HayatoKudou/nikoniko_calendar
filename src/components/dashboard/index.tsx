@@ -49,7 +49,7 @@ function TabPanel(props: TabPanelProps) {
   return (
     <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
-        <Box sx={{ p: 1 }}>
+        <Box>
           <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
             {children}
           </Typography>
