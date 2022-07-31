@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
@@ -230,7 +230,9 @@ const BookPurchaseApply = (props: Props) => {
               {me.purchase_balance - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入補助残高を超えています</Box>}
               {isNaN(me.purchase_balance - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
             </Box>
-          ) : <></>}
+          ) : (
+            <></>
+          )}
 
           <TextField
             onChange={handleChange}

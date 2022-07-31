@@ -74,9 +74,7 @@ const SignUp = () => {
             setActiveStep(1);
           }
           setSignUpRequestErrors(res.errors);
-          enqueueSnackbar(`登録に失敗しました`, {
-            variant: "error",
-          });
+          enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
         }
       })
       .catch(() => {
@@ -187,7 +185,7 @@ const SignUp = () => {
             </>
           ) : activeStep === 1 ? (
             <>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} component="form" onSubmit={() => setActiveStep(activeStep + 1)}>
                 <Grid item xs={12}>
                   <TextField onChange={handleChange} value={formValues.clientName} name="clientName" label="組織名" autoFocus fullWidth required />
                   <FormError errors={signUpRequestErrors?.client_name} />
@@ -211,7 +209,7 @@ const SignUp = () => {
             </>
           ) : activeStep === 2 ? (
             <>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} component="form" onSubmit={handleProfileSubmit}>
                 <Grid item xs={12}>
                   <TextField onChange={handleChange} value={formValues.name} label="名前" name="name" autoFocus fullWidth required />
                   <FormError errors={signUpRequestErrors?.name} />

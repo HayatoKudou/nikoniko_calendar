@@ -42,6 +42,7 @@ const PasswordSetting = () => {
           });
           router.push("/sign-in");
         } else {
+          console.log(res)
           setResetPasswordRequestErrors(res.errors);
           enqueueSnackbar(`パスワード更新に失敗しました`, {
             variant: "error",

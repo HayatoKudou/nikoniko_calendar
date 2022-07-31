@@ -24,7 +24,6 @@ const StyleSetting = () => {
   const [imageSize, setImageSize] = useRecoilState(useImageSize);
   const [bookCardStyle, setBookCardStyle] = useRecoilState(useBookCardStyle);
   const [colorMode, setColorMode] = useRecoilState(useColorMode);
-  const [openFeedBackDialog, setOpenFeedBackDialog] = React.useState<boolean>(false);
 
   const handleImageSizeSlider = (e: any) => {
     const value = e.target.value;
@@ -62,16 +61,7 @@ const StyleSetting = () => {
           </Box>
           <Box sx={{ padding: 2 }}>
             <FormLabel>画像サイズ</FormLabel>
-            <Slider
-              key={`slider-${imageSize.width}`}
-              onChange={handleImageSizeSlider}
-              defaultValue={imageSize.width / 10}
-              valueLabelDisplay="auto"
-              step={1}
-              marks
-              min={10}
-              max={20}
-            />
+            <Slider onChange={handleImageSizeSlider} defaultValue={imageSize.width / 10} valueLabelDisplay="auto" step={1} marks min={10} max={20} />
           </Box>
           <Box sx={{ padding: 2 }}>
             <FormControl>

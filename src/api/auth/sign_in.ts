@@ -8,6 +8,7 @@ interface SignInRequestPayload {
 export interface SignInRequestErrors {
   email: Array<string>;
   password: Array<string>;
+  custom: string;
 }
 
 interface SignInResult {

@@ -8,22 +8,23 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
-import { SnackbarMessage, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
-import signIn from "../../api/auth/sign_in";
+import { useSetRecoilState } from "recoil";
+import signIn, { SignInRequestErrors } from "../../api/auth/sign_in";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 
 const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [, setMe] = useRecoilState(useMe);
+  const setMe = useSetRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     email: "",
     password: "",
   });
+  const [signInRequestErrors, setSignInRequestErrors] = React.useState<Partial<SignInRequestErrors>>({});
 
   if (loading) return <Spinner />;
 
@@ -40,7 +41,8 @@ const SignIn = () => {
           router.push(`/${res.user.clientId}/dashboard`);
           enqueueSnackbar("ログインしました。", { variant: "success" });
         } else {
-          enqueueSnackbar(res.errors as SnackbarMessage, { variant: "error" });
+          setSignInRequestErrors(res.errors);
+          enqueueSnackbar(res.errors.custom ? res.errors.custom : "ログインに失敗しました", { variant: "error" });
         }
         setLoading(false);
       })
@@ -70,8 +72,19 @@ const SignIn = () => {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField onChange={handleChange} margin="normal" required fullWidth label="メールアドレス" name="email" autoComplete="email" autoFocus />
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            onChange={handleChange}
+            margin="normal"
+            required
+            fullWidth
+            label="メールアドレス"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            helperText={signInRequestErrors?.email}
+            error={signInRequestErrors?.email !== undefined}
+          />
           <TextField
             onChange={handleChange}
             margin="normal"
@@ -80,7 +93,8 @@ const SignIn = () => {
             label="パスワード"
             name="password"
             type="password"
-            autoComplete="current-password"
+            helperText={signInRequestErrors?.password}
+            error={signInRequestErrors?.password !== undefined}
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             ログイン

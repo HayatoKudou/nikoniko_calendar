@@ -87,7 +87,7 @@ const MyProfile = (props: Props) => {
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth maxWidth={"md"}>
-      <DialogContent sx={{paddingBottom: 0}}>
+      <DialogContent sx={{ paddingBottom: 0 }}>
         <Grid container sx={{ display: "block", margin: "0 auto" }}>
           <Box sx={{ padding: 2 }}>
             <TextField

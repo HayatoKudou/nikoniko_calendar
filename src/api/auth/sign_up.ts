@@ -13,6 +13,7 @@ export interface SignUpRequestErrors {
   email: Array<string>;
   password: Array<string>;
   client_name: Array<string>;
+  custom: string;
 }
 
 interface SignUpResult {
