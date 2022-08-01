@@ -1,28 +1,26 @@
 import Config from "../../../config";
 
-interface SignUpRequestPayload {
-  plan: string;
+interface SignUpGoogleRequestPayload {
   name: string;
   email: string;
-  password: string;
-  client_name: string;
+  accessToken: string;
 }
 
-export interface SignUpRequestErrors {
+export interface SignUpGoogleRequestErrors {
   name: Array<string>;
   email: Array<string>;
-  password: Array<string>;
+  accessToken: Array<string>;
   custom: string;
 }
 
-interface SignUpResult {
+interface SignUpGoogleResult {
   succeeded: boolean;
   userId?: number;
-  errors: Partial<SignUpRequestErrors>;
+  errors: Partial<SignUpGoogleRequestErrors>;
 }
 
-const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
-  const endpoint = `${Config.apiOrigin}/api/signUp`;
+const signUpGoogle = async (payload: SignUpGoogleRequestPayload): Promise<SignUpGoogleResult> => {
+  const endpoint = `${Config.apiOrigin}/api/signUpGoogle`;
 
   const res = await fetch(endpoint, {
     method: "POST",
@@ -45,4 +43,4 @@ const signUp = async (payload: SignUpRequestPayload): Promise<SignUpResult> => {
   };
 };
 
-export default signUp;
+export default signUpGoogle;

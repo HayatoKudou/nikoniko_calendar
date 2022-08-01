@@ -8,6 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Step from "@mui/material/Step";
@@ -15,21 +16,25 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
-import sign_up, { SignUpRequestErrors } from "../../api/auth/sign_up";
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { useSetRecoilState } from "recoil";
+import signUp, { SignUpRequestErrors } from "../../api/auth/sign_up";
+import signUpGoogle from "../../api/auth/sign_up_google_oauth";
+import CreateClient from "../../api/client/create";
 import { useMe } from "../../store/me";
-import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
-const steps = ["プラン選択", "組織設定", "プロフィール設定"];
+const steps = ["プロフィール設定", "プラン選択", "組織設定"];
 
 const SignUp = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [, setMe] = useRecoilState(useMe);
+  const { data: session } = useSession();
+  const setMe = useSetRecoilState(useMe);
   const [loading, setLoading] = React.useState(false);
   const [signUpRequestErrors, setSignUpRequestErrors] = React.useState<Partial<SignUpRequestErrors>>({});
   const [formValues, setFormValues] = React.useState({
@@ -40,6 +45,31 @@ const SignUp = () => {
     clientName: "",
   });
   const [activeStep, setActiveStep] = React.useState(0);
+  const [userId, setUserId] = React.useState<number | undefined>();
+
+  React.useEffect(() => {
+    if (activeStep === 0 && session && session.user) {
+      setLoading(true);
+      signUpGoogle({
+        name: session.user.name as string,
+        email: session.user.email as string,
+        accessToken: session.accessToken as string,
+      })
+        .then((res) => {
+          setLoading(false);
+          if (res.succeeded) {
+            setActiveStep(1);
+            setUserId(res.userId);
+          } else {
+            enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+          enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
+        });
+    }
+  }, [session]);
 
   if (loading) return <Spinner />;
 
@@ -50,10 +80,36 @@ const SignUp = () => {
     });
   };
 
-  const handleProfileSubmit = (e: any) => {
+  const handleCreateClient = () => {
+    setLoading(true);
+    CreateClient({
+      plan: formValues.plan,
+      name: formValues.clientName,
+      userId: userId as number,
+    })
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        if (res.succeeded) {
+          setSignUpRequestErrors({});
+          enqueueSnackbar("登録に成功しました。", { variant: "success" });
+          setMe(res.me);
+          router.push(`/${res!.me!.clientId}/dashboard`);
+        } else {
+          setSignUpRequestErrors(res.errors);
+          enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
+      });
+  };
+
+  const handleSignUpEmail = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    sign_up({
+    signUp({
       plan: formValues.plan,
       name: formValues.name,
       email: formValues.email,
@@ -64,15 +120,10 @@ const SignUp = () => {
         setLoading(false);
         if (res.succeeded) {
           setSignUpRequestErrors({});
-          enqueueSnackbar("登録に成功しました。", {
-            variant: "success",
-          });
-          setMe(res.user);
-          router.push("/need-email-verify");
+          enqueueSnackbar("登録に成功しました。", { variant: "success" });
+          setActiveStep(1);
+          setUserId(res.userId);
         } else {
-          if (res.errors.client_name) {
-            setActiveStep(1);
-          }
           setSignUpRequestErrors(res.errors);
           enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
         }
@@ -109,6 +160,75 @@ const SignUp = () => {
 
         <Box sx={{ mt: 3, width: "100%" }}>
           {activeStep === 0 ? (
+            <>
+              <Grid container spacing={2} component="form" onSubmit={handleSignUpEmail}>
+                <Grid item xs={12}>
+                  {/*@ts-ignore*/}
+                  <GoogleLoginButton onClick={() => signIn("google")} style={{ fontSize: "1rem" }}>
+                    <span>Google連携</span>
+                  </GoogleLoginButton>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider>or</Divider>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.name}
+                    label="名前"
+                    name="name"
+                    fullWidth
+                    required
+                    helperText={signUpRequestErrors?.name}
+                    error={signUpRequestErrors?.name !== undefined}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.email}
+                    fullWidth
+                    label="メールアドレス"
+                    name="email"
+                    autoComplete="email"
+                    required
+                    helperText={signUpRequestErrors?.email}
+                    error={signUpRequestErrors?.email !== undefined}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    value={formValues.password}
+                    label="パスワード"
+                    type="password"
+                    name="password"
+                    helperText={signUpRequestErrors?.password}
+                    error={signUpRequestErrors?.password !== undefined}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href={"/sign-in"} variant="body2">
+                    すでにアカウントをお持ちですか？
+                  </Link>
+                </Grid>
+              </Grid>
+              <Grid sx={{ marginTop: 2 }}>
+                <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
+                  {"戻る"}
+                </Button>
+                <Button onClick={handleSignUpEmail} variant="contained" sx={{ float: "right", width: "120px" }}>
+                  {"登録"}
+                </Button>
+              </Grid>
+            </>
+          ) : activeStep === 1 ? (
             <>
               <Box sx={{ justifyContent: "center", display: "flex" }}>
                 <Grid item xs={12} md={4}>
@@ -183,12 +303,20 @@ const SignUp = () => {
                 {"次へ"}
               </Button>
             </>
-          ) : activeStep === 1 ? (
+          ) : activeStep === 2 ? (
             <>
               <Grid container spacing={2} component="form" onSubmit={() => setActiveStep(activeStep + 1)}>
                 <Grid item xs={12}>
-                  <TextField onChange={handleChange} value={formValues.clientName} name="clientName" label="組織名" autoFocus fullWidth required />
-                  <FormError errors={signUpRequestErrors?.client_name} />
+                  <TextField
+                    onChange={handleChange}
+                    value={formValues.clientName}
+                    name="clientName"
+                    label="組織名"
+                    fullWidth
+                    required
+                    helperText={signUpRequestErrors?.name}
+                    error={signUpRequestErrors?.name !== undefined}
+                  />
                 </Grid>
               </Grid>
               <Grid container justifyContent="flex-end">
@@ -202,55 +330,7 @@ const SignUp = () => {
                 <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
                   {"戻る"}
                 </Button>
-                <Button onClick={() => setActiveStep(activeStep + 1)} variant="contained" sx={{ float: "right", width: "120px" }}>
-                  {"次へ"}
-                </Button>
-              </Box>
-            </>
-          ) : activeStep === 2 ? (
-            <>
-              <Grid container spacing={2} component="form" onSubmit={handleProfileSubmit}>
-                <Grid item xs={12}>
-                  <TextField onChange={handleChange} value={formValues.name} label="名前" name="name" autoFocus fullWidth required />
-                  <FormError errors={signUpRequestErrors?.name} />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    onChange={handleChange}
-                    value={formValues.email}
-                    fullWidth
-                    label="メールアドレス"
-                    name="email"
-                    autoComplete="email"
-                    required
-                  />
-                  <FormError errors={signUpRequestErrors?.email} />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    value={formValues.password}
-                    label="パスワード"
-                    type="password"
-                    name="password"
-                  />
-                  <FormError errors={signUpRequestErrors?.password} />
-                </Grid>
-              </Grid>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href={"/sign-in"} variant="body2">
-                    すでにアカウントをお持ちですか？
-                  </Link>
-                </Grid>
-              </Grid>
-              <Box sx={{ marginTop: 2 }}>
-                <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
-                  {"戻る"}
-                </Button>
-                <Button onClick={handleProfileSubmit} variant="contained" sx={{ float: "right", width: "120px" }}>
+                <Button onClick={handleCreateClient} variant="contained" sx={{ float: "right", width: "120px" }}>
                   {"登録"}
                 </Button>
               </Box>

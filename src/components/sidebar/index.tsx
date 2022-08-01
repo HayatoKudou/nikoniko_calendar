@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
@@ -109,6 +110,7 @@ export default function Sidebar(props: { children: any }) {
 
   const logout = () => {
     resetMe();
+    signOut();
     router.push("/sign-in");
   };
 
