@@ -72,8 +72,8 @@ const SignUp = () => {
   }, [session]);
 
   if (loading) return <Spinner />;
-  console.log(process.env.GOOGLE_CLIENT_ID);
-  console.log(process.env.GOOGLE_CLIENT_SECRET);
+  console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+  console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET);
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -90,7 +90,6 @@ const SignUp = () => {
       userId: userId as number,
     })
       .then((res) => {
-        console.log(res);
         setLoading(false);
         if (res.succeeded) {
           setSignUpRequestErrors({});
