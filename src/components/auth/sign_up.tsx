@@ -219,10 +219,7 @@ const SignUp = () => {
                 </Grid>
               </Grid>
               <Grid sx={{ marginTop: 2 }}>
-                <Button onClick={() => setActiveStep(activeStep - 1)} variant="contained" sx={{ float: "left", width: "120px" }}>
-                  {"戻る"}
-                </Button>
-                <Button onClick={handleSignUpEmail} variant="contained" sx={{ float: "right", width: "120px" }}>
+                <Button onClick={handleSignUpEmail} variant="contained" fullWidth>
                   {"登録"}
                 </Button>
               </Grid>
