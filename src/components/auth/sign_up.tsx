@@ -27,6 +27,7 @@ import signUpGoogle from "../../api/auth/sign_up_google_oauth";
 import CreateClient from "../../api/client/create";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
+import Config from "../../../config";
 
 const steps = ["プロフィール設定", "プラン選択", "組織設定"];
 
@@ -72,6 +73,8 @@ const SignUp = () => {
   }, [session]);
 
   if (loading) return <Spinner />;
+
+  console.log(Config);
 
   const handleChange = (e: any) => {
     setFormValues({
