@@ -8,6 +8,7 @@ export default NextAuth({
       clientSecret: Config.googleClientSecret,
     }),
   ],
+  secret:Config.nextAuthSecret,
   callbacks: {
     //jwtが作成・更新された時に呼ばれる
     async jwt({ token, account }) {
