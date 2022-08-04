@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
-import Config from "../../../../config";
 import GoogleProvider from "next-auth/providers/google";
+import Config from "../../../../config";
 export default NextAuth({
   providers: [
     GoogleProvider({
@@ -8,7 +8,7 @@ export default NextAuth({
       clientSecret: Config.googleClientSecret,
     }),
   ],
-  secret:Config.nextAuthSecret,
+  secret: Config.nextAuthSecret,
   callbacks: {
     //jwtが作成・更新された時に呼ばれる
     async jwt({ token, account }) {
@@ -19,6 +19,7 @@ export default NextAuth({
     },
     //セッションがチェックされた時に呼ばれる
     async session({ session, token, user }) {
+      console.log("session");
       session.accessToken = token.accessToken;
       return session;
     },

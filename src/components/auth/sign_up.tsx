@@ -22,12 +22,11 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { useSetRecoilState } from "recoil";
-import signUp, { SignUpRequestErrors } from "../../api/auth/sign_up";
-import signUpGoogle from "../../api/auth/sign_up_google_oauth";
+import signUp, { SignUpRequestErrors } from "../../api/auth/sign_up_email";
+import signUpGoogle from "../../api/auth/sign_up_google";
 import CreateClient from "../../api/client/create";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
-import Config from "../../../config";
 
 const steps = ["プロフィール設定", "プラン選択", "組織設定"];
 
@@ -49,32 +48,10 @@ const SignUp = () => {
   const [userId, setUserId] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    if (activeStep === 0 && session && session.user) {
-      setLoading(true);
-      signUpGoogle({
-        name: session.user.name as string,
-        email: session.user.email as string,
-        accessToken: session.accessToken as string,
-      })
-        .then((res) => {
-          setLoading(false);
-          if (res.succeeded) {
-            setActiveStep(1);
-            setUserId(res.userId);
-          } else {
-            enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
-          }
-        })
-        .catch(() => {
-          setLoading(false);
-          enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
-        });
-    }
-  }, [session]);
+    callbackSignUpGoogle();
+  }, []);
 
   if (loading) return <Spinner />;
-
-  console.log(Config);
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -106,6 +83,28 @@ const SignUp = () => {
         setLoading(false);
         enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
       });
+  };
+
+  const callbackSignUpGoogle = () => {
+    if (activeStep === 0 && session && session.user) {
+      signUpGoogle({
+        name: session.user.name as string,
+        email: session.user.email as string,
+        accessToken: session.accessToken as string,
+      })
+        .then((res) => {
+          if (res.succeeded) {
+            setActiveStep(1);
+            setUserId(res.userId);
+          } else {
+            setSignUpRequestErrors(res.errors);
+            enqueueSnackbar(res.errors.custom ? res.errors.custom : "登録に失敗しました", { variant: "error" });
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
+        });
+    }
   };
 
   const handleSignUpEmail = (e: any) => {

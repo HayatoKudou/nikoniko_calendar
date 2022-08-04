@@ -4,14 +4,18 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
+import { GoogleLoginButton } from "react-social-login-buttons";
 import { useSetRecoilState } from "recoil";
-import signIn, { SignInRequestErrors } from "../../api/auth/sign_in";
+import signInEmail, { SignInRequestErrors } from "../../api/auth/sign_in_email";
+import signInGoogle from "../../api/auth/sign_in_google";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 
@@ -19,6 +23,7 @@ const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const setMe = useSetRecoilState(useMe);
+  const { data: session } = useSession();
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     email: "",
@@ -26,12 +31,16 @@ const SignIn = () => {
   });
   const [signInRequestErrors, setSignInRequestErrors] = React.useState<Partial<SignInRequestErrors>>({});
 
+  React.useEffect(() => {
+    callbackSignInGoogle();
+  }, []);
+
   if (loading) return <Spinner />;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignInEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    signIn({
+    signInEmail({
       email: formValues.email,
       password: formValues.password,
     })
@@ -52,6 +61,27 @@ const SignIn = () => {
       });
   };
 
+  const callbackSignInGoogle = () => {
+    console.log(session);
+    if (session && session.user) {
+      signInGoogle({
+        email: session.user.email as string,
+        accessToken: session.accessToken as string,
+      })
+        .then((res) => {
+          if (res.succeeded) {
+            router.push(`/${res.user.clientId}/dashboard`);
+            enqueueSnackbar("ログインしました。", { variant: "success" });
+          } else {
+            enqueueSnackbar(res.errors.custom ? res.errors.custom : "ログインに失敗しました", { variant: "error" });
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
+        });
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -60,7 +90,7 @@ const SignIn = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <Box
         sx={{
@@ -72,7 +102,19 @@ const SignIn = () => {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+        <Grid container spacing={2} component="form" onSubmit={handleSignInEmail}>
+          <Grid item xs={12}>
+            {/*@ts-ignore*/}
+            <GoogleLoginButton onClick={() => signIn("google")} style={{ fontSize: "1rem" }}>
+              <span>Google連携</span>
+            </GoogleLoginButton>
+          </Grid>
+
+          <Grid item xs={12} sx={{ marginTop: 2 }}>
+            <Divider>or</Divider>
+          </Grid>
+
           <TextField
             onChange={handleChange}
             margin="normal"
@@ -111,7 +153,7 @@ const SignIn = () => {
               </Link>
             </Grid>
           </Grid>
-        </Box>
+        </Grid>
       </Box>
     </Container>
   );
