@@ -41,14 +41,14 @@ const MenuList = (props: { open: boolean }) => {
   const [menuList, setMenuList] = React.useState([
     { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
     { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
-    { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` }
+    { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
   ]);
 
   React.useEffect(() => {
     setSelected(router.asPath);
-    if (me.role.is_book_manager){
-      setMenuList([...menuList, { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` }])
-    };
+    if (me.role.is_book_manager) {
+      setMenuList([...menuList, { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` }]);
+    }
   }, []);
 
   const handleSelect = (path: string | null) => {

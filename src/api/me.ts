@@ -1,6 +1,4 @@
-import { useRecoilValue } from "recoil";
 import Config from "../../config";
-import { useMe } from "../store/me";
 
 const AuthenticatedAccount = async (clientId: number, apiToken: string) => {
   const endpoint = `${Config.apiOrigin}/api/${clientId}/user`;
