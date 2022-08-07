@@ -12,6 +12,11 @@ const AuthenticatedAccount = async () => {
       Authorization: `Bearer ${me.apiToken}`,
     },
   });
+
+  if (!res.ok) {
+    throw new Error(`failed to request. url=${endpoint} status=${res.status}`);
+  }
+
   return await res.json();
 };
 

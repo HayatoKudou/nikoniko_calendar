@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { useSetRecoilState } from "recoil";
+import GenerateGoogleOauthUrl from "../../api/auth/generate_google_oauth_url";
 import signInEmail, { SignInRequestErrors } from "../../api/auth/sign_in_email";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
@@ -55,22 +56,16 @@ const SignIn = () => {
   };
 
   const handleSignInGoogle = () => {
-    console.log("callbackSignInGoogle");
-    // signInGoogle({
-    //   email: session.user.email as string,
-    //   accessToken: session.accessToken as string,
-    // })
-    //   .then((res) => {
-    //     if (res.succeeded) {
-    //       router.push(`/${res.user.clientId}/dashboard`);
-    //       enqueueSnackbar("ログインしました。", { variant: "success" });
-    //     } else {
-    //       enqueueSnackbar(res.errors.custom ? res.errors.custom : "ログインに失敗しました", { variant: "error" });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     enqueueSnackbar(`登録に失敗しました`, { variant: "error" });
-    //   });
+    setLoading(true);
+    GenerateGoogleOauthUrl()
+      .then((res) => {
+        setLoading(false);
+        router.push(res.connectUrl);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
+      });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,47 +97,52 @@ const SignIn = () => {
             </GoogleLoginButton>
           </Grid>
 
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Grid item xs={12}>
             <Divider>or</Divider>
           </Grid>
 
-          <TextField
-            onChange={handleChange}
-            margin="normal"
-            required
-            fullWidth
-            label="メールアドレス"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            helperText={signInRequestErrors?.email}
-            error={signInRequestErrors?.email !== undefined}
-          />
-          <TextField
-            onChange={handleChange}
-            margin="normal"
-            required
-            fullWidth
-            label="パスワード"
-            name="password"
-            type="password"
-            helperText={signInRequestErrors?.password}
-            error={signInRequestErrors?.password !== undefined}
-          />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            ログイン
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forget-password" variant="body2">
-                {"パスワードを忘れましたか？"}
-              </Link>
-            </Grid>
-            <Grid item xs>
-              <Link href={"/sign-up"} variant="body2">
-                {"アカウントをお持ちではありませんか？"}
-              </Link>
-            </Grid>
+          <Grid item xs={12}>
+            <TextField
+              onChange={handleChange}
+              required
+              fullWidth
+              label="メールアドレス"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              helperText={signInRequestErrors?.email}
+              error={signInRequestErrors?.email !== undefined}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              onChange={handleChange}
+              required
+              fullWidth
+              label="パスワード"
+              name="password"
+              type="password"
+              helperText={signInRequestErrors?.password}
+              error={signInRequestErrors?.password !== undefined}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth variant="contained">
+              ログイン
+            </Button>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Link href="/forget-password" variant="body2">
+              {"パスワードを忘れましたか？"}
+            </Link>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Link href={"/sign-up"} variant="body2">
+              {"アカウントをお持ちではありませんか？"}
+            </Link>
           </Grid>
         </Grid>
       </Box>

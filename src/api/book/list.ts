@@ -1,5 +1,5 @@
 import { useSnackbar } from "notistack";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 import Config from "../../../config";
 import { useMe } from "../../store/me";
