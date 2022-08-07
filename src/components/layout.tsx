@@ -17,24 +17,28 @@ const Layout = ({ children }: any) => {
     },
   });
 
+  React.useEffect(() => {
+    const authExclusionPath = ["/sign-up", "/sign-in", "/forget-password", "/password-setting"];
+    const pathname = router.pathname;
+    if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
+      console.log(pathname)
+      authenticatedAccount();
+      if (me && me.clientId && pathname === "/") {
+        router.push(`/${me.clientId}/dashboard`);
+      }
+    }
+  }, [])
+
   const authenticatedAccount = () => {
-    AuthenticatedAccount()
+    AuthenticatedAccount(me.clientId, me.apiToken)
       .then((res) => {
         setMe(res.user);
       })
-      .catch(() => {
-        router.push("/sign-in");
+      .catch((e) => {
+        console.log(e)
+        // router.push("/sign-in");
       });
   };
-
-  const authExclusionPath = ["/sign-up", "/sign-in", "/forget-password", "/password-setting"];
-  const pathname = router.pathname;
-  if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
-    authenticatedAccount();
-    if (me && me.clientId && pathname === "/") {
-      router.push(`/${me.clientId}/dashboard`);
-    }
-  }
 
   return (
     <ThemeProvider theme={theme}>

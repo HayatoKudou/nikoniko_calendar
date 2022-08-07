@@ -63,7 +63,7 @@ const MenuList = (props: { open: boolean }) => {
 
   return (
     <>
-      <List>
+      <List component="div">
         <ListItemButton
           sx={{
             minHeight: 48,

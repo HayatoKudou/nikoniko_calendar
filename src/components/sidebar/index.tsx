@@ -109,7 +109,6 @@ export default function Sidebar(props: { children: any }) {
 
   const logout = () => {
     resetMe();
-    router.push("/sign-in");
   };
 
   const isMenuOpen = Boolean(anchorEl);

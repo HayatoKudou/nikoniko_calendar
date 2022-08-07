@@ -38,9 +38,17 @@ const MenuList = (props: { open: boolean }) => {
   const router = useRouter();
   const me = useRecoilValue(useMe);
   const [selected, setSelected] = React.useState<string>();
+  const [menuList, setMenuList] = React.useState([
+    { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
+    { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
+    { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` }
+  ]);
 
   React.useEffect(() => {
     setSelected(router.asPath);
+    if (me.role.is_book_manager){
+      setMenuList([...menuList, { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` }])
+    };
   }, []);
 
   const handleSelect = (path: string | null) => {
@@ -50,19 +58,8 @@ const MenuList = (props: { open: boolean }) => {
     }
   };
 
-  let menuList: { name: string; title: string | undefined; path: string | null }[] = [];
-
-  if (me) {
-    menuList = [
-      { name: "dashboard", title: "ダッシュボード", path: `/${me.clientId}/dashboard` },
-      { name: "books", title: "書籍管理", path: `/${me.clientId}/books` },
-      { name: "users", title: "ユーザー管理", path: `/${me.clientId}/users` },
-    ];
-    if (me.role.is_book_manager) menuList.push({ name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` });
-  }
-
   return (
-    <List>
+    <List component="div">
       {menuList.map((menu, index) => (
         <ListItemButton
           onClick={() => handleSelect(menu.path)}
