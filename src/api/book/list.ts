@@ -1,12 +1,12 @@
 import { useSnackbar } from "notistack";
-import { useRecoilState } from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import useSWR from "swr";
 import Config from "../../../config";
 import { useMe } from "../../store/me";
 
 const useBooks = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
   const endpoint = `${Config.apiOrigin}/api/${me.clientId}/books`;
   const fetcher = (endpoint: string) =>
     fetch(endpoint, {

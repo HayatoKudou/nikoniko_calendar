@@ -3,44 +3,29 @@ import Config from "../../../config";
 interface SignUpGoogleRequestPayload {
   name: string;
   email: string;
-  accessToken: string;
-}
-
-export interface SignUpGoogleRequestErrors {
-  name: Array<string>;
-  email: Array<string>;
-  accessToken: Array<string>;
-  custom: string;
+  oauthToken: string;
 }
 
 interface SignUpGoogleResult {
-  succeeded: boolean;
   userId?: number;
-  errors: Partial<SignUpGoogleRequestErrors>;
 }
 
-const signUpGoogle = async (payload: SignUpGoogleRequestPayload): Promise<SignUpGoogleResult> => {
-  const endpoint = `${Config.apiOrigin}/api/signUpGoogle`;
+const SignUpGoogle = async (payload: SignUpGoogleRequestPayload): Promise<SignUpGoogleResult> => {
+  const endpoint = `${Config.apiOrigin}/google/auth/callback`;
 
   const res = await fetch(endpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(payload),
+    headers: { Accept: "application/json" },
   });
   const response = await res.json();
 
   if (!res.ok) {
-    return {
-      succeeded: false,
-      errors: response.errors,
-    };
+    throw new Error(`failed to request. url=${endpoint} status=${res.status}`);
   }
 
   return {
-    succeeded: true,
     userId: response.userId,
-    errors: {},
   };
 };
 
-export default signUpGoogle;
+export default SignUpGoogle;

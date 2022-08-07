@@ -14,7 +14,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
@@ -110,19 +109,10 @@ export default function Sidebar(props: { children: any }) {
 
   const logout = () => {
     resetMe();
-    signOut();
     router.push("/sign-in");
   };
 
   const isMenuOpen = Boolean(anchorEl);
-  const renderMenu = (
-    <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={() => setAnchorEl(null)}>
-      <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-      {me.role.is_client_manager ? <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem> : <></>}
-      <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
-      <ConfirmDialog message={"ログアウトしますか？"} open={openLogoutConfirm} onClose={() => setOpenLogoutConfirm(false)} handleSubmit={logout} />
-    </Menu>
-  );
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -159,14 +149,24 @@ export default function Sidebar(props: { children: any }) {
             </Box>
           )}
           <StyleSetting />
-          {me.id && (
+          {me && me.id && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
                 <AccountCircle sx={{ fontSize: "30px" }} />
               </IconButton>
-              {renderMenu}
+              <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={() => setAnchorEl(null)}>
+                <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
+                {me.role.is_client_manager ? <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem> : <></>}
+                <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
+                <ConfirmDialog
+                  message={"ログアウトしますか？"}
+                  open={openLogoutConfirm}
+                  onClose={() => setOpenLogoutConfirm(false)}
+                  handleSubmit={logout}
+                />
+              </Menu>
             </>
           )}
         </Toolbar>

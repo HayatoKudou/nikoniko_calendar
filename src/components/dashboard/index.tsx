@@ -21,7 +21,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import Config from "../../../config";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import useBooks from "../../api/book/list";
@@ -60,10 +60,10 @@ function TabPanel(props: TabPanelProps) {
 
 const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const me = useRecoilValue(useMe);
+  const [me, setMe] = useRecoilState(useMe);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
-  const [, setBookCategory] = useRecoilState(useBookCategories);
+  const setBookCategory = useSetRecoilState(useBookCategories);
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [creating, setCreating] = React.useState<boolean>(false);
