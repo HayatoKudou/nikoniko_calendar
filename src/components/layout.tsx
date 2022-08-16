@@ -21,7 +21,9 @@ const Layout = ({ children }: any) => {
     const authExclusionPath = ["/sign-up", "/sign-in", "/forget-password", "/password-setting"];
     const pathname = router.pathname;
     if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
-      console.log(pathname);
+      if(!me || me.id === null){
+        router.push("/sign-in");
+      }
       authenticatedAccount();
       if (me && me.clientId && pathname === "/") {
         router.push(`/${me.clientId}/dashboard`);
@@ -34,9 +36,8 @@ const Layout = ({ children }: any) => {
       .then((res) => {
         setMe(res.user);
       })
-      .catch((e) => {
-        console.log(e);
-        // router.push("/sign-in");
+      .catch(() => {
+        router.push("/sign-in");
       });
   };
 

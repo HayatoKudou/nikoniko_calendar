@@ -109,6 +109,7 @@ export default function Sidebar(props: { children: any }) {
 
   const logout = () => {
     resetMe();
+    router.push("/sign-in");
   };
 
   const isMenuOpen = Boolean(anchorEl);
@@ -118,17 +119,19 @@ export default function Sidebar(props: { children: any }) {
       <CssBaseline />
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={() => setSideDrawerOpen(true)}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(sideDrawerOpen && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {(me && me.id) && (
+            <IconButton
+              color="inherit"
+              onClick={() => setSideDrawerOpen(true)}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(sideDrawerOpen && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography
             variant="h6"
             noWrap
@@ -148,7 +151,7 @@ export default function Sidebar(props: { children: any }) {
             </Box>
           )}
           <StyleSetting />
-          {me && me.id && (
+          {(me && me.id) && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
@@ -170,14 +173,16 @@ export default function Sidebar(props: { children: any }) {
           )}
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={sideDrawerOpen}>
-        <DrawerHeader>
-          <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
-        </DrawerHeader>
-        <MenuList open={sideDrawerOpen} />
-        <Divider />
-        <MenuList2 open={sideDrawerOpen} />
-      </Drawer>
+      {(me && me.id) && (
+        <Drawer variant="permanent" open={sideDrawerOpen}>
+          <DrawerHeader>
+            <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+          </DrawerHeader>
+          <MenuList open={sideDrawerOpen} />
+          <Divider />
+          <MenuList2 open={sideDrawerOpen} />
+        </Drawer>
+      )}
       <Box sx={{ width: "100%", margin: "72px auto 0 auto", padding: 2 }}>{props.children}</Box>
     </Box>
   );
