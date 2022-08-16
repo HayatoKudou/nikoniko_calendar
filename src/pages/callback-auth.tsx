@@ -16,7 +16,6 @@ const Index = () => {
         name: router.query.name,
         email: router.query.email,
         apiToken: router.query.apiToken,
-        purchase_balance: router.query.purchase_balance,
         role: {
           is_account_manager: Boolean(router.query.is_account_manager),
           is_book_manager: Boolean(router.query.is_book_manager),

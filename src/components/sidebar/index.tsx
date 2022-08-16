@@ -119,7 +119,7 @@ export default function Sidebar(props: { children: any }) {
       <CssBaseline />
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
-          {(me && me.id) && (
+          {me && me.id && (
             <IconButton
               color="inherit"
               onClick={() => setSideDrawerOpen(true)}
@@ -151,7 +151,7 @@ export default function Sidebar(props: { children: any }) {
             </Box>
           )}
           <StyleSetting />
-          {(me && me.id) && (
+          {me && me.id && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
@@ -173,7 +173,7 @@ export default function Sidebar(props: { children: any }) {
           )}
         </Toolbar>
       </AppBar>
-      {(me && me.id) && (
+      {me && me.id && (
         <Drawer variant="permanent" open={sideDrawerOpen}>
           <DrawerHeader>
             <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>

@@ -21,7 +21,7 @@ const Layout = ({ children }: any) => {
     const authExclusionPath = ["/sign-up", "/sign-in", "/forget-password", "/password-setting"];
     const pathname = router.pathname;
     if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
-      if(!me || me.id === null){
+      if (!me || me.id === null) {
         router.push("/sign-in");
       }
       authenticatedAccount();

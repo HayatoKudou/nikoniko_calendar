@@ -1,18 +1,13 @@
 import CheckIcon from "@mui/icons-material/Check";
-import { FormGroup } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Checkbox from "@mui/material/Checkbox";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import InputAdornment from "@mui/material/InputAdornment";
-import MenuItem from "@mui/material/MenuItem";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
@@ -32,21 +27,6 @@ interface Props {
   onClose: () => void;
 }
 
-const purchaseLimitUnits = [
-  {
-    value: "everyYear",
-    label: "年",
-  },
-  {
-    value: "monthly",
-    label: "月",
-  },
-  {
-    value: "weekly",
-    label: "週",
-  },
-];
-
 const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { label: "通知設定" }];
 
 const ClientProfile = (props: Props) => {
@@ -58,10 +38,6 @@ const ClientProfile = (props: Props) => {
     id: 0,
     name: "",
     plan: "",
-    enablePurchaseLimit: false,
-    purchaseLimit: 0,
-    purchaseLimitUnit: "monthly",
-    privateOwnershipAllow: false,
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
@@ -73,10 +49,6 @@ const ClientProfile = (props: Props) => {
         id: response.client.id,
         name: response.client.name,
         plan: response.client.plan,
-        enablePurchaseLimit: response.client.enablePurchaseLimit,
-        purchaseLimit: response.client.purchaseLimit,
-        purchaseLimitUnit: response.client.purchaseLimitUnit,
-        privateOwnershipAllow: response.client.privateOwnershipAllow,
       });
     }
   }, [response]);
@@ -90,13 +62,6 @@ const ClientProfile = (props: Props) => {
     });
   };
 
-  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.checked,
-    });
-  };
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     if (newValue !== undefined) {
       setOpenTabValue(newValue);
@@ -107,10 +72,6 @@ const ClientProfile = (props: Props) => {
     setUpdating(true);
     Update(me.clientId, {
       name: formValues.name,
-      enable_purchase_limit: formValues.enablePurchaseLimit,
-      purchase_limit: formValues.purchaseLimit,
-      purchase_limit_unit: formValues.purchaseLimitUnit,
-      private_ownership_allow: formValues.privateOwnershipAllow,
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -162,57 +123,6 @@ const ClientProfile = (props: Props) => {
                   helperText={createRequestErrors?.name}
                   error={createRequestErrors?.name !== undefined}
                 />
-
-                <FormGroup sx={{ whiteSpace: "nowrap", marginTop: 3 }}>
-                  <FormControlLabel
-                    control={<Checkbox checked={formValues.enablePurchaseLimit} onChange={handleClick} name="enablePurchaseLimit" />}
-                    label="購入補助金上限を設定する"
-                  />
-                </FormGroup>
-
-                {formValues.enablePurchaseLimit && (
-                  <>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <TextField
-                        value={formValues.purchaseLimit}
-                        fullWidth
-                        onChange={handleChange}
-                        name={"purchaseLimit"}
-                        label={"購入補助金上限"}
-                        required
-                        variant="standard"
-                        margin={"normal"}
-                        type={"number"}
-                        InputProps={{ startAdornment: <InputAdornment position="start">¥</InputAdornment> }}
-                        helperText={createRequestErrors?.purchase_limit}
-                        error={createRequestErrors?.purchase_limit !== undefined}
-                      />
-                      <Box sx={{ padding: 2 }}>/</Box>
-                      <TextField
-                        select
-                        name={"purchaseLimitUnit"}
-                        value={formValues.purchaseLimitUnit}
-                        onChange={handleChange}
-                        sx={{ minWidth: "80px" }}
-                        helperText={createRequestErrors?.purchase_limit_unit}
-                        error={createRequestErrors?.purchase_limit_unit !== undefined}
-                      >
-                        {purchaseLimitUnits.map((purchaseLimitUnit, index) => (
-                          <MenuItem key={index} value={purchaseLimitUnit.value}>
-                            {purchaseLimitUnit.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Box>
-                  </>
-                )}
-
-                <FormGroup sx={{ whiteSpace: "nowrap" }}>
-                  <FormControlLabel
-                    control={<Checkbox checked={formValues.privateOwnershipAllow} onChange={handleClick} name="privateOwnershipAllow" />}
-                    label="個人所有を許可"
-                  />
-                </FormGroup>
               </>
             )}
 

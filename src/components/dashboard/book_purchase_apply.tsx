@@ -6,12 +6,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
@@ -42,7 +38,6 @@ const BookPurchaseApply = (props: Props) => {
   const [title, setTitle] = React.useState("");
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
-    bookOwner: "team",
     bookCategoryName: "ALL",
     title: "",
     description: "",
@@ -191,48 +186,19 @@ const BookPurchaseApply = (props: Props) => {
             error={bookPurchaseApplyRequestErrors?.reason !== undefined}
           />
 
-          <FormControl sx={{ display: "block", marginTop: 1 }}>
-            <FormLabel sx={{ marginRight: 2 }}>所有者</FormLabel>
-            <RadioGroup value={formValues.bookOwner} sx={{ display: "inline" }}>
-              <FormControlLabel name="bookOwner" value="team" onChange={handleChange} control={<Radio />} label="組織" />
-              <FormControlLabel
-                name="bookOwner"
-                value="private"
-                onChange={handleChange}
-                control={<Radio disabled={!props.client.privateOwnershipAllow} />}
-                label="個人"
-              />
-            </RadioGroup>
-            <TextField
-              onChange={handleChange}
-              value={formValues.price}
-              name="price"
-              autoFocus
-              label="価格"
-              variant="standard"
-              required
-              helperText={bookPurchaseApplyRequestErrors?.price}
-              error={bookPurchaseApplyRequestErrors?.price !== undefined}
-            />
-          </FormControl>
-
-          {props.client.enablePurchaseLimit ? (
-            <Box sx={{ margin: "16px 32px", padding: 1, border: "solid 1px" }}>
-              <Box sx={{ display: "flex" }}>
-                現在の購入補助上限：<Box sx={{ marginLeft: "auto" }}>{"¥" + me.purchase_balance}</Box>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                書籍の価格：<Box sx={{ marginLeft: "auto" }}>{"¥" + formValues.price}</Box>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                購入補助残高：<Box sx={{ marginLeft: "auto" }}>{"¥" + (me.purchase_balance - formValues.price)}</Box>
-              </Box>
-              {me.purchase_balance - formValues.price < 0 && <Box sx={{ color: "red", textAlign: "right" }}>※ 購入補助残高を超えています</Box>}
-              {isNaN(me.purchase_balance - formValues.price) && <Box sx={{ color: "red", textAlign: "right" }}>※ 無効な値が入力されました</Box>}
-            </Box>
-          ) : (
-            <></>
-          )}
+          <TextField
+            onChange={handleChange}
+            value={formValues.price}
+            name="price"
+            autoFocus
+            label="価格"
+            variant="standard"
+            margin={"dense"}
+            fullWidth
+            required
+            helperText={bookPurchaseApplyRequestErrors?.price}
+            error={bookPurchaseApplyRequestErrors?.price !== undefined}
+          />
 
           <TextField
             onChange={handleChange}

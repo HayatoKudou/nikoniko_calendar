@@ -2,8 +2,6 @@ import Config from "../../../config";
 
 export interface UpdateClientRequestErrors {
   name: Array<string>;
-  purchase_limit: Array<string>;
-  purchase_limit_unit: Array<string>;
 }
 
 interface UpdateClientResult {
@@ -13,10 +11,6 @@ interface UpdateClientResult {
 
 interface UpdateClientRequestPayload {
   name: string;
-  enable_purchase_limit: boolean;
-  purchase_limit: number;
-  purchase_limit_unit: string;
-  private_ownership_allow: boolean;
   apiToken: string;
 }
 
