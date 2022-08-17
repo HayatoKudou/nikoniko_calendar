@@ -216,7 +216,7 @@ const Dashboard = () => {
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} />
           ))}
-          {me.role.is_book_manager && (
+          {me.role.isBookManager && (
             <Box className={styles.dashboard__bookCategoryForm}>
               <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
                 {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}

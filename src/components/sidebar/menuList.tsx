@@ -46,7 +46,7 @@ const MenuList = (props: { open: boolean }) => {
 
   React.useEffect(() => {
     setSelected(router.asPath);
-    if (me.role.is_book_manager) {
+    if (me.role.isBookManager) {
       setMenuList([...menuList, { name: "purchaseApplies", title: "書籍購入申請", path: `/${me.clientId}/purchase-applies` }]);
     }
   }, []);

@@ -75,7 +75,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-      ) : me.role.is_account_manager ? (
+      ) : me.role.isAccountManager ? (
         <Chip icon={<AddIcon />} label="ユーザー追加" onClick={props.handleCreate} />
       ) : (
         <></>
@@ -107,7 +107,7 @@ const CustomTable = (props: Props) => {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    if (!me.role.is_account_manager) {
+    if (!me.role.isAccountManager) {
       return;
     }
     const selectedIndex = props.selected.indexOf(id);
@@ -150,8 +150,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.users.length}
             headCells={headCells}
-            showActionIcon={me.role.is_account_manager}
-            showCheckBox={me.role.is_account_manager}
+            showActionIcon={me.role.isAccountManager}
+            showCheckBox={me.role.isAccountManager}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -169,7 +169,7 @@ const CustomTable = (props: Props) => {
                     key={user.id}
                     selected={isItemSelected}
                   >
-                    {me.role.is_account_manager ? (
+                    {me.role.isAccountManager ? (
                       <>
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} />
@@ -186,9 +186,9 @@ const CustomTable = (props: Props) => {
                     <TableCell align="center">{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
                     <TableCell align="center">
-                      {user.role.is_account_manager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
-                      {user.role.is_book_manager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
-                      {user.role.is_client_manager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isClientManager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
                     </TableCell>
                   </TableRow>
                 );

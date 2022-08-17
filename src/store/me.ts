@@ -12,9 +12,9 @@ export const useMe = atom({
     email: "",
     apiToken: "",
     role: {
-      is_account_manager: false,
-      is_book_manager: false,
-      is_client_manager: false,
+      isAccountManager: false,
+      isBookManager: false,
+      isClientManager: false,
     },
   },
   effects_UNSTABLE: [persistAtom],

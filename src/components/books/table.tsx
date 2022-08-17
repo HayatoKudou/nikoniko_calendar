@@ -93,7 +93,7 @@ const TableToolbar = (props: TableToolbarProps) => {
         </Tooltip>
       ) : (
         <>
-          {me.role.is_book_manager ? (
+          {me.role.isBookManager ? (
             <>
               <Chip icon={<AddIcon />} label="書籍登録" onClick={props.handleCreate} sx={{ margin: "2px" }} />
               <Chip icon={<UploadIcon />} label="CSVアップロード" onClick={props.handleCsvUpload} sx={{ margin: "2px" }} />
@@ -142,7 +142,7 @@ const CustomTable = (props: Props) => {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    if (!me.role.is_account_manager) {
+    if (!me.role.isAccountManager) {
       return;
     }
     const selectedIndex = props.selected.indexOf(id);
@@ -191,8 +191,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.books.length}
             headCells={headCells}
-            showActionIcon={me.role.is_book_manager}
-            showCheckBox={me.role.is_book_manager}
+            showActionIcon={me.role.isBookManager}
+            showCheckBox={me.role.isBookManager}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -211,7 +211,7 @@ const CustomTable = (props: Props) => {
                     key={book.id}
                     selected={isItemSelected}
                   >
-                    {me.role.is_book_manager ? (
+                    {me.role.isBookManager ? (
                       <>
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} />

@@ -44,9 +44,9 @@ const UpdateUser = (props: Props) => {
 
   React.useEffect(() => {
     const roles: Array<string> = [];
-    if (props.user.role.is_account_manager) roles.push("アカウント管理");
-    if (props.user.role.is_book_manager) roles.push("書籍管理");
-    if (props.user.role.is_client_manager) roles.push("組織管理");
+    if (props.user.role.isAccountManager) roles.push("アカウント管理");
+    if (props.user.role.isBookManager) roles.push("書籍管理");
+    if (props.user.role.isClientManager) roles.push("組織管理");
     setFormValues({
       id: props.user.id,
       name: props.user.name,
@@ -109,14 +109,14 @@ const UpdateUser = (props: Props) => {
       });
   };
 
-  const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
+  const roles = ["is_account_manager", "isBookManager", "isClientManager"];
   const displayRoleName = (roleValue: string) => {
     switch (roleValue) {
-      case "is_account_manager":
+      case "isAccountManager":
         return "アカウント管理";
-      case "is_book_manager":
+      case "isBookManager":
         return "書籍管理";
-      case "is_client_manager":
+      case "isClientManager":
         return "組織管理";
       default:
         return "unknown";

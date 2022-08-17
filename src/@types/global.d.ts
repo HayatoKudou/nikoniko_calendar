@@ -5,9 +5,9 @@ interface User {
   email: string;
   apiToken: string;
   role: {
-    is_account_manager: number;
-    is_book_manager: number;
-    is_client_manager: number;
+    isAccountManager: number;
+    isBookManager: number;
+    isClientManager: number;
   };
 }
 

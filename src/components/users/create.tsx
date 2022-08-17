@@ -89,14 +89,14 @@ const CreateUser = (props: Props) => {
       });
   };
 
-  const roles = ["is_account_manager", "is_book_manager", "is_client_manager"];
+  const roles = ["isAccountManager", "isBookManager", "isClientManager"];
   const displayRoleName = (roleValue: string) => {
     switch (roleValue) {
-      case "is_account_manager":
+      case "isAccountManager":
         return "アカウント管理";
-      case "is_book_manager":
+      case "isBookManager":
         return "書籍管理";
-      case "is_client_manager":
+      case "isClientManager":
         return "組織管理";
       default:
         return "unknown";

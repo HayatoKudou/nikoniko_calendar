@@ -17,9 +17,9 @@ const Index = () => {
         email: router.query.email,
         apiToken: router.query.apiToken,
         role: {
-          is_account_manager: Boolean(router.query.is_account_manager),
-          is_book_manager: Boolean(router.query.is_book_manager),
-          is_client_manager: Boolean(router.query.is_client_manager),
+          isAccountManager: Boolean(router.query.isAccountManager),
+          isBookManager: Boolean(router.query.isBookManager),
+          isClientManager: Boolean(router.query.isClientManager),
         },
       });
       router.push(`/${router.query.clientId}/dashboard`);
