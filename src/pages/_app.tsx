@@ -1,8 +1,9 @@
 import "../styles/globals.css";
-import { StyledEngineProvider } from "@mui/material";
+import {CssBaseline, StyledEngineProvider} from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
 import type { AppProps } from "next/app";
+import * as React from "react";
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,6 +16,7 @@ function App({ Component, pageProps }: AppProps) {
             horizontal: "left",
           }}
         >
+          <CssBaseline />
           <Component {...pageProps} />
         </SnackbarProvider>
       </RecoilRoot>

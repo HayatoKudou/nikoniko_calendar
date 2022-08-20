@@ -5,6 +5,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
+import AuthenticatedAccount from "../api/me";
+import {CssBaseline} from "@mui/material";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
@@ -15,33 +17,35 @@ const Layout = ({ children }: any) => {
       mode: colorMode,
     },
   });
+  console.log(theme);
 
-  // React.useEffect(() => {
-  //   const authExclusionPath = ["/sign-in", "/forget-password", "/password-setting"];
-  //   const pathname = router.pathname;
-  //   if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
-  //     if (!me || me.id === null) {
-  //       router.push("/sign-in");
-  //     }
-  //     authenticatedAccount();
-  //     if (me && me.clientId && pathname === "/") {
-  //       router.push(`/${me.clientId}/dashboard`);
-  //     }
-  //   }
-  // }, []);
-  //
-  // const authenticatedAccount = () => {
-  //   AuthenticatedAccount(me.clientId, me.apiToken)
-  //     .then((res) => {
-  //       setMe(res.user);
-  //     })
-  //     .catch(() => {
-  //       router.push("/sign-in");
-  //     });
-  // };
+  React.useEffect(() => {
+    const authExclusionPath = ["/sign-in", "/forget-password", "/password-setting"];
+    const pathname = router.pathname;
+    if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
+      if (!me || me.id === null) {
+        router.push("/sign-in");
+      }
+      authenticatedAccount();
+      if (me && me.clientId && pathname === "/") {
+        router.push(`/${me.clientId}/dashboard`);
+      }
+    }
+  }, []);
+
+  const authenticatedAccount = () => {
+    AuthenticatedAccount(me.clientId, me.apiToken)
+      .then((res) => {
+        setMe(res.user);
+      })
+      .catch(() => {
+        router.push("/sign-in");
+      });
+  };
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Sidebar>{children}</Sidebar>
     </ThemeProvider>
   );
