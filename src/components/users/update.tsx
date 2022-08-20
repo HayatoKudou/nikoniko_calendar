@@ -35,8 +35,6 @@ const UpdateUser = (props: Props) => {
     name: "",
     email: "",
     roles: [],
-    password: "",
-    password_confirmation: "",
     apiToken: "",
   });
   const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
@@ -51,8 +49,6 @@ const UpdateUser = (props: Props) => {
       id: props.user.id,
       name: props.user.name,
       email: props.user.email,
-      password: "",
-      password_confirmation: "",
       roles: roles,
       apiToken: me.apiToken,
     });
@@ -82,8 +78,6 @@ const UpdateUser = (props: Props) => {
       name: formValues.name,
       email: formValues.email,
       roles: formValues.roles,
-      password: formValues.password,
-      password_confirmation: formValues.password_confirmation,
       apiToken: formValues.apiToken,
     })
       .then((res) => {

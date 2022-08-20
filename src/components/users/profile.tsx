@@ -26,8 +26,6 @@ const MyProfile = (props: Props) => {
     id: 0,
     name: "",
     email: "",
-    password: "",
-    passwordConfirmation: "",
     apiToken: "",
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
@@ -38,8 +36,6 @@ const MyProfile = (props: Props) => {
       id: me.id,
       name: me.name,
       email: me.email,
-      password: "",
-      passwordConfirmation: "",
       apiToken: me.apiToken,
     });
   }, []);
@@ -60,8 +56,6 @@ const MyProfile = (props: Props) => {
       name: formValues.name,
       email: formValues.email,
       roles: [],
-      password: formValues.password,
-      password_confirmation: formValues.passwordConfirmation,
       apiToken: formValues.apiToken,
     })
       .then((res) => {
@@ -116,36 +110,6 @@ const MyProfile = (props: Props) => {
               margin={"normal"}
               helperText={createRequestErrors?.email}
               error={createRequestErrors?.email !== undefined}
-            />
-
-            <TextField
-              type={"password"}
-              value={formValues.password}
-              fullWidth
-              onChange={handleChange}
-              name={"password"}
-              label={"パスワード"}
-              required
-              inputProps={{ minLength: 1, maxLength: 255 }}
-              variant="standard"
-              margin={"normal"}
-              helperText={createRequestErrors?.password}
-              error={createRequestErrors?.password !== undefined}
-            />
-
-            <TextField
-              type={"password"}
-              value={formValues.passwordConfirmation}
-              fullWidth
-              onChange={handleChange}
-              name={"passwordConfirmation"}
-              label={"パスワード確認"}
-              required
-              inputProps={{ minLength: 1, maxLength: 255 }}
-              variant="standard"
-              margin={"normal"}
-              helperText={createRequestErrors?.password_confirmation}
-              error={createRequestErrors?.password_confirmation !== undefined}
             />
 
             <ConfirmDialog

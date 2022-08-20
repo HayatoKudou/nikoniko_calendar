@@ -4,8 +4,6 @@ export interface UpdateUserRequestErrors {
   name: Array<string>;
   email: Array<string>;
   roles: Array<string>;
-  password: Array<string>;
-  password_confirmation: Array<string>;
 }
 
 interface UpdateUserResult {
@@ -18,8 +16,6 @@ export interface UpdateUserRequestPayload {
   name: string;
   email: string;
   roles: Array<string>;
-  password: string;
-  password_confirmation: string;
   apiToken: string;
 }
 

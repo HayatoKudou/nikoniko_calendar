@@ -115,7 +115,7 @@ export default function Sidebar(props: { children: any }) {
     <Box className={styles.sidebar}>
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
-          {me && me.id && (
+          {me && (
             <IconButton
               color="inherit"
               onClick={() => setSideDrawerOpen(true)}
@@ -126,21 +126,23 @@ export default function Sidebar(props: { children: any }) {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography noWrap onClick={() => router.push(`/${me.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
+
+          <Typography onClick={() => router.push(`/${me.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
             Read Worth
-            {me && me.id && (
-              <FormControl className={styles.sidebar__choseClient}>
-                <NativeSelect defaultValue={30} disableUnderline>
-                  <option value={10}>Ten</option>
-                  <option value={20}>Twenty</option>
-                  <option value={30}>Thirty</option>
-                </NativeSelect>
-              </FormControl>
-            )}
           </Typography>
 
+          {me && (
+            <FormControl className={styles.sidebar__choseClient}>
+              <NativeSelect defaultValue={30} disableUnderline>
+                <option value={10}>Ten</option>
+                <option value={20}>Twenty</option>
+                <option value={30}>Thirty</option>
+              </NativeSelect>
+            </FormControl>
+          )}
+
           <StyleSetting />
-          {me && me.id && (
+          {me && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
@@ -162,7 +164,7 @@ export default function Sidebar(props: { children: any }) {
           )}
         </Toolbar>
       </AppBar>
-      {me && me.id && (
+      {me && (
         <Drawer variant="permanent" open={sideDrawerOpen}>
           <DrawerHeader>
             <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
