@@ -17,7 +17,6 @@ const Layout = ({ children }: any) => {
       mode: colorMode,
     },
   });
-  console.log(theme);
 
   React.useEffect(() => {
     const authExclusionPath = ["/sign-in", "/forget-password", "/password-setting"];
