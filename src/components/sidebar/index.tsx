@@ -2,12 +2,12 @@ import { AccountCircle } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MenuIcon from "@mui/icons-material/Menu";
+import { NativeSelect } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useMe } from "../../store/me";
+import styles from "../../styles/components/sidebar/index.module.scss";
 import ClientProfile from "../client_proofile";
 import ConfirmDialog from "../parts/confirm_dialog";
 import StyleSetting from "../style_setting";
@@ -98,7 +99,6 @@ const Drawer = styled(MuiDrawer, {
 export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
-  const pathname = router.pathname;
   const me = useRecoilValue(useMe);
   const resetMe = useResetRecoilState(useMe);
   const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
@@ -108,57 +108,46 @@ export default function Sidebar(props: { children: any }) {
   const [openClientProfile, setOpenClientProfile] = React.useState<boolean>(false);
 
   const logout = () => {
-    resetMe();
-    router.push("/sign-in");
+    router.push("/sign-in").then(() => resetMe());
   };
 
-  const isMenuOpen = Boolean(anchorEl);
-
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <Box className={styles.sidebar}>
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
           {me && me.id && (
             <IconButton
               color="inherit"
               onClick={() => setSideDrawerOpen(true)}
+              className={styles.sidebar__toolbarIconButton}
               edge="start"
-              sx={{
-                marginRight: 5,
-                ...(sideDrawerOpen && { display: "none" }),
-              }}
+              sx={{ ...(sideDrawerOpen && { display: "none" }) }}
             >
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            variant="h6"
-            noWrap
-            onClick={() => router.push(`/${me.clientId}/dashboard`)}
-            sx={{ flexGrow: 1, alignSelf: "flex-end", margin: "auto 0" }}
-          >
+          <Typography noWrap onClick={() => router.push(`/${me.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
             Read Worth
+            {me && me.id && (
+              <FormControl className={styles.sidebar__choseClient}>
+                <NativeSelect defaultValue={30} disableUnderline>
+                  <option value={10}>Ten</option>
+                  <option value={20}>Twenty</option>
+                  <option value={30}>Thirty</option>
+                </NativeSelect>
+              </FormControl>
+            )}
           </Typography>
-          {(pathname === "/sign-up" || pathname === "/sign-in") && (
-            <Box sx={{ marginLeft: "auto" }}>
-              <Button color="inherit" onClick={() => router.push("/sign-up")} sx={{ fontSize: "1rem" }}>
-                新規登録
-              </Button>
-              <Button color="inherit" onClick={() => router.push("/sign-in")} sx={{ fontSize: "1rem" }}>
-                ログイン
-              </Button>
-            </Box>
-          )}
+
           <StyleSetting />
           {me && me.id && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
-                <AccountCircle sx={{ fontSize: "30px" }} />
+                <AccountCircle className={styles.sidebar__styleSettingIcon} />
               </IconButton>
-              <Menu anchorEl={anchorEl} color="inherit" open={isMenuOpen} onClose={() => setAnchorEl(null)}>
+              <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
                 {me.role.isClientManager ? <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem> : <></>}
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
@@ -183,7 +172,7 @@ export default function Sidebar(props: { children: any }) {
           <MenuList2 open={sideDrawerOpen} />
         </Drawer>
       )}
-      <Box sx={{ width: "100%", margin: "72px auto 0 auto", padding: 2 }}>{props.children}</Box>
+      <Box className={styles.sidebar__children}>{props.children}</Box>
     </Box>
   );
 }

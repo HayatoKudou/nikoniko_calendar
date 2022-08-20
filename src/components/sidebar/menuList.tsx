@@ -53,8 +53,7 @@ const MenuList = (props: { open: boolean }) => {
 
   const handleSelect = (path: string | null) => {
     if (path) {
-      setSelected(path);
-      router.push(path);
+      router.push(path).then(() => setSelected(path));
     }
   };
 

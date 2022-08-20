@@ -1,0 +1,36 @@
+.sidebar {
+  display: flex;
+
+  &__toolbarIconButton {
+    margin-right: 40px;
+  }
+
+  &__toolbarTitle {
+    flex-grow: 1;
+    align-self: flex-end;
+    margin: auto 0;
+    font-size: 20px;
+  }
+
+  &__choseClient {
+    margin-left: 16px;
+  }
+
+  &__toolbarAuthItems {
+    margin-left: auto;
+  }
+
+  &__toolbarAuthItemsButton {
+    font-size: 1rem;
+  }
+
+  &__styleSettingIcon {
+    font-size: 30px;
+  }
+
+  &__children {
+    width: 100%;
+    margin: 72px auto 0 auto;
+    padding: 16px;
+  }
+}
