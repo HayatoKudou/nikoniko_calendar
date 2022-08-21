@@ -15,6 +15,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import BulkCreate from "../../api/book/bulk_create";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 
@@ -34,6 +35,7 @@ interface CSV {
 const CsvUpload = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [csvData, setCsvData] = React.useState<Array<CSV> | null>(null);
   const [loading, setLoading] = React.useState(false);
   const fileReader = new FileReader();
@@ -71,7 +73,7 @@ const CsvUpload = (props: Props) => {
       return enqueueSnackbar("CSVファイルが選択されていません", { variant: "error" });
     }
     setLoading(true);
-    BulkCreate(me.clientId, {
+    BulkCreate(choseClient.clientId, {
       books: csvData,
       apiToken: me.apiToken,
     })

@@ -10,6 +10,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Notification, { BookPurchaseNotificationRequestErrors } from "../../../api/book/purchase_apply/notification";
 import Refuse from "../../../api/book/purchase_apply/refuse";
+import { useChoseClient } from "../../../store/choseClient";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
@@ -25,6 +26,7 @@ interface Props {
 
 const Step3 = (props: Props) => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const [openNotificationConfirm, setOpenNotificationConfirm] = React.useState<boolean>(false);
@@ -41,7 +43,7 @@ const Step3 = (props: Props) => {
 
   const handleRefuse = () => {
     setLoading(true);
-    Refuse(me.clientId, props.purchaseApply.book.id, {
+    Refuse(choseClient.clientId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -58,7 +60,7 @@ const Step3 = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Notification(me.clientId, props.purchaseApply.book.id, {
+    Notification(choseClient.clientId, props.purchaseApply.book.id, {
       title: formValues.title,
       message: formValues.message,
       apiToken: me.apiToken,

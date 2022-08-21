@@ -2,12 +2,14 @@ import { useSnackbar } from "notistack";
 import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 import Config from "../../../config";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 
 const useClientInfo = () => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const endpoint = `${Config.apiOrigin}/api/${me.clientId}/client`;
+  const choseClient = useRecoilValue(useChoseClient);
+  const endpoint = `${Config.apiOrigin}/api/${choseClient.clientId}/client`;
 
   const fetcher = (endpoint: string) =>
     fetch(endpoint, {

@@ -1,44 +1,59 @@
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { Configuration, DefaultApi } from "../../api_client";
+import appConfig from "../../app-config";
+import { useChoseClient } from "../store/choseClient";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
-import AuthenticatedAccount from "../api/me";
-import {CssBaseline} from "@mui/material";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
   const [me, setMe] = useRecoilState(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const colorMode = useRecoilValue(useColorMode);
   const theme = createTheme({
     palette: {
       mode: colorMode,
     },
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {
-    const authExclusionPath = ["/sign-in", "/forget-password", "/password-setting"];
+    const authExclusionPath = ["/sign-in"];
     const pathname = router.pathname;
-    if (!authExclusionPath.includes(pathname) && !pathname.match(/reset-password/)) {
+    if (!authExclusionPath.includes(pathname)) {
       if (!me || me.id === null) {
         router.push("/sign-in");
       }
       authenticatedAccount();
-      if (me && me.clientId && pathname === "/") {
-        router.push(`/${me.clientId}/dashboard`);
+      if (me.id && choseClient.clientId && pathname === "/") {
+        router.push(`/${choseClient.clientId}/dashboard`);
       }
     }
   }, []);
 
   const authenticatedAccount = () => {
-    AuthenticatedAccount(me.clientId, me.apiToken)
+    new DefaultApi(
+      new Configuration({
+        basePath: appConfig.apiOrigin,
+        baseOptions: {
+          headers: { Authorization: `Bearer ${me.apiToken}` },
+        },
+      })
+    )
+      .apiClientIdMeGet(choseClient.clientId)
       .then((res) => {
-        setMe(res.user);
+        setMe(res.data);
       })
       .catch(() => {
-        router.push("/sign-in");
+        enqueueSnackbar("エラーが発生しました", {
+          variant: "error",
+        });
       });
   };
 
@@ -46,6 +61,7 @@ const Layout = ({ children }: any) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Sidebar>{children}</Sidebar>
+      {/*{children}*/}
     </ThemeProvider>
   );
 };

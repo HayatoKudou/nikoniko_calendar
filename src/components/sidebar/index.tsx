@@ -2,12 +2,10 @@ import { AccountCircle } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MenuIcon from "@mui/icons-material/Menu";
-import {CssBaseline, NativeSelect} from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
-import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/sidebar/index.module.scss";
 import ClientProfile from "../client_proofile";
@@ -25,6 +24,7 @@ import StyleSetting from "../style_setting";
 import MeProfile from "../users/profile";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
+import MenuList3 from "./menuList3";
 
 const drawerWidth = 240;
 
@@ -100,6 +100,7 @@ export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const resetMe = useResetRecoilState(useMe);
   const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -115,7 +116,7 @@ export default function Sidebar(props: { children: any }) {
     <Box className={styles.sidebar}>
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
-          {me && (
+          {me.id && (
             <IconButton
               color="inherit"
               onClick={() => setSideDrawerOpen(true)}
@@ -127,22 +128,22 @@ export default function Sidebar(props: { children: any }) {
             </IconButton>
           )}
 
-          <Typography onClick={() => router.push(`/${me.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
+          <Typography onClick={() => router.push(`/${choseClient.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
             Read Worth
           </Typography>
 
-          {me && (
-            <FormControl className={styles.sidebar__choseClient}>
-              <NativeSelect defaultValue={30} disableUnderline>
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </NativeSelect>
-            </FormControl>
-          )}
+          {/*{me.id && (*/}
+          {/*  <FormControl className={styles.sidebar__choseClient}>*/}
+          {/*    <NativeSelect defaultValue={30} disableUnderline>*/}
+          {/*      <option value={10}>Ten</option>*/}
+          {/*      <option value={20}>Twenty</option>*/}
+          {/*      <option value={30}>Thirty</option>*/}
+          {/*    </NativeSelect>*/}
+          {/*  </FormControl>*/}
+          {/*)}*/}
 
           <StyleSetting />
-          {me && (
+          {me.id && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
@@ -151,8 +152,9 @@ export default function Sidebar(props: { children: any }) {
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenMeProfile(true)}></MenuItem>
-                {me.role.isClientManager && <MenuItem onClick={() => setOpenClientProfile(true)}>組織設定</MenuItem>}
+                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: me.role.isClientManager && "none" }}>
+                  組織設定
+                </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
               </Menu>
               <ConfirmDialog
@@ -165,7 +167,7 @@ export default function Sidebar(props: { children: any }) {
           )}
         </Toolbar>
       </AppBar>
-      {me && (
+      {me.id && (
         <Drawer variant="permanent" open={sideDrawerOpen}>
           <DrawerHeader>
             <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
@@ -173,6 +175,8 @@ export default function Sidebar(props: { children: any }) {
           <MenuList open={sideDrawerOpen} />
           <Divider />
           <MenuList2 open={sideDrawerOpen} />
+          <Divider />
+          <MenuList3 open={sideDrawerOpen} />
         </Drawer>
       )}
       <Box className={styles.sidebar__children}>{props.children}</Box>

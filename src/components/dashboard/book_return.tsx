@@ -2,8 +2,9 @@ import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import Button from "@mui/material/Button";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import BookReturn from "../../api/book/return";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -16,7 +17,8 @@ interface Props {
 const BookReturnForm = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -31,7 +33,7 @@ const BookReturnForm = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    BookReturn(me.clientId, props.bookInfo.id, {
+    BookReturn(choseClient.clientId, props.bookInfo.id, {
       apiToken: me.apiToken,
     })
       .then(() => {

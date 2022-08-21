@@ -16,6 +16,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import CreateBookPurchaseApply, { BookPurchaseApplyRequestErrors } from "../../api/book/purchase_apply/create";
 import { useBookCategories } from "../../store/book/categories";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -31,6 +32,7 @@ interface Props {
 
 const BookPurchaseApply = (props: Props) => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [bookCategories] = useRecoilState(useBookCategories);
   const [loading, setLoading] = React.useState(false);
@@ -58,7 +60,7 @@ const BookPurchaseApply = (props: Props) => {
 
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    CreateBookPurchaseApply(me.clientId, {
+    CreateBookPurchaseApply(choseClient.clientId, {
       bookCategoryName: formValues.bookCategoryName,
       title: title,
       reason: formValues.reason,

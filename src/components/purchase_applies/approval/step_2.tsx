@@ -12,6 +12,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Done, { BookPurchaseDoneRequestErrors } from "../../../api/book/purchase_apply/done";
 import Refuse from "../../../api/book/purchase_apply/refuse";
+import { useChoseClient } from "../../../store/choseClient";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
@@ -26,6 +27,7 @@ interface Props {
 
 const Step2 = (props: Props) => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const [openDoneConfirm, setOpenDoneConfirm] = React.useState<boolean>(false);
@@ -39,7 +41,7 @@ const Step2 = (props: Props) => {
 
   const handleRefuse = () => {
     setLoading(true);
-    Refuse(me.clientId, props.purchaseApply.book.id, {
+    Refuse(choseClient.clientId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -57,7 +59,7 @@ const Step2 = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Done(me.clientId, props.purchaseApply.book.id, {
+    Done(choseClient.clientId, props.purchaseApply.book.id, {
       location: formValues.location,
       apiToken: me.apiToken,
     })

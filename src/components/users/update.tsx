@@ -12,8 +12,9 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Update, { UpdateUserRequestErrors, UpdateUserRequestPayload } from "../../api/user/update";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -28,7 +29,8 @@ interface Props {
 
 const UpdateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
+  const chosenClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<UpdateUserRequestPayload>({
     id: 0,
@@ -73,7 +75,7 @@ const UpdateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(me.clientId, {
+    Update(chosenClient.clientId, {
       id: formValues.id,
       name: formValues.name,
       email: formValues.email,

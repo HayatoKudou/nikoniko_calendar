@@ -15,6 +15,7 @@ import { useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import UpdateBook, { UpdateBookRequestErrors, UpdateBookRequestPayload } from "../../api/book/update";
 import { useBookCategories } from "../../store/book/categories";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -31,6 +32,7 @@ interface Props {
 const Update = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<Blob | null>(props.book.image);
@@ -72,7 +74,7 @@ const Update = (props: Props) => {
 
   const handleUpdate = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    UpdateBook(me.clientId, {
+    UpdateBook(choseClient.clientId, {
       id: formValues.id,
       category: formValues.category,
       status: formValues.status,

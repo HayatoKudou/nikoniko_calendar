@@ -5,6 +5,7 @@ import Config from "../../../config";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
 import usePurchaseApplies from "../../api/book/purchase_apply/list";
 import { useBookCategories } from "../../store/book/categories";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -13,6 +14,7 @@ import CustomTable from "./table";
 
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const setBookCategory = useSetRecoilState(useBookCategories);
   const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<PurchaseApply>();
   const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
@@ -54,14 +56,14 @@ const PurchaseApplies = () => {
       return;
     }
     setInitializing(true);
-    InitBookPurchase(me.clientId, selectedInitPurchaseApply.book.id, {
+    InitBookPurchase(choseClient.clientId, selectedInitPurchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then(() => {
         enqueueSnackbar("申請却下を取り消しました", { variant: "success" });
         setInitializing(false);
         setOpenInitConfirm(false);
-        mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`);
+        mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`);
       })
       .catch(() => {
         enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
@@ -84,7 +86,7 @@ const PurchaseApplies = () => {
           purchaseApply={selectedEditPurchaseApply}
           open={approvalOpen}
           onClose={() => setApprovalOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
         />
       )}
       <CustomTable bookPurchaseApplies={response.bookPurchaseApplies} handleEdit={handleEdit} handleInit={handleInitClick} />

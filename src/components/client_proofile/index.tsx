@@ -18,6 +18,7 @@ import { useRecoilValue } from "recoil";
 import Config from "../../../config";
 import useClientInfo from "../../api/client/info";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -32,6 +33,7 @@ const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { labe
 const ClientProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [updating, setUpdating] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
@@ -70,7 +72,7 @@ const ClientProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setUpdating(true);
-    Update(me.clientId, {
+    Update(choseClient.clientId, {
       name: formValues.name,
       apiToken: me.apiToken,
     })
@@ -80,7 +82,7 @@ const ClientProfile = (props: Props) => {
           enqueueSnackbar("更新に成功しました。", {
             variant: "success",
           });
-          mutate(`${Config.apiOrigin}/api/${me.clientId}/client`);
+          mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/client`);
           setOpenConfirm(false);
         } else {
           setCreateRequestErrors(res.errors);
@@ -109,21 +111,19 @@ const ClientProfile = (props: Props) => {
             </Tabs>
 
             {openTabValue === "基本情報" && (
-              <>
-                <TextField
-                  value={formValues.name}
-                  fullWidth
-                  onChange={handleChange}
-                  name={"name"}
-                  label={"組織名"}
-                  required
-                  inputProps={{ minLength: 1, maxLength: 255 }}
-                  variant="standard"
-                  margin={"normal"}
-                  helperText={createRequestErrors?.name}
-                  error={createRequestErrors?.name !== undefined}
-                />
-              </>
+              <TextField
+                value={formValues.name}
+                fullWidth
+                onChange={handleChange}
+                name={"name"}
+                label={"組織名"}
+                required
+                inputProps={{ minLength: 1, maxLength: 255 }}
+                variant="standard"
+                margin={"normal"}
+                helperText={createRequestErrors?.name}
+                error={createRequestErrors?.name !== undefined}
+              />
             )}
 
             {openTabValue === "プラン選択" && (

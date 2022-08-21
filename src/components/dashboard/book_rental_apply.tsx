@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookRentalApply, { BookRentalApplyRequestErrors } from "../../api/book/rental_apply/create";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -23,6 +24,7 @@ const BookRentalApply = (props: Props) => {
   initDate.setDate(initDate.getDate() + 7);
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [expectedReturnDate, setExpectedReturnDate] = React.useState<Date>(initDate);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
@@ -43,7 +45,7 @@ const BookRentalApply = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     setOpenConfirm(false);
-    CreateBookRentalApply(me.clientId, props.bookInfo.id, {
+    CreateBookRentalApply(choseClient.clientId, props.bookInfo.id, {
       reason: formValues.reason,
       expected_return_date: expectedReturnDate,
       apiToken: me.apiToken,

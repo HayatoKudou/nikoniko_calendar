@@ -5,6 +5,7 @@ import Config from "../../../config";
 import DeleteBook from "../../api/book/delete";
 import useBooks from "../../api/book/list";
 import { useBookCategories } from "../../store/book/categories";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -15,6 +16,8 @@ import CustomTable from "./table";
 
 const Books = () => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
+  const chosenClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [, setBookCategory] = useRecoilState(useBookCategories);
   const [deleting, setDeleting] = React.useState<boolean>(false);
@@ -57,12 +60,12 @@ const Books = () => {
   };
 
   const handleSuccess = () => {
-    mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
+    mutate(`${Config.apiOrigin}/api/${chosenClient.clientId}/books`);
   };
 
   const handleDeleteBook = () => {
     setDeleting(true);
-    DeleteBook(me.clientId, {
+    DeleteBook(choseClient.clientId, {
       book_ids: selectedBookIds,
       apiToken: me.apiToken,
     })
@@ -89,7 +92,7 @@ const Books = () => {
           book={selectedEditBook}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
         />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />

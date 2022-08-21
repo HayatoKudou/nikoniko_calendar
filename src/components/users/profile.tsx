@@ -7,8 +7,9 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Update, { UpdateUserRequestErrors } from "../../api/user/update";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -20,7 +21,8 @@ interface Props {
 
 const MyProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     id: 0,
@@ -51,7 +53,7 @@ const MyProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(me.clientId, {
+    Update(choseClient.clientId, {
       id: formValues.id,
       name: formValues.name,
       email: formValues.email,

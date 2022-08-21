@@ -14,6 +14,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Create, { CreateUserRequestErrors } from "../../api/user/create";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -28,6 +29,7 @@ interface Props {
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const chosenClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
@@ -60,7 +62,7 @@ const CreateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Create(me.clientId, {
+    Create(chosenClient.clientId, {
       name: formValues.name,
       email: formValues.email,
       roles: formValues.roles,

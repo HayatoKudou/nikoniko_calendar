@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/dashboards/book_review.module.scss";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -21,6 +22,7 @@ interface Props {
 const BookReviews = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
@@ -44,7 +46,7 @@ const BookReviews = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    CreateBookReview(me.clientId, props.bookInfo.id, {
+    CreateBookReview(choseClient.clientId, props.bookInfo.id, {
       rate: formValues.rate,
       review: formValues.review,
       apiToken: me.apiToken,

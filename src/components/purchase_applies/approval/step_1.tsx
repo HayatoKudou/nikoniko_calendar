@@ -11,6 +11,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Accept from "../../../api/book/purchase_apply/accept";
 import Refuse from "../../../api/book/purchase_apply/refuse";
+import { useChoseClient } from "../../../store/choseClient";
 import { useMe } from "../../../store/me";
 import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
 import ConfirmDialog from "../../parts/confirm_dialog";
@@ -25,6 +26,7 @@ interface Props {
 
 const Step1 = (props: Props) => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const [openAcceptConfirm, setOpenAcceptConfirm] = React.useState<boolean>(false);
@@ -34,7 +36,7 @@ const Step1 = (props: Props) => {
 
   const handleRefuse = () => {
     setLoading(true);
-    Refuse(me.clientId, props.purchaseApply.book.id, {
+    Refuse(choseClient.clientId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then((res) => {
@@ -52,7 +54,7 @@ const Step1 = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Accept(me.clientId, props.purchaseApply.book.id, {
+    Accept(choseClient.clientId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then((res) => {

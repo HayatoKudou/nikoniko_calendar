@@ -7,7 +7,6 @@ export const useMe = atom({
   key: "me",
   default: {
     id: null,
-    clientId: null,
     name: "",
     email: "",
     apiToken: "",
@@ -16,6 +15,12 @@ export const useMe = atom({
       isBookManager: false,
       isClientManager: false,
     },
+    clients: [
+      {
+        id: null,
+        name: "",
+      },
+    ],
   },
   effects_UNSTABLE: [persistAtom],
 });

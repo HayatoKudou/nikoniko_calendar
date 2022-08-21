@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import Config from "../../../config";
 import DeleteUser from "../../api/user/delete";
 import useUsers from "../../api/user/list";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -13,6 +14,7 @@ import UpdateUser from "./update";
 
 const Users = () => {
   const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
   const [deleting, setDeleting] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
@@ -44,7 +46,7 @@ const Users = () => {
 
   const handleDeleteUser = () => {
     setDeleting(true);
-    DeleteUser(me.clientId, {
+    DeleteUser(choseClient.clientId, {
       user_ids: selectedUserIds,
       apiToken: me.apiToken,
     })
@@ -52,7 +54,7 @@ const Users = () => {
         enqueueSnackbar("削除しました", {
           variant: "success",
         });
-        mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
+        mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/books`);
         setOpenDeleteConfirm(false);
         setDeleting(false);
       })
@@ -67,14 +69,14 @@ const Users = () => {
       <CreateUser
         open={openCreateConfirm}
         onClose={() => setOpenCreateConfirm(false)}
-        onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+        onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
       />
       {selectUser && (
         <UpdateUser
           user={selectUser}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${me.clientId}/user/list`)}
+          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
         />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleDeleteConfirmClose} handleSubmit={handleDeleteUser} />

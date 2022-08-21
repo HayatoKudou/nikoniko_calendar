@@ -21,11 +21,12 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import Config from "../../../config";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import useBooks from "../../api/book/list";
 import { useBookCategories } from "../../store/book/categories";
+import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
@@ -60,7 +61,8 @@ function TabPanel(props: TabPanelProps) {
 
 const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [me, setMe] = useRecoilState(useMe);
+  const me = useRecoilValue(useMe);
+  const choseClient = useRecoilValue(useChoseClient);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
   const setBookCategory = useSetRecoilState(useBookCategories);
@@ -154,7 +156,7 @@ const Dashboard = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setCreating(true);
-    CreateBookCategory(me.clientId, {
+    CreateBookCategory(choseClient.clientId, {
       name: bookCategoryFormValue,
       apiToken: me.apiToken,
     })
@@ -194,7 +196,7 @@ const Dashboard = () => {
   };
 
   const handleSuccess = () => {
-    mutate(`${Config.apiOrigin}/api/${me.clientId}/books`);
+    mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/books`);
     setBookInfoDialogOpen(false);
     setApplicationDialogOpen(false);
   };
