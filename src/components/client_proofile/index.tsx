@@ -15,8 +15,8 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Config from "../../../config";
-import useClientInfo from "../../api/client/info";
+import { Configuration, DefaultApi } from "../../../api_client";
+import appConfig from "../../../app-config";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -35,7 +35,6 @@ const ClientProfile = (props: Props) => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
   const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [updating, setUpdating] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     id: 0,
     name: "",
@@ -43,19 +42,36 @@ const ClientProfile = (props: Props) => {
   });
   const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
-  const { loading, error, response, mutate } = useClientInfo();
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (response) {
-      setFormValues({
-        id: response.client.id,
-        name: response.client.name,
-        plan: response.client.plan,
-      });
-    }
-  }, [response]);
+    fetchClient();
+  }, []);
 
-  if (loading || error || updating) return <Spinner />;
+  if (loading) return <Spinner />;
+
+  const fetchClient = () => {
+    setLoading(true);
+    new DefaultApi(
+      new Configuration({
+        basePath: appConfig.apiOrigin,
+        baseOptions: {
+          headers: { Authorization: `Bearer ${me.apiToken}` },
+        },
+      })
+    )
+      .apiClientIdClientGet(choseClient.clientId)
+      .then((res) => {
+        setLoading(false);
+        setFormValues(res.data);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar("エラーが発生しました", {
+          variant: "error",
+        });
+      });
+  };
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -71,7 +87,7 @@ const ClientProfile = (props: Props) => {
   };
 
   const handleSubmit = () => {
-    setUpdating(true);
+    setLoading(true);
     Update(choseClient.clientId, {
       name: formValues.name,
       apiToken: me.apiToken,
@@ -82,7 +98,7 @@ const ClientProfile = (props: Props) => {
           enqueueSnackbar("更新に成功しました。", {
             variant: "success",
           });
-          mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/client`);
+          fetchClient();
           setOpenConfirm(false);
         } else {
           setCreateRequestErrors(res.errors);
@@ -91,10 +107,10 @@ const ClientProfile = (props: Props) => {
           });
         }
         setOpenConfirm(false);
-        setUpdating(false);
+        setLoading(false);
       })
       .catch(() => {
-        setUpdating(false);
+        setLoading(false);
         enqueueSnackbar(`更新に失敗しました`, { variant: "error" });
       });
   };
@@ -128,10 +144,7 @@ const ClientProfile = (props: Props) => {
 
             {openTabValue === "プラン選択" && (
               <>
-                <Grid item xs={12} md={12}>
-                  <Box>{"現在の登録ユーザー人数： " + response.client.users + "人"}</Box>
-                  <Box>{"現在の登録書籍数： " + response.client.books + "冊"}</Box>
-                </Grid>
+                <Grid item xs={12} md={12}></Grid>
                 <Box sx={{ justifyContent: "center", display: "flex" }}>
                   <Grid item xs={12} md={4}>
                     <Card variant="outlined" sx={{ margin: 1, minWidth: "200px" }}>

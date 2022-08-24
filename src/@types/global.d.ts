@@ -13,6 +13,7 @@ interface User {
 interface Client {
   id: number;
   name: string;
+  plan: string;
 }
 
 interface Book {

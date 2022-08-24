@@ -152,7 +152,7 @@ export default function Sidebar(props: { children: any }) {
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: me.role.isClientManager && "none" }}>
+                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : "" }}>
                   組織設定
                 </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>

@@ -34,6 +34,31 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
+ * @interface ClientResponse
+ */
+export interface ClientResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof ClientResponse
+   */
+  id: number;
+  /**
+   *
+   * @type {string}
+   * @memberof ClientResponse
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ClientResponse
+   */
+  plan: string;
+}
+/**
+ *
+ * @export
  * @interface UserResponse
  */
 export interface UserResponse {
@@ -177,6 +202,41 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
+     * @summary 組織情報
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdClientGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiClientIdClientGet", "clientId", clientId);
+      const localVarPath = `/api/{clientId}/client`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary 自分の情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -257,6 +317,20 @@ export const DefaultApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary 組織情報
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiClientIdClientGet(
+      clientId: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClientResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdClientGet(clientId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary 自分の情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -295,6 +369,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
+     * @summary 組織情報
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdClientGet(clientId: number, options?: any): AxiosPromise<ClientResponse> {
+      return localVarFp.apiClientIdClientGet(clientId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary 自分の情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -323,6 +407,20 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+  /**
+   *
+   * @summary 組織情報
+   * @param {number} clientId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiClientIdClientGet(clientId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiClientIdClientGet(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    *
    * @summary 自分の情報
