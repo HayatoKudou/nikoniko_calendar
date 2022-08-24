@@ -34,19 +34,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
- * @interface UserCreateRequest
- */
-export interface UserCreateRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof UserCreateRequest
-   */
-  name?: string;
-}
-/**
- *
- * @export
  * @interface UserResponse
  */
 export interface UserResponse {
@@ -76,10 +63,10 @@ export interface UserResponse {
   apiToken: string;
   /**
    *
-   * @type {Array<UserResponseRoleInner>}
+   * @type {UserResponseRole}
    * @memberof UserResponse
    */
-  role: Array<UserResponseRoleInner>;
+  role: UserResponseRole;
   /**
    *
    * @type {Array<UserResponseClientsInner>}
@@ -98,38 +85,38 @@ export interface UserResponseClientsInner {
    * @type {number}
    * @memberof UserResponseClientsInner
    */
-  id?: number;
+  id: number;
   /**
    *
    * @type {string}
    * @memberof UserResponseClientsInner
    */
-  name?: string;
+  name: string;
 }
 /**
  *
  * @export
- * @interface UserResponseRoleInner
+ * @interface UserResponseRole
  */
-export interface UserResponseRoleInner {
+export interface UserResponseRole {
   /**
    *
    * @type {boolean}
-   * @memberof UserResponseRoleInner
+   * @memberof UserResponseRole
    */
-  isAccountManager?: boolean;
+  isAccountManager: boolean;
   /**
    *
    * @type {boolean}
-   * @memberof UserResponseRoleInner
+   * @memberof UserResponseRole
    */
-  isBookManager?: boolean;
+  isBookManager: boolean;
   /**
    *
    * @type {boolean}
-   * @memberof UserResponseRoleInner
+   * @memberof UserResponseRole
    */
-  isClientManager?: boolean;
+  isClientManager: boolean;
 }
 /**
  *
@@ -142,7 +129,7 @@ export interface UsersResponse {
    * @type {Array<UsersResponseUsersInner>}
    * @memberof UsersResponse
    */
-  users?: Array<UsersResponseUsersInner>;
+  users: Array<UsersResponseUsersInner>;
 }
 /**
  *
@@ -155,31 +142,31 @@ export interface UsersResponseUsersInner {
    * @type {number}
    * @memberof UsersResponseUsersInner
    */
-  id?: number;
+  id: number;
   /**
    *
    * @type {string}
    * @memberof UsersResponseUsersInner
    */
-  name?: string;
+  name: string;
   /**
    *
    * @type {string}
    * @memberof UsersResponseUsersInner
    */
-  email?: string;
+  email: string;
   /**
    *
    * @type {string}
    * @memberof UsersResponseUsersInner
    */
-  apiToken?: string;
+  apiToken: string;
   /**
    *
-   * @type {Array<UserResponseRoleInner>}
+   * @type {UserResponseRole}
    * @memberof UsersResponseUsersInner
    */
-  role?: Array<UserResponseRoleInner>;
+  role: UserResponseRole;
 }
 
 /**
@@ -217,45 +204,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
-     * @summary 組織にユーザー追加
-     * @param {number} clientId
-     * @param {UserCreateRequest} [userCreateRequest]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiClientIdUserPost: async (clientId: number, userCreateRequest?: UserCreateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdUserPost", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: "POST", ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication Bearer required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-      localVarHeaderParameter["Content-Type"] = "application/json";
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(userCreateRequest, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -323,22 +271,6 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary 組織にユーザー追加
-     * @param {number} clientId
-     * @param {UserCreateRequest} [userCreateRequest]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiClientIdUserPost(
-      clientId: number,
-      userCreateRequest?: UserCreateRequest,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, userCreateRequest, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
      * @summary 組織に所属しているユーザー情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -373,17 +305,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
-     * @summary 組織にユーザー追加
-     * @param {number} clientId
-     * @param {UserCreateRequest} [userCreateRequest]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: any): AxiosPromise<UsersResponse> {
-      return localVarFp.apiClientIdUserPost(clientId, userCreateRequest, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
      * @summary 組織に所属しているユーザー情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -413,21 +334,6 @@ export class DefaultApi extends BaseAPI {
   public apiClientIdMeGet(clientId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiClientIdMeGet(clientId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @summary 組織にユーザー追加
-   * @param {number} clientId
-   * @param {UserCreateRequest} [userCreateRequest]
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: AxiosRequestConfig) {
-    return DefaultApiFp(this.configuration)
-      .apiClientIdUserPost(clientId, userCreateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

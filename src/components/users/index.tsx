@@ -1,9 +1,9 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Config from "../../../config";
+import { Configuration, DefaultApi } from "../../../api_client";
+import appConfig from "../../../app-config";
 import DeleteUser from "../../api/user/delete";
-import useUsers from "../../api/user/list";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -16,15 +16,42 @@ const Users = () => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
-  const [deleting, setDeleting] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
   const [selectUser, setSelectUser] = React.useState<User>();
   const [selectedUserIds, setSelectedUserIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [openCreateConfirm, setOpenCreateConfirm] = React.useState<boolean>(false);
-  const { loading, error, response, mutate } = useUsers();
+  const [users, setUsers] = React.useState<Array<User>>([]);
 
-  if (deleting || loading || error) return <Spinner />;
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = () => {
+    setLoading(true);
+    new DefaultApi(
+      new Configuration({
+        basePath: appConfig.apiOrigin,
+        baseOptions: {
+          headers: { Authorization: `Bearer ${me.apiToken}` },
+        },
+      })
+    )
+      .apiClientIdUsersGet(choseClient.clientId)
+      .then((res) => {
+        setLoading(false);
+        setUsers(res.data.users);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar("エラーが発生しました", {
+          variant: "error",
+        });
+      });
+  };
+
+  if (loading) return <Spinner />;
 
   const handleEditUser = (e: { stopPropagation: any }, user: User) => {
     e.stopPropagation();
@@ -45,7 +72,7 @@ const Users = () => {
   };
 
   const handleDeleteUser = () => {
-    setDeleting(true);
+    setLoading(true);
     DeleteUser(choseClient.clientId, {
       user_ids: selectedUserIds,
       apiToken: me.apiToken,
@@ -54,34 +81,25 @@ const Users = () => {
         enqueueSnackbar("削除しました", {
           variant: "success",
         });
-        mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/books`);
+        fetchUsers();
         setOpenDeleteConfirm(false);
-        setDeleting(false);
+        setLoading(false);
       })
       .catch(() => {
-        setDeleting(false);
+        setLoading(false);
         enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
       });
   };
 
   return (
     <>
-      <CreateUser
-        open={openCreateConfirm}
-        onClose={() => setOpenCreateConfirm(false)}
-        onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
-      />
+      <CreateUser open={openCreateConfirm} onClose={() => setOpenCreateConfirm(false)} onSuccess={() => fetchUsers()} />
       {selectUser && (
-        <UpdateUser
-          user={selectUser}
-          open={updateDialogOpen}
-          onClose={() => setUpdateDialogOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
-        />
+        <UpdateUser user={selectUser} open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)} onSuccess={() => fetchUsers()} />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleDeleteConfirmClose} handleSubmit={handleDeleteUser} />
       <CustomTable
-        users={response.users}
+        users={users}
         handleEdit={handleEditUser}
         handleDelete={handleClickDeleteButton}
         handleCreate={handleClickCreateButton}

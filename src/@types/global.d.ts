@@ -1,13 +1,12 @@
 interface User {
   id: number;
-  clientId: number;
   name: string;
   email: string;
-  apiToken: string;
+  apiToken?: string;
   role: {
-    isAccountManager: number;
-    isBookManager: number;
-    isClientManager: number;
+    isAccountManager: boolean;
+    isBookManager: boolean;
+    isClientManager: boolean;
   };
 }
 

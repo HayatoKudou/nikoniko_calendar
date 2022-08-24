@@ -47,34 +47,95 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersResponse'
+        "401":
+          description: "apiトークンが無効の場合"
         "403":
           description: "指定された組織にユーザーがいない場合"
-  /api/{clientId}/user:
-    post:
-      summary: 組織にユーザー追加
-      parameters:
-        - in: path
-          name: clientId
-          schema:
-            type: integer
-          required: true
-          example: 1
-      security:
-        - Bearer: [ ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreateRequest'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsersResponse'
-        "403":
-          description: "指定された組織にユーザーがいない場合"
+#
+#  /api/{clientId}/user:
+#    post:
+#      summary: ユーザー追加
+#      parameters:
+#        - in: path
+#          name: clientId
+#          schema:
+#            type: integer
+#          required: true
+#          example: 1
+#      security:
+#        - Bearer: [ ]
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: "#/components/schemas/UserCreateRequest"
+#      responses:
+#        "200":
+#          description: OK
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/UsersResponse'
+#        "401":
+#          description: "apiトークンが無効の場合"
+#        "403":
+#          description: "指定された組織にユーザーがいない場合"
+##    put:
+##      summary: ユーザー更新
+##      parameters:
+##        - in: path
+##          name: clientId
+##          schema:
+##            type: integer
+##          required: true
+##          example: 1
+##      security:
+##        - Bearer: [ ]
+##      requestBody:
+##        content:
+##          application/json:
+##            schema:
+##              $ref: '#/components/schemas/UserUpdateRequest'
+##      responses:
+##        "200":
+##          description: OK
+##          content:
+##            application/json:
+##              schema:
+##                $ref: '#/components/schemas/UsersResponse'
+##        "401":
+##          description: "apiトークンが無効の場合"
+##        "403":
+##          description: "指定された組織にユーザーがいない場合"
+##    delete:
+##      summary: ユーザー削除
+##      parameters:
+##        - in: path
+##          name: clientId
+##          schema:
+##            type: integer
+##          required: true
+##          example: 1
+##      security:
+##        - Bearer: [ ]
+##      requestBody:
+##        content:
+##          application/json:
+##            schema:
+##              $ref: '#/components/schemas/UserCreateRequest'
+##      responses:
+##        "200":
+##          description: OK
+##          content:
+##            application/json:
+##              schema:
+##                $ref: '#/components/schemas/UsersResponse'
+##        "401":
+##          description: "apiトークンが無効の場合"
+##        "403":
+##          description: "指定された組織にユーザーがいない場合"
+
+
 
 components:
   securitySchemes:
@@ -84,44 +145,6 @@ components:
   schemas:
     UserResponse:
       type: object
-      properties:
-        id:
-          type: number
-          example: 1
-        name:
-          type: string
-          example: 工藤
-        email:
-          type: string
-          example: tetetest@gmail.com
-        apiToken:
-          type: string
-          example: xtGq57ENtxfHL7MB63jRoEhPM5d7Bah2rXRpUGowAuXsE2lzlM8DvnqH163T
-        role:
-          type: array
-          items:
-            type: object
-            properties:
-              isAccountManager:
-                type: boolean
-                example: true
-              isBookManager:
-                type: boolean
-                example: true
-              isClientManager:
-                type: boolean
-                example: true
-        clients:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-                example: 1
-              name:
-                type: string
-                example: テテマーチ
       required:
         - id
         - name
@@ -129,42 +152,105 @@ components:
         - apiToken
         - role
         - clients
-    UsersResponse:
       properties:
-        users:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: "工藤"
+        email:
+          type: string
+          example: "tetetest@gmail.com"
+        apiToken:
+          type: string
+          example: "xtGq57ENtxfHL7MB63jRoEhPM5d7Bah2rXRpUGowAuXsE2lzlM8DvnqH163T"
+        role:
+          type: object
+          required:
+            - isAccountManager
+            - isBookManager
+            - isClientManager
+          properties:
+            isAccountManager:
+              type: boolean
+              example: true
+            isBookManager:
+              type: boolean
+              example: true
+            isClientManager:
+              type: boolean
+              example: true
+        clients:
           type: array
           items:
             type: object
+            required:
+              - id
+              - name
             properties:
               id:
                 type: number
                 example: 1
               name:
                 type: string
-                example: 工藤
+                example: "テテマーチ"
+    UsersResponse:
+      required:
+        - users
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - email
+              - apiToken
+              - role
+            properties:
+              id:
+                type: number
+                example: 1
+              name:
+                type: string
+                example: "工藤"
               email:
                 type: string
-                example: tetetest@gmail.com
+                example: "tetetest@gmail.com"
               apiToken:
                 type: string
-                example: xtGq57ENtxfHL7MB63jRoEhPM5d7Bah2rXRpUGowAuXsE2lzlM8DvnqH163T
+                example: "xtGq57ENtxfHL7MB63jRoEhPM5d7Bah2rXRpUGowAuXsE2lzlM8DvnqH163T"
               role:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    isAccountManager:
-                      type: boolean
-                      example: true
-                    isBookManager:
-                      type: boolean
-                      example: true
-                    isClientManager:
-                      type: boolean
-                      example: true
-    UserCreateRequest:
-      properties:
-        name:
-          type: string
-          example: ""
-
+                type: object
+                required:
+                  - isAccountManager
+                  - isBookManager
+                  - isClientManager
+                properties:
+                  isAccountManager:
+                    type: boolean
+                    example: true
+                  isBookManager:
+                    type: boolean
+                    example: true
+                  isClientManager:
+                    type: boolean
+                    example: true
+#    UserCreateRequest:
+#      properties:
+#        name:
+#          type: string
+#          example: "工藤"
+#        email:
+#          type: string
+#          example: "tetetest@gmail.com"
+#        roles:
+#          type: array
+#          example: ["組織管理", "書籍管理"]
+#      required:
+#        - name
+#        - email
+#        - roles
