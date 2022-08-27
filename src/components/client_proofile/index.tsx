@@ -22,6 +22,7 @@ import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
+import ApiClient  from "../../lib/apiClient"
 
 interface Props {
   open: boolean;
@@ -52,15 +53,7 @@ const ClientProfile = (props: Props) => {
 
   const fetchClient = () => {
     setLoading(true);
-    new DefaultApi(
-      new Configuration({
-        basePath: appConfig.apiOrigin,
-        baseOptions: {
-          headers: { Authorization: `Bearer ${me.apiToken}` },
-        },
-      })
-    )
-      .apiClientIdClientGet(choseClient.clientId)
+    ApiClient(me.apiToken).apiClientIdClientGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);

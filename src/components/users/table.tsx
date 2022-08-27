@@ -27,6 +27,7 @@ type Order = "asc" | "desc";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  isAccountManager: boolean;
   handleCreate: () => void;
   handleDelete: () => void;
 }
@@ -57,7 +58,7 @@ const headCells: readonly TableHeadCell[] = [
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const { numSelected } = props;
-  const me = useRecoilValue(useMe);
+
   return (
     <Toolbar
       sx={{
@@ -75,7 +76,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-      ) : me.role.isAccountManager ? (
+      ) : props.isAccountManager ? (
         <Chip icon={<AddIcon />} label="ユーザー追加" onClick={props.handleCreate} />
       ) : (
         <></>
@@ -90,6 +91,11 @@ const CustomTable = (props: Props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const me = useRecoilValue(useMe);
+  const [isAccountManager, setIsAccountManager] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setIsAccountManager(me.isAccountManager)
+  }, [me])
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -107,7 +113,7 @@ const CustomTable = (props: Props) => {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    if (!me.role.isAccountManager) {
+    if (!isAccountManager) {
       return;
     }
     const selectedIndex = props.selected.indexOf(id);
@@ -139,7 +145,7 @@ const CustomTable = (props: Props) => {
 
   return (
     <Paper>
-      <EnhancedTableToolbar numSelected={props.selected.length} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
+      <EnhancedTableToolbar numSelected={props.selected.length} isAccountManager={isAccountManager} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
       <TableContainer>
         <Table className={styles.booksTable} size="small">
           <TableHead
@@ -150,8 +156,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.users.length}
             headCells={headCells}
-            showActionIcon={me.role.isAccountManager}
-            showCheckBox={me.role.isAccountManager}
+            showActionIcon={isAccountManager}
+            showCheckBox={isAccountManager}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -166,10 +172,10 @@ const CustomTable = (props: Props) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={user.id}
+                    key={index}
                     selected={isItemSelected}
                   >
-                    {me.role.isAccountManager ? (
+                    {isAccountManager && (
                       <>
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} />
@@ -180,16 +186,14 @@ const CustomTable = (props: Props) => {
                           </IconButton>
                         </TableCell>
                       </>
-                    ) : (
-                      <></>
                     )}
                     <TableCell align="center">{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
-                    <TableCell align="center">
-                      {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
-                      {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
-                      {user.role.isClientManager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
-                    </TableCell>
+                     <TableCell align="center">
+                        {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
+                        {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
+                        {user.role.isClientManager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
+                      </TableCell>
                   </TableRow>
                 );
               })}

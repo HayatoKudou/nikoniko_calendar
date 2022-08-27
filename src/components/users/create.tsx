@@ -13,12 +13,13 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Create, { CreateUserRequestErrors } from "../../api/user/create";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
+import ApiClient from "../../lib/apiClient";
+import {ApiClientIdUsersGet403Response} from "../../../api_client";
 
 interface Props {
   open: boolean;
@@ -29,7 +30,7 @@ interface Props {
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const chosenClient = useRecoilValue(useChoseClient);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
@@ -39,7 +40,7 @@ const CreateUser = (props: Props) => {
     password_confirmation: "",
     roles: [],
   });
-  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<Partial<CreateUserRequestErrors>>({});
+  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<ApiClientIdUsersGet403Response>({});
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -62,32 +63,25 @@ const CreateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Create(chosenClient.clientId, {
+    ApiClient(me.apiToken).apiClientIdUserPost(choseClient.clientId, {
       name: formValues.name,
       email: formValues.email,
       roles: formValues.roles,
-      apiToken: me.apiToken,
     })
       .then((res) => {
-        if (res.succeeded) {
-          setCreateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの登録に成功しました。メールから認証を完了させてください。", {
-            variant: "success",
-          });
-          props.onSuccess();
-          props.onClose();
-        } else {
-          setCreateUserRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
-            variant: "error",
-          });
-        }
+        setLoading(false);
+        setCreateUserRequestErrors({});
+        enqueueSnackbar("ユーザーの登録に成功しました", {variant: "success",});
         setOpenConfirm(false);
-        setLoading(false);
+        props.onSuccess();
+        props.onClose();
       })
-      .catch(() => {
+      .catch((res) => {
+        console.log(res);
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
+        setOpenConfirm(false);
+        setCreateUserRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", {variant: "error"});
       });
   };
 

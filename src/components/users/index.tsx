@@ -11,6 +11,7 @@ import Spinner from "../parts/spinner";
 import CreateUser from "./create";
 import CustomTable from "./table";
 import UpdateUser from "./update";
+import ApiClient from "../../lib/apiClient";
 
 const Users = () => {
   const me = useRecoilValue(useMe);
@@ -30,15 +31,7 @@ const Users = () => {
 
   const fetchUsers = () => {
     setLoading(true);
-    new DefaultApi(
-      new Configuration({
-        basePath: appConfig.apiOrigin,
-        baseOptions: {
-          headers: { Authorization: `Bearer ${me.apiToken}` },
-        },
-      })
-    )
-      .apiClientIdUsersGet(choseClient.clientId)
+    ApiClient(me.apiToken).apiClientIdUsersGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setUsers(res.data.users);
