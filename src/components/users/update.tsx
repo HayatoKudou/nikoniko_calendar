@@ -13,7 +13,8 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Update, { UpdateUserRequestErrors, UpdateUserRequestPayload } from "../../api/user/update";
+import { ApiClientIdUserPost422Response1, ApiClientIdUserPostRequest } from "../../../api_client";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -30,16 +31,15 @@ interface Props {
 const UpdateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const chosenClient = useRecoilValue(useChoseClient);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<UpdateUserRequestPayload>({
+  const [formValues, setFormValues] = React.useState<ApiClientIdUserPostRequest>({
     id: 0,
     name: "",
     email: "",
     roles: [],
-    apiToken: "",
   });
-  const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+  const [updateUserRequestErrors, setUpdateUserRequestErrors] = React.useState<ApiClientIdUserPost422Response1>({});
   const [openUpdateConfirm, setOpenUpdateConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -52,7 +52,6 @@ const UpdateUser = (props: Props) => {
       name: props.user.name,
       email: props.user.email,
       roles: roles,
-      apiToken: me.apiToken,
     });
   }, [props.open]);
 
@@ -75,33 +74,25 @@ const UpdateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(chosenClient.clientId, {
-      id: formValues.id,
-      name: formValues.name,
-      email: formValues.email,
-      roles: formValues.roles,
-      apiToken: formValues.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setUpdateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの更新に成功しました。", {
-            variant: "success",
-          });
-          props.onSuccess();
-          props.onClose();
-        } else {
-          setUpdateUserRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenUpdateConfirm(false);
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiClientIdUserPut(choseClient.clientId, {
+        id: formValues.id,
+        name: formValues.name,
+        email: formValues.email,
+        roles: formValues.roles,
       })
-      .catch(() => {
+      .then((res) => {
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
+        setOpenUpdateConfirm(false);
+        enqueueSnackbar("更新に成功しました", { variant: "success" });
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch((res) => {
+        console.log(res);
+        setLoading(false);
+        setUpdateUserRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 

@@ -94,7 +94,7 @@ const CustomTable = (props: Props) => {
   const [isAccountManager, setIsAccountManager] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setIsAccountManager(me.isAccountManager);
+    setIsAccountManager(Boolean(me.role.isAccountManager));
   }, [me]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {

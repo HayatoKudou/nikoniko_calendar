@@ -146,9 +146,71 @@ export interface ApiClientIdMeGet200ResponseRole {
 /**
  *
  * @export
+ * @interface ApiClientIdUserPost422Response
+ */
+export interface ApiClientIdUserPost422Response {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response
+   */
+  id?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response
+   */
+  name?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response
+   */
+  email?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response
+   */
+  roles?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface ApiClientIdUserPost422Response1
+ */
+export interface ApiClientIdUserPost422Response1 {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response1
+   */
+  name?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response1
+   */
+  email?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPost422Response1
+   */
+  roles?: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface ApiClientIdUserPostRequest
  */
 export interface ApiClientIdUserPostRequest {
+  /**
+   *
+   * @type {number}
+   * @memberof ApiClientIdUserPostRequest
+   */
+  id: number;
   /**
    *
    * @type {string}
@@ -165,6 +227,31 @@ export interface ApiClientIdUserPostRequest {
    *
    * @type {Array<string>}
    * @memberof ApiClientIdUserPostRequest
+   */
+  roles: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface ApiClientIdUserPostRequest1
+ */
+export interface ApiClientIdUserPostRequest1 {
+  /**
+   *
+   * @type {string}
+   * @memberof ApiClientIdUserPostRequest1
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApiClientIdUserPostRequest1
+   */
+  email: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApiClientIdUserPostRequest1
    */
   roles: Array<string>;
 }
@@ -217,31 +304,6 @@ export interface ApiClientIdUsersGet200ResponseUsersInner {
    * @memberof ApiClientIdUsersGet200ResponseUsersInner
    */
   role: ApiClientIdMeGet200ResponseRole;
-}
-/**
- *
- * @export
- * @interface ApiClientIdUsersGet403Response
- */
-export interface ApiClientIdUsersGet403Response {
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUsersGet403Response
-   */
-  name?: Array<string>;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUsersGet403Response
-   */
-  email?: Array<string>;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUsersGet403Response
-   */
-  roles?: Array<string>;
 }
 
 /**
@@ -320,13 +382,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      *
      * @summary ユーザー追加
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     apiClientIdUserPost: async (
       clientId: number,
-      apiClientIdUserPostRequest?: ApiClientIdUserPostRequest,
+      apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'clientId' is not null or undefined
@@ -340,6 +402,47 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       }
 
       const localVarRequestOptions = { method: "POST", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(apiClientIdUserPostRequest1, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary ユーザー更新
+     * @param {number} clientId
+     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdUserPut: async (
+      clientId: number,
+      apiClientIdUserPostRequest?: ApiClientIdUserPostRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiClientIdUserPut", "clientId", clientId);
+      const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "PUT", ...baseOptions, ...options };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
@@ -432,16 +535,32 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      *
      * @summary ユーザー追加
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async apiClientIdUserPost(
       clientId: number,
+      apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @summary ユーザー更新
+     * @param {number} clientId
+     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiClientIdUserPut(
+      clientId: number,
       apiClientIdUserPostRequest?: ApiClientIdUserPostRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, apiClientIdUserPostRequest, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -492,12 +611,23 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      *
      * @summary ユーザー追加
      * @param {number} clientId
+     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1, options?: any): AxiosPromise<void> {
+      return localVarFp.apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary ユーザー更新
+     * @param {number} clientId
      * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdUserPost(clientId, apiClientIdUserPostRequest, options).then((request) => request(axios, basePath));
+    apiClientIdUserPut(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -551,14 +681,29 @@ export class DefaultApi extends BaseAPI {
    *
    * @summary ユーザー追加
    * @param {number} clientId
+   * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary ユーザー更新
+   * @param {number} clientId
    * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: AxiosRequestConfig) {
+  public apiClientIdUserPut(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUserPost(clientId, apiClientIdUserPostRequest, options)
+      .apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
