@@ -1,9 +1,8 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { Configuration, DefaultApi } from "../../../api_client";
-import appConfig from "../../../app-config";
 import DeleteUser from "../../api/user/delete";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -11,7 +10,6 @@ import Spinner from "../parts/spinner";
 import CreateUser from "./create";
 import CustomTable from "./table";
 import UpdateUser from "./update";
-import ApiClient from "../../lib/apiClient";
 
 const Users = () => {
   const me = useRecoilValue(useMe);
@@ -31,7 +29,8 @@ const Users = () => {
 
   const fetchUsers = () => {
     setLoading(true);
-    ApiClient(me.apiToken).apiClientIdUsersGet(choseClient.clientId)
+    ApiClient(me.apiToken)
+      .apiClientIdUsersGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setUsers(res.data.users);

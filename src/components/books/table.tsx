@@ -31,6 +31,7 @@ type Order = "asc" | "desc";
 interface TableToolbarProps {
   books: Array<Book>;
   numSelected: number;
+  isBookManager: boolean;
   handleCreate: () => void;
   handleDelete: () => void;
   handleCsvUpload: () => void;
@@ -83,8 +84,9 @@ const TableToolbar = (props: TableToolbarProps) => {
       }}
     >
       <Box className={styles.booksTable__toolBar} color="inherit">
-        {numSelected > 0 ? numSelected + " 選択中" : "書籍管理"}
+        {props.isBookManager && numSelected > 0 ? numSelected + " 選択中" : "書籍管理"}
       </Box>
+
       {numSelected > 0 ? (
         <Tooltip title="削除">
           <IconButton onClick={() => props.handleDelete()}>
@@ -93,13 +95,11 @@ const TableToolbar = (props: TableToolbarProps) => {
         </Tooltip>
       ) : (
         <>
-          {me.role.isBookManager ? (
+          {props.isBookManager && (
             <>
               <Chip icon={<AddIcon />} label="書籍登録" onClick={props.handleCreate} sx={{ margin: "2px" }} />
               <Chip icon={<UploadIcon />} label="CSVアップロード" onClick={props.handleCsvUpload} sx={{ margin: "2px" }} />
             </>
-          ) : (
-            <></>
           )}
           <CsvDownload
             csvDataGenerator={() => {
@@ -125,6 +125,11 @@ const CustomTable = (props: Props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const me = useRecoilValue(useMe);
+  const [isBookManager, setIsBookManager] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setIsBookManager(me.isBookManager);
+  }, [me]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -142,7 +147,7 @@ const CustomTable = (props: Props) => {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    if (!me.role.isAccountManager) {
+    if (!isBookManager) {
       return;
     }
     const selectedIndex = props.selected.indexOf(id);
@@ -177,6 +182,7 @@ const CustomTable = (props: Props) => {
       <TableToolbar
         books={props.books}
         numSelected={props.selected.length}
+        isBookManager={isBookManager}
         handleCsvUpload={props.handleCsvUpload}
         handleCreate={props.handleCreate}
         handleDelete={props.handleDelete}
@@ -191,8 +197,8 @@ const CustomTable = (props: Props) => {
             onRequestSort={handleRequestSort}
             rowCount={props.books.length}
             headCells={headCells}
-            showActionIcon={me.role.isBookManager}
-            showCheckBox={me.role.isBookManager}
+            showActionIcon={isBookManager}
+            showCheckBox={isBookManager}
           />
           <TableBody>
             {/*@ts-ignore*/}
@@ -211,7 +217,7 @@ const CustomTable = (props: Props) => {
                     key={book.id}
                     selected={isItemSelected}
                   >
-                    {me.role.isBookManager ? (
+                    {isBookManager && (
                       <>
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} />
@@ -222,8 +228,6 @@ const CustomTable = (props: Props) => {
                           </IconButton>
                         </TableCell>
                       </>
-                    ) : (
-                      <></>
                     )}
                     <TableCell align="left">{book.createdAt}</TableCell>
                     <TableCell align="center">

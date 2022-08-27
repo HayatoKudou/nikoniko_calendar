@@ -13,13 +13,13 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { ApiClientIdUsersGet403Response } from "../../../api_client";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
-import ApiClient from "../../lib/apiClient";
-import {ApiClientIdUsersGet403Response} from "../../../api_client";
 
 interface Props {
   open: boolean;
@@ -63,15 +63,16 @@ const CreateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    ApiClient(me.apiToken).apiClientIdUserPost(choseClient.clientId, {
-      name: formValues.name,
-      email: formValues.email,
-      roles: formValues.roles,
-    })
+    ApiClient(me.apiToken)
+      .apiClientIdUserPost(choseClient.clientId, {
+        name: formValues.name,
+        email: formValues.email,
+        roles: formValues.roles,
+      })
       .then((res) => {
         setLoading(false);
         setCreateUserRequestErrors({});
-        enqueueSnackbar("ユーザーの登録に成功しました", {variant: "success",});
+        enqueueSnackbar("ユーザーの登録に成功しました", { variant: "success" });
         setOpenConfirm(false);
         props.onSuccess();
         props.onClose();
@@ -81,7 +82,7 @@ const CreateUser = (props: Props) => {
         setLoading(false);
         setOpenConfirm(false);
         setCreateUserRequestErrors(res.response.data.errors);
-        enqueueSnackbar("エラーが発生しました", {variant: "error"});
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 

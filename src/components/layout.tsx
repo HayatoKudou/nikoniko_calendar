@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import ApiClient from "../lib/apiClient";
 import { useChoseClient } from "../store/choseClient";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
-import ApiClient from "../lib/apiClient";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
@@ -37,7 +37,8 @@ const Layout = ({ children }: any) => {
   }, []);
 
   const authenticatedAccount = () => {
-    ApiClient(me.apiToken).apiClientIdMeGet(choseClient.clientId)
+    ApiClient(me.apiToken)
+      .apiClientIdMeGet(choseClient.clientId)
       .then((res) => {
         setMe(res.data);
       })

@@ -110,13 +110,12 @@ export default function Sidebar(props: { children: any }) {
   const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setLoggedIn(!!(me && me.id))
-  }, [me])
+    setLoggedIn(!!(me && me.id));
+  }, [me]);
 
   const logout = () => {
     router.push("/signin").then(() => resetMe());
   };
-
 
   return (
     <Box className={styles.sidebar}>
@@ -148,7 +147,7 @@ export default function Sidebar(props: { children: any }) {
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : ""}}>
+                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : "" }}>
                   組織設定
                 </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>

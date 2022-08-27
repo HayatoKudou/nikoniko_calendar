@@ -94,8 +94,8 @@ const CustomTable = (props: Props) => {
   const [isAccountManager, setIsAccountManager] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setIsAccountManager(me.isAccountManager)
-  }, [me])
+    setIsAccountManager(me.isAccountManager);
+  }, [me]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -145,7 +145,12 @@ const CustomTable = (props: Props) => {
 
   return (
     <Paper>
-      <EnhancedTableToolbar numSelected={props.selected.length} isAccountManager={isAccountManager} handleCreate={props.handleCreate} handleDelete={props.handleDelete} />
+      <EnhancedTableToolbar
+        numSelected={props.selected.length}
+        isAccountManager={isAccountManager}
+        handleCreate={props.handleCreate}
+        handleDelete={props.handleDelete}
+      />
       <TableContainer>
         <Table className={styles.booksTable} size="small">
           <TableHead
@@ -189,11 +194,11 @@ const CustomTable = (props: Props) => {
                     )}
                     <TableCell align="center">{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
-                     <TableCell align="center">
-                        {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
-                        {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
-                        {user.role.isClientManager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
-                      </TableCell>
+                    <TableCell align="center">
+                      {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isClientManager ? <Chip label="組織管理" sx={{ margin: "2px" }} /> : null}
+                    </TableCell>
                   </TableRow>
                 );
               })}

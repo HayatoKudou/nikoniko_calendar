@@ -15,14 +15,12 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { Configuration, DefaultApi } from "../../../api_client";
-import appConfig from "../../../app-config";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import ApiClient  from "../../lib/apiClient"
 
 interface Props {
   open: boolean;
@@ -53,7 +51,8 @@ const ClientProfile = (props: Props) => {
 
   const fetchClient = () => {
     setLoading(true);
-    ApiClient(me.apiToken).apiClientIdClientGet(choseClient.clientId)
+    ApiClient(me.apiToken)
+      .apiClientIdClientGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);
