@@ -132,16 +132,6 @@ export default function Sidebar(props: { children: any }) {
             Read Worth
           </Typography>
 
-          {/*{me.id && (*/}
-          {/*  <FormControl className={styles.sidebar__choseClient}>*/}
-          {/*    <NativeSelect defaultValue={30} disableUnderline>*/}
-          {/*      <option value={10}>Ten</option>*/}
-          {/*      <option value={20}>Twenty</option>*/}
-          {/*      <option value={30}>Thirty</option>*/}
-          {/*    </NativeSelect>*/}
-          {/*  </FormControl>*/}
-          {/*)}*/}
-
           <StyleSetting />
           {me.id && (
             <>
@@ -152,7 +142,7 @@ export default function Sidebar(props: { children: any }) {
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : "" }}>
+                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : ""}}>
                   組織設定
                 </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
