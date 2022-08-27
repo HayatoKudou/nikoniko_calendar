@@ -13,7 +13,8 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Create, { CreateUserRequestErrors } from "../../api/user/create";
+import { ApiClientIdUserPost422Response, ApiClientIdUserPostRequest1 } from "../../../api_client";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -29,17 +30,15 @@ interface Props {
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const chosenClient = useRecoilValue(useChoseClient);
+  const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = React.useState<ApiClientIdUserPostRequest1>({
     name: "",
     email: "",
-    password: "",
-    password_confirmation: "",
     roles: [],
   });
-  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<Partial<CreateUserRequestErrors>>({});
+  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<ApiClientIdUserPost422Response>({});
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -62,32 +61,24 @@ const CreateUser = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Create(chosenClient.clientId, {
-      name: formValues.name,
-      email: formValues.email,
-      roles: formValues.roles,
-      apiToken: me.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setCreateUserRequestErrors({});
-          enqueueSnackbar("ユーザーの登録に成功しました。メールから認証を完了させてください。", {
-            variant: "success",
-          });
-          props.onSuccess();
-          props.onClose();
-        } else {
-          setCreateUserRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenConfirm(false);
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiClientIdUserPost(choseClient.clientId, {
+        name: formValues.name,
+        email: formValues.email,
+        roles: formValues.roles,
       })
-      .catch(() => {
+      .then((res) => {
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
+        setCreateUserRequestErrors({});
+        enqueueSnackbar("登録に成功しました", { variant: "success" });
+        setOpenConfirm(false);
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch((res) => {
+        setLoading(false);
+        setCreateUserRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 

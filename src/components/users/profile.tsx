@@ -8,11 +8,12 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Update, { UpdateUserRequestErrors } from "../../api/user/update";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
+import ApiClient from "../../lib/apiClient";
+import {ApiClientIdUserPost422Response, ApiClientIdUserPostRequest} from "../../../api_client";
 
 interface Props {
   open: boolean;
@@ -24,13 +25,13 @@ const MyProfile = (props: Props) => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = React.useState<ApiClientIdUserPostRequest>({
     id: 0,
     name: "",
     email: "",
-    apiToken: "",
+    roles: [],
   });
-  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateUserRequestErrors>>({});
+  const [updateRequestErrors, setUpdateRequestErrors] = React.useState<ApiClientIdUserPost422Response>({});
   const [openUpdateConfirm, setOpenUpdateConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -38,7 +39,7 @@ const MyProfile = (props: Props) => {
       id: me.id,
       name: me.name,
       email: me.email,
-      apiToken: me.apiToken,
+      roles: me.role,
     });
   }, []);
 
@@ -53,31 +54,24 @@ const MyProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(choseClient.clientId, {
-      id: formValues.id,
-      name: formValues.name,
-      email: formValues.email,
-      roles: [],
-      apiToken: formValues.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setCreateRequestErrors({});
-          enqueueSnackbar("ユーザーの更新に成功しました。", {
-            variant: "success",
-          });
-        } else {
-          setCreateRequestErrors(res.errors);
-          enqueueSnackbar(`ユーザー登録に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenUpdateConfirm(false);
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiClientIdUserPut(choseClient.clientId, {
+        id: formValues.id,
+        name: formValues.name,
+        email: formValues.email,
+        roles: formValues.roles,
       })
-      .catch(() => {
+      .then((res) => {
         setLoading(false);
-        enqueueSnackbar(`ユーザーの登録に失敗しました`, { variant: "error" });
+        setOpenUpdateConfirm(false);
+        setUpdateRequestErrors({});
+        enqueueSnackbar("更新に成功しました", { variant: "success" });
+      })
+      .catch((res) => {
+        setLoading(false);
+        setOpenUpdateConfirm(false);
+        setUpdateRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -96,8 +90,8 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
-              helperText={createRequestErrors?.name}
-              error={createRequestErrors?.name !== undefined}
+              helperText={updateRequestErrors?.name}
+              error={updateRequestErrors?.name !== undefined}
             />
 
             <TextField
@@ -110,8 +104,8 @@ const MyProfile = (props: Props) => {
               inputProps={{ minLength: 1, maxLength: 255 }}
               variant="standard"
               margin={"normal"}
-              helperText={createRequestErrors?.email}
-              error={createRequestErrors?.email !== undefined}
+              helperText={updateRequestErrors?.email}
+              error={updateRequestErrors?.email !== undefined}
             />
 
             <ConfirmDialog

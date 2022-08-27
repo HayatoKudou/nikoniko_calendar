@@ -15,9 +15,8 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { Configuration, DefaultApi } from "../../../api_client";
-import appConfig from "../../../app-config";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -52,14 +51,7 @@ const ClientProfile = (props: Props) => {
 
   const fetchClient = () => {
     setLoading(true);
-    new DefaultApi(
-      new Configuration({
-        basePath: appConfig.apiOrigin,
-        baseOptions: {
-          headers: { Authorization: `Bearer ${me.apiToken}` },
-        },
-      })
-    )
+    ApiClient(me.apiToken)
       .apiClientIdClientGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);

@@ -107,16 +107,21 @@ export default function Sidebar(props: { children: any }) {
   const [openLogoutConfirm, setOpenLogoutConfirm] = React.useState<boolean>(false);
   const [openMeProfile, setOpenMeProfile] = React.useState<boolean>(false);
   const [openClientProfile, setOpenClientProfile] = React.useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setLoggedIn(!!(me && me.id));
+  }, [me]);
 
   const logout = () => {
-    router.push("/sign-in").then(() => resetMe());
+    router.push("/signin").then(() => resetMe());
   };
 
   return (
     <Box className={styles.sidebar}>
       <AppBar position="fixed" open={sideDrawerOpen} sx={{ backgroundColor: theme.palette.mode === "light" ? "#455a64" : "" }}>
         <Toolbar>
-          {me.id && (
+          {loggedIn && (
             <IconButton
               color="inherit"
               onClick={() => setSideDrawerOpen(true)}
@@ -133,7 +138,7 @@ export default function Sidebar(props: { children: any }) {
           </Typography>
 
           <StyleSetting />
-          {me.id && (
+          {loggedIn && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
               <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
@@ -142,7 +147,7 @@ export default function Sidebar(props: { children: any }) {
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : ""}}>
+                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isClientManager ? "none" : "" }}>
                   組織設定
                 </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>
@@ -157,7 +162,7 @@ export default function Sidebar(props: { children: any }) {
           )}
         </Toolbar>
       </AppBar>
-      {me.id && (
+      {loggedIn && (
         <Drawer variant="permanent" open={sideDrawerOpen}>
           <DrawerHeader>
             <IconButton onClick={() => setSideDrawerOpen(false)}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>

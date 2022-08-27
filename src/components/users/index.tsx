@@ -1,9 +1,8 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { Configuration, DefaultApi } from "../../../api_client";
-import appConfig from "../../../app-config";
 import DeleteUser from "../../api/user/delete";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -30,14 +29,7 @@ const Users = () => {
 
   const fetchUsers = () => {
     setLoading(true);
-    new DefaultApi(
-      new Configuration({
-        basePath: appConfig.apiOrigin,
-        baseOptions: {
-          headers: { Authorization: `Bearer ${me.apiToken}` },
-        },
-      })
-    )
+    ApiClient(me.apiToken)
       .apiClientIdUsersGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
