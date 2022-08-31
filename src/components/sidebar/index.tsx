@@ -114,7 +114,7 @@ export default function Sidebar(props: { children: any }) {
   }, [me]);
 
   const logout = () => {
-    router.push("/signin").then(() => resetMe());
+    router.push("/sign-in").then(() => resetMe());
   };
 
   return (

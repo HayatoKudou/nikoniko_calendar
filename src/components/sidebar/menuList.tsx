@@ -39,24 +39,20 @@ const MenuList = (props: { open: boolean }) => {
   const router = useRouter();
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
-  const [selected, setSelected] = React.useState<string>();
-  const [menuList, setMenuList] = React.useState([
+  const [selectedPath, setSelectedPath] = React.useState<string>("");
+  const menuList = [
     { name: "dashboard", title: "ダッシュボード", path: `/${choseClient.clientId}/dashboard` },
     { name: "books", title: "書籍管理", path: `/${choseClient.clientId}/books` },
     { name: "users", title: "ユーザー管理", path: `/${choseClient.clientId}/users` },
-  ]);
+    me.role.isBookManager && { name: "purchaseApplies", title: "書籍購入申請", path: `/${choseClient.clientId}/purchase-applies` },
+  ];
 
   React.useEffect(() => {
-    setSelected(router.asPath);
-    if (me.role.isBookManager) {
-      setMenuList([...menuList, { name: "purchaseApplies", title: "書籍購入申請", path: `/${choseClient.clientId}/purchase-applies` }]);
-    }
-  }, []);
+    setSelectedPath(router.asPath);
+  }, [router]);
 
-  const handleSelect = (path: string | null) => {
-    if (path) {
-      router.push(path).then(() => setSelected(path));
-    }
+  const handleSelect = (path: string) => {
+    router.push(path).then(() => setSelectedPath(path));
   };
 
   return (
@@ -73,7 +69,7 @@ const MenuList = (props: { open: boolean }) => {
               backgroundColor: theme.palette.mode === "light" ? "#455a6478" : "",
             },
           }}
-          selected={selected == menu.path}
+          selected={selectedPath == menu.path}
         >
           <ListItemIcon
             sx={{
