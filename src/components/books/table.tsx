@@ -128,7 +128,7 @@ const CustomTable = (props: Props) => {
   const [isBookManager, setIsBookManager] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setIsBookManager(me.role.isBookManager);
+    setIsBookManager(Boolean(me.role.isBookManager));
   }, [me]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {

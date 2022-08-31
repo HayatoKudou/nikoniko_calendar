@@ -1,10 +1,9 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import Config from "../../../config";
+import { useRecoilValue } from "recoil";
+import { ApiClientIdBookPurchaseAppliesGet200Response } from "../../../api_client";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
-import usePurchaseApplies from "../../api/book/purchase_apply/list";
-import { useBookCategories } from "../../store/book/categories";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -15,30 +14,34 @@ import CustomTable from "./table";
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
-  const setBookCategory = useSetRecoilState(useBookCategories);
   const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<PurchaseApply>();
   const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
   const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
   const [openInitConfirm, setOpenInitConfirm] = React.useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [initializing, setInitializing] = React.useState<boolean>(false);
-  const { loading, error, response, mutate } = usePurchaseApplies();
+  const [loading, setLoading] = React.useState(false);
+  const [response, setResponse] = React.useState<null | ApiClientIdBookPurchaseAppliesGet200Response>(null);
+
+  const fetchPurchaseApplies = () => {
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiClientIdBookPurchaseAppliesGet(choseClient.clientId)
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        setResponse(res.data);
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+      });
+  };
 
   React.useEffect(() => {
-    if (response) {
-      setBookCategory(response.bookCategories);
-      // ステップ更新用
-      if (selectedEditPurchaseApply) {
-        response.bookPurchaseApplies.forEach((purchaseApply: any) => {
-          if (purchaseApply.book.id === selectedEditPurchaseApply.book.id) {
-            setSelectedEditPurchaseApply(purchaseApply);
-          }
-        });
-      }
-    }
-  }, [response]);
+    fetchPurchaseApplies();
+  }, []);
 
-  if (loading || error || initializing) return <Spinner />;
+  if (loading || !response) return <Spinner />;
 
   const handleEdit = (e: { stopPropagation: any }, purchaseApply: any) => {
     e.stopPropagation();
@@ -55,19 +58,19 @@ const PurchaseApplies = () => {
     if (!selectedInitPurchaseApply) {
       return;
     }
-    setInitializing(true);
+    setLoading(true);
     InitBookPurchase(choseClient.clientId, selectedInitPurchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then(() => {
         enqueueSnackbar("申請却下を取り消しました", { variant: "success" });
-        setInitializing(false);
+        setLoading(false);
         setOpenInitConfirm(false);
-        mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`);
+        fetchPurchaseApplies();
       })
       .catch(() => {
         enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
-        setInitializing(false);
+        setLoading(false);
         setOpenInitConfirm(false);
       });
   };
@@ -86,7 +89,7 @@ const PurchaseApplies = () => {
           purchaseApply={selectedEditPurchaseApply}
           open={approvalOpen}
           onClose={() => setApprovalOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
+          onSuccess={() => fetchPurchaseApplies()}
         />
       )}
       <CustomTable bookPurchaseApplies={response.bookPurchaseApplies} handleEdit={handleEdit} handleInit={handleInitClick} />
