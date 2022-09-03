@@ -69,14 +69,15 @@ const CreateUser = (props: Props) => {
       })
       .then((res) => {
         setLoading(false);
+        setOpenConfirm(false);
         setCreateUserRequestErrors({});
         enqueueSnackbar("登録に成功しました", { variant: "success" });
-        setOpenConfirm(false);
         props.onSuccess();
         props.onClose();
       })
       .catch((res) => {
         setLoading(false);
+        setOpenConfirm(false);
         setCreateUserRequestErrors(res.response.data.errors);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
