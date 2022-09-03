@@ -31,7 +31,7 @@ const Layout = ({ children }: any) => {
       }
       authenticatedAccount();
       if (me.id && choseClient.clientId && pathname === "/") {
-        router.push(`/${choseClient.clientId}/dashboard`);
+        router.push(`/dashboard`);
       }
     }
   }, []);

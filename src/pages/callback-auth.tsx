@@ -30,7 +30,7 @@ const Index = () => {
         ],
       });
       setChoseClient({ clientId: router.query.clientId });
-      router.push(`/${router.query.clientId}/dashboard`);
+      router.push(`/dashboard`);
     }
   }, [router.query]);
 

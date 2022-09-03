@@ -133,7 +133,7 @@ export default function Sidebar(props: { children: any }) {
             </IconButton>
           )}
 
-          <Typography onClick={() => router.push(`/${choseClient.clientId}/dashboard`)} className={styles.sidebar__toolbarTitle}>
+          <Typography onClick={() => router.push(`/dashboard`)} className={styles.sidebar__toolbarTitle}>
             Read Worth
           </Typography>
 
