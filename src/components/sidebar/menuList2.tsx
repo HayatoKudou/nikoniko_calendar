@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ApiClientIdClientGet200Response } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
@@ -45,7 +45,7 @@ const MenuList = (props: { open: boolean }) => {
   };
 
   const handleSelect = (clientId: number) => {
-    setChoseClient(clientId);
+    setChoseClient({ clientId: clientId });
   };
 
   return (

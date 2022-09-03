@@ -1,5 +1,5 @@
-import Layout from "../../components/layout";
-import Users from "../../components/users";
+import Layout from "../components/layout";
+import Users from "../components/users";
 
 const Index = () => {
   return (

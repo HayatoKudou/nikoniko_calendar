@@ -12,7 +12,6 @@ import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 
 const MenuListIcon = (props: { name: string }) => {
@@ -38,13 +37,12 @@ const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
   const [selectedPath, setSelectedPath] = React.useState<string>("");
   const menuList = [
-    { name: "dashboard", title: "ダッシュボード", path: `/${choseClient.clientId}/dashboard` },
-    { name: "books", title: "書籍管理", path: `/${choseClient.clientId}/books` },
-    { name: "users", title: "ユーザー管理", path: `/${choseClient.clientId}/users` },
-    me.role.isBookManager && { name: "purchaseApplies", title: "書籍購入申請", path: `/${choseClient.clientId}/purchase-applies` },
+    { name: "dashboard", title: "ダッシュボード", path: `/dashboard` },
+    { name: "books", title: "書籍管理", path: `/books` },
+    { name: "users", title: "ユーザー管理", path: `/users` },
+    me.role.isBookManager && { name: "purchaseApplies", title: "書籍購入申請", path: `/purchase-applies` },
   ];
 
   React.useEffect(() => {
