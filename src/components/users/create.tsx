@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { ApiClientIdUserPost422Response, ApiClientIdUserPostRequest1 } from "../../../api_client";
+import { UserCreateValidateErrorResponse, UserCreateRequest } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -33,12 +33,12 @@ const CreateUser = (props: Props) => {
   const choseClient = useRecoilValue(useChoseClient);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
-  const [formValues, setFormValues] = React.useState<ApiClientIdUserPostRequest1>({
+  const [formValues, setFormValues] = React.useState<UserCreateRequest>({
     name: "",
     email: "",
     roles: [],
   });
-  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<ApiClientIdUserPost422Response>({});
+  const [createUserRequestErrors, setCreateUserRequestErrors] = React.useState<UserCreateValidateErrorResponse>({});
 
   const handleChange = (e: any) => {
     setFormValues({

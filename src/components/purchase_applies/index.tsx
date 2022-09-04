@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { ApiClientIdBookPurchaseAppliesGet200Response } from "../../../api_client";
+import { BookPurchaseAppliesListResponse } from "../../../api_client";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
@@ -20,14 +20,13 @@ const PurchaseApplies = () => {
   const [openInitConfirm, setOpenInitConfirm] = React.useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
-  const [response, setResponse] = React.useState<null | ApiClientIdBookPurchaseAppliesGet200Response>(null);
+  const [response, setResponse] = React.useState<null | BookPurchaseAppliesListResponse>(null);
 
   const fetchPurchaseApplies = () => {
     setLoading(true);
     ApiClient(me.apiToken)
       .apiClientIdBookPurchaseAppliesGet(choseClient.clientId)
       .then((res) => {
-        console.log(res);
         setLoading(false);
         setResponse(res.data);
       })
@@ -39,7 +38,7 @@ const PurchaseApplies = () => {
 
   React.useEffect(() => {
     fetchPurchaseApplies();
-  }, []);
+  }, [choseClient]);
 
   if (loading || !response) return <Spinner />;
 
