@@ -13,9 +13,9 @@ import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/sidebar/index.module.scss";
 import ClientProfile from "../client_proofile";
@@ -100,8 +100,8 @@ export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
   const resetMe = useResetRecoilState(useMe);
+  const { enqueueSnackbar } = useSnackbar();
   const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openLogoutConfirm, setOpenLogoutConfirm] = React.useState<boolean>(false);
@@ -114,7 +114,10 @@ export default function Sidebar(props: { children: any }) {
   }, [me]);
 
   const logout = () => {
-    router.push("/sign-in").then(() => resetMe());
+    router.push("/sign-in").then(() => {
+      resetMe();
+      enqueueSnackbar("ログアウトしました", { variant: "success" });
+    });
   };
 
   return (
