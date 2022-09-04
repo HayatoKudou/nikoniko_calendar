@@ -156,6 +156,29 @@ paths:
           description: "apiトークンが無効の場合"
         "403":
           description: "指定された組織にユーザーがいない場合"
+  /api/{clientId}/books:
+    get:
+      summary: 書籍一覧
+      parameters:
+        - in: path
+          name: clientId
+          schema:
+            type: integer
+          required: true
+          example: 1
+      security:
+        - Bearer: [ ]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksResponse"
+        "401":
+          description: "apiトークンが無効の場合"
+        "403":
+          description: "指定された組織にユーザーがいない場合"
   /api/{clientId}/bookPurchaseApplies:
     get:
       summary: 書籍購入申請一覧
@@ -185,7 +208,7 @@ components:
   securitySchemes:
     Bearer:
       type: http
-      scheme: beare
+      scheme: bear
   schemas:
     MeResponse:
       type: object
@@ -396,6 +419,100 @@ components:
           plan:
             type: string
             example: "工藤"
+    BooksResponse:
+      required:
+        - books
+        - bookCategories
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - status
+              - category
+              - title
+              - description
+              - url
+              - createdAt
+              - purchaseApplicant
+              - rentalApplicant
+            properties:
+              id:
+                type: integer
+                example: 1
+              status:
+                type: integer
+                example: 1
+              category:
+                type: string
+                example: "IT"
+              title:
+                type: string
+                example: "プロダクトレッドグロース"
+              description:
+                type: string
+                example: "マーケティングの本"
+              image:
+                type: string
+                example: "gvdsngvaongaflafafeao"
+              url:
+                type: string
+                example: "https://www.amazon.co.jp/gp/product/4297128462/ref=ox_sc_saved_image_3?smid=AN1VRQENFRJN5&psc=1"
+              createdAt:
+                type: string
+                example: "2022/08/01"
+              purchaseApplicant:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: "たかし君"
+              rentalApplicant:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: "たかし君"
+              reviews:
+                type: object
+                required:
+                  - rate
+                  - review
+                  - reviewedAt
+                  - reviewer
+                properties:
+                  rate:
+                    type: number
+                    example: 4
+                  review:
+                    type: string
+                    example: "いい本だった"
+                  reviewedAt:
+                    type: string
+                    example: "2022年09月04日 13時56分"
+                  reviewer:
+                    type: string
+                    example: "たなか君"
+                  rentalCount:
+                    type: number
+                    example: 5
+        bookCategories:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "ALL"
     bookPurchaseAppliesListResponse:
       required:
         - slackCredentialExists

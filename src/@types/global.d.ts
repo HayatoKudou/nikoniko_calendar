@@ -16,6 +16,16 @@ interface Client {
   plan: string;
 }
 
+interface PurchaseApplicantName {
+  id: number;
+  name: string;
+}
+
+interface RentalApplicant {
+  id: number;
+  name: string;
+}
+
 interface Book {
   id: number;
   category: string;
@@ -25,8 +35,8 @@ interface Book {
   createdAt: string;
   image: any | null;
   url: string | null;
-  purchaseApplicant: User;
-  rentalApplicant: User;
+  purchaseApplicant: PurchaseApplicantName;
+  rentalApplicant: RentalApplicant;
   reviews: any;
   rentalCount: number;
 }

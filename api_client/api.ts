@@ -182,6 +182,167 @@ export interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser {
 /**
  *
  * @export
+ * @interface BooksResponse
+ */
+export interface BooksResponse {
+  /**
+   *
+   * @type {Array<BooksResponseBooksInner>}
+   * @memberof BooksResponse
+   */
+  books: Array<BooksResponseBooksInner>;
+  /**
+   *
+   * @type {Array<BooksResponseBookCategoriesInner>}
+   * @memberof BooksResponse
+   */
+  bookCategories: Array<BooksResponseBookCategoriesInner>;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBookCategoriesInner
+ */
+export interface BooksResponseBookCategoriesInner {
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBookCategoriesInner
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInner
+ */
+export interface BooksResponseBooksInner {
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInner
+   */
+  id: number;
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInner
+   */
+  status: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  category: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  title: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  description: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  image?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  url: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {BooksResponseBooksInnerPurchaseApplicant}
+   * @memberof BooksResponseBooksInner
+   */
+  purchaseApplicant: BooksResponseBooksInnerPurchaseApplicant;
+  /**
+   *
+   * @type {BooksResponseBooksInnerPurchaseApplicant}
+   * @memberof BooksResponseBooksInner
+   */
+  rentalApplicant: BooksResponseBooksInnerPurchaseApplicant;
+  /**
+   *
+   * @type {BooksResponseBooksInnerReviews}
+   * @memberof BooksResponseBooksInner
+   */
+  reviews?: BooksResponseBooksInnerReviews;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInnerPurchaseApplicant
+ */
+export interface BooksResponseBooksInnerPurchaseApplicant {
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerPurchaseApplicant
+   */
+  id?: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerPurchaseApplicant
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInnerReviews
+ */
+export interface BooksResponseBooksInnerReviews {
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  rate: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  review: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  reviewedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  reviewer: string;
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  rentalCount?: number;
+}
+/**
+ *
+ * @export
  * @interface ClientResponse
  */
 export interface ClientResponse {
@@ -520,6 +681,39 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBooksGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiClientIdBooksGet", "clientId", clientId);
+      const localVarPath = `/api/{clientId}/books`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary 組織情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -750,6 +944,20 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiClientIdBooksGet(
+      clientId: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BooksResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBooksGet(clientId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary 組織情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -858,6 +1066,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBooksGet(clientId: number, options?: any): AxiosPromise<BooksResponse> {
+      return localVarFp.apiClientIdBooksGet(clientId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary 組織情報
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -939,6 +1157,20 @@ export class DefaultApi extends BaseAPI {
   public apiClientIdBookPurchaseAppliesGet(clientId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiClientIdBookPurchaseAppliesGet(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary 書籍一覧
+   * @param {number} clientId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiClientIdBooksGet(clientId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiClientIdBooksGet(clientId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

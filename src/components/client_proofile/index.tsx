@@ -45,7 +45,7 @@ const ClientProfile = (props: Props) => {
 
   React.useEffect(() => {
     fetchClient();
-  }, []);
+  }, [choseClient]);
 
   if (loading) return <Spinner />;
 
