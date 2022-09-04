@@ -34,424 +34,610 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
- * @interface ApiClientIdBookPurchaseAppliesGet200Response
+ * @interface BookPurchaseAppliesListResponse
  */
-export interface ApiClientIdBookPurchaseAppliesGet200Response {
+export interface BookPurchaseAppliesListResponse {
   /**
    *
    * @type {boolean}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200Response
+   * @memberof BookPurchaseAppliesListResponse
    */
   slackCredentialExists: boolean;
   /**
    *
-   * @type {Array<ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner>}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200Response
+   * @type {Array<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>}
+   * @memberof BookPurchaseAppliesListResponse
    */
-  bookPurchaseApplies: Array<ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner>;
+  bookPurchaseApplies: Array<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>;
 }
 /**
  *
  * @export
- * @interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+ * @interface BookPurchaseAppliesListResponseBookPurchaseAppliesInner
  */
-export interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner {
+export interface BookPurchaseAppliesListResponseBookPurchaseAppliesInner {
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
   reason: string;
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
   price: number;
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
   step: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
   location: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
   createdAt: string;
   /**
    *
-   * @type {ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @type {BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser}
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
-  user: ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser;
+  user: BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser;
   /**
    *
-   * @type {ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInner
+   * @type {BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook}
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInner
    */
-  book: ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook;
+  book: BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook;
 }
 /**
  *
  * @export
- * @interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+ * @interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
  */
-export interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook {
+export interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   id: number;
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   status: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   category: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   title: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   description: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   image?: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   url: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerBook
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerBook
    */
   createdAt: string;
 }
 /**
  *
  * @export
- * @interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser
+ * @interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser
  */
-export interface ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser {
+export interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser
    */
   id: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser
    */
   name: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdBookPurchaseAppliesGet200ResponseBookPurchaseAppliesInnerUser
+   * @memberof BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser
    */
   email: string;
 }
 /**
  *
  * @export
- * @interface ApiClientIdClientGet200Response
+ * @interface BooksResponse
  */
-export interface ApiClientIdClientGet200Response {
+export interface BooksResponse {
+  /**
+   *
+   * @type {Array<BooksResponseBooksInner>}
+   * @memberof BooksResponse
+   */
+  books: Array<BooksResponseBooksInner>;
+  /**
+   *
+   * @type {Array<BooksResponseBookCategoriesInner>}
+   * @memberof BooksResponse
+   */
+  bookCategories: Array<BooksResponseBookCategoriesInner>;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBookCategoriesInner
+ */
+export interface BooksResponseBookCategoriesInner {
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBookCategoriesInner
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInner
+ */
+export interface BooksResponseBooksInner {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdClientGet200Response
+   * @memberof BooksResponseBooksInner
+   */
+  id: number;
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInner
+   */
+  status: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  category: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  title: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  description: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  image?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  url: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInner
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {BooksResponseBooksInnerPurchaseApplicant}
+   * @memberof BooksResponseBooksInner
+   */
+  purchaseApplicant: BooksResponseBooksInnerPurchaseApplicant;
+  /**
+   *
+   * @type {BooksResponseBooksInnerPurchaseApplicant}
+   * @memberof BooksResponseBooksInner
+   */
+  rentalApplicant: BooksResponseBooksInnerPurchaseApplicant;
+  /**
+   *
+   * @type {BooksResponseBooksInnerReviews}
+   * @memberof BooksResponseBooksInner
+   */
+  reviews?: BooksResponseBooksInnerReviews;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInnerPurchaseApplicant
+ */
+export interface BooksResponseBooksInnerPurchaseApplicant {
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerPurchaseApplicant
+   */
+  id?: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerPurchaseApplicant
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface BooksResponseBooksInnerReviews
+ */
+export interface BooksResponseBooksInnerReviews {
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  rate: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  review: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  reviewedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  reviewer: string;
+  /**
+   *
+   * @type {number}
+   * @memberof BooksResponseBooksInnerReviews
+   */
+  rentalCount?: number;
+}
+/**
+ *
+ * @export
+ * @interface ClientResponse
+ */
+export interface ClientResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof ClientResponse
    */
   id: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdClientGet200Response
+   * @memberof ClientResponse
    */
   name: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdClientGet200Response
+   * @memberof ClientResponse
    */
   plan: string;
 }
 /**
  *
  * @export
- * @interface ApiClientIdMeGet200Response
+ * @interface ClientsResponseInner
  */
-export interface ApiClientIdMeGet200Response {
+export interface ClientsResponseInner {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdMeGet200Response
+   * @memberof ClientsResponseInner
    */
   id: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdMeGet200Response
+   * @memberof ClientsResponseInner
    */
   name: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdMeGet200Response
+   * @memberof ClientsResponseInner
+   */
+  plan: string;
+}
+/**
+ *
+ * @export
+ * @interface MeResponse
+ */
+export interface MeResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof MeResponse
+   */
+  id: number;
+  /**
+   *
+   * @type {string}
+   * @memberof MeResponse
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof MeResponse
    */
   email: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdMeGet200Response
+   * @memberof MeResponse
    */
   apiToken: string;
   /**
    *
-   * @type {ApiClientIdMeGet200ResponseRole}
-   * @memberof ApiClientIdMeGet200Response
+   * @type {MeResponseRole}
+   * @memberof MeResponse
    */
-  role: ApiClientIdMeGet200ResponseRole;
+  role: MeResponseRole;
   /**
    *
-   * @type {Array<ApiClientIdMeGet200ResponseClientsInner>}
-   * @memberof ApiClientIdMeGet200Response
+   * @type {Array<MeResponseClientsInner>}
+   * @memberof MeResponse
    */
-  clients: Array<ApiClientIdMeGet200ResponseClientsInner>;
+  clients: Array<MeResponseClientsInner>;
 }
 /**
  *
  * @export
- * @interface ApiClientIdMeGet200ResponseClientsInner
+ * @interface MeResponseClientsInner
  */
-export interface ApiClientIdMeGet200ResponseClientsInner {
+export interface MeResponseClientsInner {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdMeGet200ResponseClientsInner
+   * @memberof MeResponseClientsInner
    */
   id: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdMeGet200ResponseClientsInner
+   * @memberof MeResponseClientsInner
    */
   name: string;
 }
 /**
  *
  * @export
- * @interface ApiClientIdMeGet200ResponseRole
+ * @interface MeResponseRole
  */
-export interface ApiClientIdMeGet200ResponseRole {
+export interface MeResponseRole {
   /**
    *
    * @type {boolean}
-   * @memberof ApiClientIdMeGet200ResponseRole
+   * @memberof MeResponseRole
    */
   isAccountManager: boolean;
   /**
    *
    * @type {boolean}
-   * @memberof ApiClientIdMeGet200ResponseRole
+   * @memberof MeResponseRole
    */
   isBookManager: boolean;
   /**
    *
    * @type {boolean}
-   * @memberof ApiClientIdMeGet200ResponseRole
+   * @memberof MeResponseRole
    */
   isClientManager: boolean;
 }
 /**
  *
  * @export
- * @interface ApiClientIdUserPost422Response
+ * @interface UserCreateRequest
  */
-export interface ApiClientIdUserPost422Response {
+export interface UserCreateRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof UserCreateRequest
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserCreateRequest
+   */
+  email: string;
   /**
    *
    * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response
+   * @memberof UserCreateRequest
+   */
+  roles: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface UserCreateValidateErrorResponse
+ */
+export interface UserCreateValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UserCreateValidateErrorResponse
+   */
+  name?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UserCreateValidateErrorResponse
+   */
+  email?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UserCreateValidateErrorResponse
+   */
+  roles?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface UserUpdateRequest
+ */
+export interface UserUpdateRequest {
+  /**
+   *
+   * @type {number}
+   * @memberof UserUpdateRequest
+   */
+  id: number;
+  /**
+   *
+   * @type {string}
+   * @memberof UserUpdateRequest
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserUpdateRequest
+   */
+  email: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UserUpdateRequest
+   */
+  roles: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface UserUpdateValidateErrorResponse
+ */
+export interface UserUpdateValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UserUpdateValidateErrorResponse
    */
   id?: Array<string>;
   /**
    *
    * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response
+   * @memberof UserUpdateValidateErrorResponse
    */
   name?: Array<string>;
   /**
    *
    * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response
+   * @memberof UserUpdateValidateErrorResponse
    */
   email?: Array<string>;
   /**
    *
    * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response
+   * @memberof UserUpdateValidateErrorResponse
    */
   roles?: Array<string>;
 }
 /**
  *
  * @export
- * @interface ApiClientIdUserPost422Response1
+ * @interface UsersListResponse
  */
-export interface ApiClientIdUserPost422Response1 {
+export interface UsersListResponse {
   /**
    *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response1
+   * @type {Array<UsersListResponseUsersInner>}
+   * @memberof UsersListResponse
    */
-  name?: Array<string>;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response1
-   */
-  email?: Array<string>;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUserPost422Response1
-   */
-  roles?: Array<string>;
+  users: Array<UsersListResponseUsersInner>;
 }
 /**
  *
  * @export
- * @interface ApiClientIdUserPostRequest
+ * @interface UsersListResponseUsersInner
  */
-export interface ApiClientIdUserPostRequest {
+export interface UsersListResponseUsersInner {
   /**
    *
    * @type {number}
-   * @memberof ApiClientIdUserPostRequest
+   * @memberof UsersListResponseUsersInner
    */
   id: number;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdUserPostRequest
+   * @memberof UsersListResponseUsersInner
    */
   name: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdUserPostRequest
-   */
-  email: string;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUserPostRequest
-   */
-  roles: Array<string>;
-}
-/**
- *
- * @export
- * @interface ApiClientIdUserPostRequest1
- */
-export interface ApiClientIdUserPostRequest1 {
-  /**
-   *
-   * @type {string}
-   * @memberof ApiClientIdUserPostRequest1
-   */
-  name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiClientIdUserPostRequest1
-   */
-  email: string;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ApiClientIdUserPostRequest1
-   */
-  roles: Array<string>;
-}
-/**
- *
- * @export
- * @interface ApiClientIdUsersGet200Response
- */
-export interface ApiClientIdUsersGet200Response {
-  /**
-   *
-   * @type {Array<ApiClientIdUsersGet200ResponseUsersInner>}
-   * @memberof ApiClientIdUsersGet200Response
-   */
-  users: Array<ApiClientIdUsersGet200ResponseUsersInner>;
-}
-/**
- *
- * @export
- * @interface ApiClientIdUsersGet200ResponseUsersInner
- */
-export interface ApiClientIdUsersGet200ResponseUsersInner {
-  /**
-   *
-   * @type {number}
-   * @memberof ApiClientIdUsersGet200ResponseUsersInner
-   */
-  id: number;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiClientIdUsersGet200ResponseUsersInner
-   */
-  name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiClientIdUsersGet200ResponseUsersInner
+   * @memberof UsersListResponseUsersInner
    */
   email: string;
   /**
    *
    * @type {string}
-   * @memberof ApiClientIdUsersGet200ResponseUsersInner
+   * @memberof UsersListResponseUsersInner
    */
   apiToken: string;
   /**
    *
-   * @type {ApiClientIdMeGet200ResponseRole}
-   * @memberof ApiClientIdUsersGet200ResponseUsersInner
+   * @type {MeResponseRole}
+   * @memberof UsersListResponseUsersInner
    */
-  role: ApiClientIdMeGet200ResponseRole;
+  role: MeResponseRole;
 }
 
 /**
@@ -471,6 +657,39 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       // verify required parameter 'clientId' is not null or undefined
       assertParamExists("apiClientIdBookPurchaseAppliesGet", "clientId", clientId);
       const localVarPath = `/api/{clientId}/bookPurchaseApplies`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBooksGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiClientIdBooksGet", "clientId", clientId);
+      const localVarPath = `/api/{clientId}/books`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -596,15 +815,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      *
      * @summary ユーザー追加
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+     * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPost: async (
-      clientId: number,
-      apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
+    apiClientIdUserPost: async (clientId: number, userCreateRequest?: UserCreateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'clientId' is not null or undefined
       assertParamExists("apiClientIdUserPost", "clientId", clientId);
       const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
@@ -626,7 +841,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(apiClientIdUserPostRequest1, localVarRequestOptions, configuration);
+      localVarRequestOptions.data = serializeDataIfNeeded(userCreateRequest, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -637,15 +852,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      *
      * @summary ユーザー更新
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPut: async (
-      clientId: number,
-      apiClientIdUserPostRequest?: ApiClientIdUserPostRequest,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
+    apiClientIdUserPut: async (clientId: number, userUpdateRequest?: UserUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'clientId' is not null or undefined
       assertParamExists("apiClientIdUserPut", "clientId", clientId);
       const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
@@ -667,7 +878,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(apiClientIdUserPostRequest, localVarRequestOptions, configuration);
+      localVarRequestOptions.data = serializeDataIfNeeded(userUpdateRequest, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -727,8 +938,22 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async apiClientIdBookPurchaseAppliesGet(
       clientId: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiClientIdBookPurchaseAppliesGet200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BookPurchaseAppliesListResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBookPurchaseAppliesGet(clientId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiClientIdBooksGet(
+      clientId: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BooksResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBooksGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -741,7 +966,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async apiClientIdClientGet(
       clientId: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiClientIdClientGet200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClientResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdClientGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -755,7 +980,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async apiClientIdClientsGet(
       clientId: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiClientIdClientGet200Response>>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ClientsResponseInner>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdClientsGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -769,7 +994,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async apiClientIdMeGet(
       clientId: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiClientIdMeGet200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdMeGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -777,32 +1002,32 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      *
      * @summary ユーザー追加
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+     * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async apiClientIdUserPost(
       clientId: number,
-      apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1,
+      userCreateRequest?: UserCreateRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, userCreateRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary ユーザー更新
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async apiClientIdUserPut(
       clientId: number,
-      apiClientIdUserPostRequest?: ApiClientIdUserPostRequest,
+      userUpdateRequest?: UserUpdateRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPut(clientId, userUpdateRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -815,7 +1040,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async apiClientIdUsersGet(
       clientId: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiClientIdUsersGet200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersListResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUsersGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -836,8 +1061,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookPurchaseAppliesGet(clientId: number, options?: any): AxiosPromise<ApiClientIdBookPurchaseAppliesGet200Response> {
+    apiClientIdBookPurchaseAppliesGet(clientId: number, options?: any): AxiosPromise<BookPurchaseAppliesListResponse> {
       return localVarFp.apiClientIdBookPurchaseAppliesGet(clientId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary 書籍一覧
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBooksGet(clientId: number, options?: any): AxiosPromise<BooksResponse> {
+      return localVarFp.apiClientIdBooksGet(clientId, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -846,7 +1081,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientGet(clientId: number, options?: any): AxiosPromise<ApiClientIdClientGet200Response> {
+    apiClientIdClientGet(clientId: number, options?: any): AxiosPromise<ClientResponse> {
       return localVarFp.apiClientIdClientGet(clientId, options).then((request) => request(axios, basePath));
     },
     /**
@@ -856,7 +1091,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientsGet(clientId: number, options?: any): AxiosPromise<Array<ApiClientIdClientGet200Response>> {
+    apiClientIdClientsGet(clientId: number, options?: any): AxiosPromise<Array<ClientsResponseInner>> {
       return localVarFp.apiClientIdClientsGet(clientId, options).then((request) => request(axios, basePath));
     },
     /**
@@ -866,30 +1101,30 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdMeGet(clientId: number, options?: any): AxiosPromise<ApiClientIdMeGet200Response> {
+    apiClientIdMeGet(clientId: number, options?: any): AxiosPromise<MeResponse> {
       return localVarFp.apiClientIdMeGet(clientId, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary ユーザー追加
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+     * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options).then((request) => request(axios, basePath));
+    apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiClientIdUserPost(clientId, userCreateRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary ユーザー更新
      * @param {number} clientId
-     * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+     * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPut(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options).then((request) => request(axios, basePath));
+    apiClientIdUserPut(clientId: number, userUpdateRequest?: UserUpdateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiClientIdUserPut(clientId, userUpdateRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -898,7 +1133,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUsersGet(clientId: number, options?: any): AxiosPromise<ApiClientIdUsersGet200Response> {
+    apiClientIdUsersGet(clientId: number, options?: any): AxiosPromise<UsersListResponse> {
       return localVarFp.apiClientIdUsersGet(clientId, options).then((request) => request(axios, basePath));
     },
   };
@@ -922,6 +1157,20 @@ export class DefaultApi extends BaseAPI {
   public apiClientIdBookPurchaseAppliesGet(clientId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiClientIdBookPurchaseAppliesGet(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary 書籍一覧
+   * @param {number} clientId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiClientIdBooksGet(clientId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiClientIdBooksGet(clientId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -971,14 +1220,14 @@ export class DefaultApi extends BaseAPI {
    *
    * @summary ユーザー追加
    * @param {number} clientId
-   * @param {ApiClientIdUserPostRequest1} [apiClientIdUserPostRequest1]
+   * @param {UserCreateRequest} [userCreateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUserPost(clientId: number, apiClientIdUserPostRequest1?: ApiClientIdUserPostRequest1, options?: AxiosRequestConfig) {
+  public apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUserPost(clientId, apiClientIdUserPostRequest1, options)
+      .apiClientIdUserPost(clientId, userCreateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -986,14 +1235,14 @@ export class DefaultApi extends BaseAPI {
    *
    * @summary ユーザー更新
    * @param {number} clientId
-   * @param {ApiClientIdUserPostRequest} [apiClientIdUserPostRequest]
+   * @param {UserUpdateRequest} [userUpdateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUserPut(clientId: number, apiClientIdUserPostRequest?: ApiClientIdUserPostRequest, options?: AxiosRequestConfig) {
+  public apiClientIdUserPut(clientId: number, userUpdateRequest?: UserUpdateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUserPut(clientId, apiClientIdUserPostRequest, options)
+      .apiClientIdUserPut(clientId, userUpdateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

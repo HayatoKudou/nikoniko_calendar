@@ -8,7 +8,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { ApiClientIdClientGet200Response } from "../../../api_client";
+import { ClientsResponseInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -20,7 +20,7 @@ const MenuList = (props: { open: boolean }) => {
   const theme = useTheme();
   const [choseClient, setChoseClient] = useRecoilState(useChoseClient);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [clients, setClients] = React.useState<null | Array<ApiClientIdClientGet200Response>>(null);
+  const [clients, setClients] = React.useState<null | Array<ClientsResponseInner>>(null);
 
   React.useEffect(() => {
     fetchClient();
@@ -47,6 +47,8 @@ const MenuList = (props: { open: boolean }) => {
   const handleSelect = (clientId: number) => {
     setChoseClient({ clientId: clientId });
   };
+
+  console.log(clients);
 
   return (
     <List component="div">
