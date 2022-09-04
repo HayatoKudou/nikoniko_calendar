@@ -25,6 +25,7 @@ import MeProfile from "../users/profile";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
 import MenuList3 from "./menuList3";
+import {useSnackbar} from "notistack";
 
 const drawerWidth = 240;
 
@@ -100,8 +101,8 @@ export default function Sidebar(props: { children: any }) {
   const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
   const resetMe = useResetRecoilState(useMe);
+  const { enqueueSnackbar } = useSnackbar();
   const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openLogoutConfirm, setOpenLogoutConfirm] = React.useState<boolean>(false);
@@ -114,7 +115,10 @@ export default function Sidebar(props: { children: any }) {
   }, [me]);
 
   const logout = () => {
-    router.push("/sign-in").then(() => resetMe());
+    router.push("/sign-in").then(() => {
+      resetMe()
+      enqueueSnackbar("ログアウトしました", {variant: "success"});
+    })
   };
 
   return (
