@@ -13,9 +13,9 @@ import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/sidebar/index.module.scss";
 import ClientProfile from "../client_proofile";
@@ -25,7 +25,6 @@ import MeProfile from "../users/profile";
 import MenuList from "./menuList";
 import MenuList2 from "./menuList2";
 import MenuList3 from "./menuList3";
-import {useSnackbar} from "notistack";
 
 const drawerWidth = 240;
 
@@ -116,9 +115,9 @@ export default function Sidebar(props: { children: any }) {
 
   const logout = () => {
     router.push("/sign-in").then(() => {
-      resetMe()
-      enqueueSnackbar("ログアウトしました", {variant: "success"});
-    })
+      resetMe();
+      enqueueSnackbar("ログアウトしました", { variant: "success" });
+    });
   };
 
   return (
