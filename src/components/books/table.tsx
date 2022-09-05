@@ -20,6 +20,7 @@ import Tooltip from "@mui/material/Tooltip";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/books/table.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
@@ -29,7 +30,7 @@ import TableHead from "../parts/table_head";
 
 type Order = "asc" | "desc";
 interface TableToolbarProps {
-  books: Array<Book>;
+  books: Array<BooksResponseBooksInner>;
   numSelected: number;
   isBookManager: boolean;
   handleCreate: () => void;
@@ -38,7 +39,7 @@ interface TableToolbarProps {
 }
 
 interface Props {
-  books: Array<Book>;
+  books: Array<BooksResponseBooksInner>;
   handleCreate: () => void;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
   handleDelete: () => void;
@@ -72,7 +73,6 @@ const headCells: readonly TableHeadCell[] = [
 
 const TableToolbar = (props: TableToolbarProps) => {
   const { numSelected } = props;
-  const me = useRecoilValue(useMe);
   return (
     <Toolbar
       sx={{
@@ -103,7 +103,7 @@ const TableToolbar = (props: TableToolbarProps) => {
           )}
           <CsvDownload
             csvDataGenerator={() => {
-              return props.books.map((book: Book) => {
+              return props.books.map((book) => {
                 return {
                   カテゴリ: book.category,
                   タイトル: book.title,

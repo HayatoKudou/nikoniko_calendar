@@ -209,7 +209,7 @@ export interface BooksResponseBookCategoriesInner {
    * @type {string}
    * @memberof BooksResponseBookCategoriesInner
    */
-  name?: string;
+  name: string;
 }
 /**
  *

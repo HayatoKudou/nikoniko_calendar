@@ -38,12 +38,12 @@ const CsvUpload = (props: Props) => {
   const choseClient = useRecoilValue(useChoseClient);
   const [csvData, setCsvData] = React.useState<Array<CSV> | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const fileReader = new FileReader();
 
   if (loading) return <Spinner />;
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      const fileReader = new FileReader();
       fileReader.onload = function (event) {
         const csvString = event.target!.result as string;
         const replacedResult = csvString.replace(/['"]+/g, "");

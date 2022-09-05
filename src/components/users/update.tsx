@@ -89,7 +89,6 @@ const UpdateUser = (props: Props) => {
         props.onClose();
       })
       .catch((res) => {
-        console.log(res);
         setLoading(false);
         setUpdateUserRequestErrors(res.response.data.errors);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
