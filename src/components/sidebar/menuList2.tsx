@@ -48,8 +48,6 @@ const MenuList = (props: { open: boolean }) => {
     setChoseClient({ clientId: clientId });
   };
 
-  console.log(clients);
-
   return (
     <List component="div">
       {clients?.map((client, index) => (

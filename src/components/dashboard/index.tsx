@@ -21,10 +21,11 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import Config from "../../../config";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
-import useBooks from "../../api/book/list";
+import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -65,10 +66,10 @@ const Dashboard = () => {
   const choseClient = useRecoilValue(useChoseClient);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
-  const setBookCategory = useSetRecoilState(useBookCategories);
+  const [bookCategory, setBookCategory] = useRecoilState(useBookCategories);
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
-  const [creating, setCreating] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState(false);
   const [applicationDialogOpen, setApplicationDialogOpen] = React.useState<boolean>(false);
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState<boolean>(false);
@@ -78,22 +79,32 @@ const Dashboard = () => {
   const [bookSearchStringInput, setBookSearchStringInput] = React.useState<string>("");
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
   const [bookSortedOption, setBookSortedOption] = React.useState<string>("新しい順");
+  const [books, setBooks] = React.useState<Array<BooksResponseBooksInner>>([]);
 
-  const { loading, error, response, mutate } = useBooks();
   React.useEffect(() => {
-    if (response) {
-      const bookCategories = response.bookCategories.map((bookCategory: BookCategory) => {
-        return { label: bookCategory.name };
-      });
-      setBookCategory(response.bookCategories);
-      setTabList(bookCategories);
-    }
-  }, [response]);
+    fetchBooks();
+  }, [choseClient]);
 
-  if (loading || creating) return <Spinner />;
-  if (error) {
-    return <Spinner />;
-  }
+  if (loading) return <Spinner />;
+
+  const fetchBooks = () => {
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiClientIdBooksGet(choseClient.clientId)
+      .then((res) => {
+        setBooks(res.data.books);
+        setBookCategory(res.data.bookCategories);
+        const bookCategories = res.data.bookCategories.map((bookCategory) => {
+          return { label: bookCategory.name };
+        });
+        setTabList(bookCategories);
+        setLoading(false);
+      })
+      .catch(() => {
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+        setLoading(false);
+      });
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     if (newValue !== undefined) {
@@ -155,7 +166,7 @@ const Dashboard = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCreating(true);
+    setLoading(true);
     CreateBookCategory(choseClient.clientId, {
       name: bookCategoryFormValue,
       apiToken: me.apiToken,
@@ -178,15 +189,13 @@ const Dashboard = () => {
           setBookCategoryFormValue("");
         } else {
           setBookCategoryFormError(res.errors);
-          enqueueSnackbar(`カテゴリの登録に失敗しました`, {
-            variant: "error",
-          });
+          enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
         }
-        setCreating(false);
+        setLoading(false);
       })
       .catch(() => {
         enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
-        setCreating(false);
+        setLoading(false);
       });
   };
 

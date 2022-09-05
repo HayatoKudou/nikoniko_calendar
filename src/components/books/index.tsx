@@ -1,10 +1,9 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import Config from "../../../config";
+import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import DeleteBook from "../../api/book/delete";
-import useBooks from "../../api/book/list";
-import { useBookCategories } from "../../store/book/categories";
+import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
@@ -19,23 +18,34 @@ const Books = () => {
   const choseClient = useRecoilValue(useChoseClient);
   const chosenClient = useRecoilValue(useChoseClient);
   const { enqueueSnackbar } = useSnackbar();
-  const [, setBookCategory] = useRecoilState(useBookCategories);
-  const [deleting, setDeleting] = React.useState<boolean>(false);
   const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = React.useState<boolean>(false);
   const [csvUploadDialogOpen, setCsvUploadDialogOpen] = React.useState<boolean>(false);
-  const { loading, error, response, mutate } = useBooks();
+  const [loading, setLoading] = React.useState(false);
+  const [books, setBooks] = React.useState<Array<BooksResponseBooksInner>>([]);
 
   React.useEffect(() => {
-    if (response) {
-      setBookCategory(response.bookCategories);
-    }
-  }, [response]);
+    fetchBooks();
+  }, [chosenClient]);
 
-  if (loading || deleting || error) return <Spinner />;
+  if (loading) return <Spinner />;
+
+  const fetchBooks = () => {
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiClientIdBooksGet(choseClient.clientId)
+      .then((res) => {
+        setBooks(res.data.books);
+        setLoading(false);
+      })
+      .catch(() => {
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+        setLoading(false);
+      });
+  };
 
   const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
     e.stopPropagation();
@@ -60,11 +70,10 @@ const Books = () => {
   };
 
   const handleSuccess = () => {
-    mutate(`${Config.apiOrigin}/api/${chosenClient.clientId}/books`);
+    fetchBooks();
   };
 
   const handleDeleteBook = () => {
-    setDeleting(true);
     DeleteBook(choseClient.clientId, {
       book_ids: selectedBookIds,
       apiToken: me.apiToken,
@@ -74,11 +83,9 @@ const Books = () => {
           variant: "success",
         });
         setOpenDeleteConfirm(false);
-        setDeleting(false);
         handleSuccess();
       })
       .catch(() => {
-        setDeleting(false);
         enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
       });
   };
@@ -92,12 +99,13 @@ const Books = () => {
           book={selectedEditBook}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
-          onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
+          // onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
+          onSuccess={fetchBooks}
         />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
       <CustomTable
-        books={response.books}
+        books={books}
         handleCsvUpload={handleClickCsvUploadButton}
         handleCreate={handleClickCreateButton}
         handleEdit={handleEditBook}
