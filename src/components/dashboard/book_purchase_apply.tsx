@@ -25,7 +25,6 @@ import Spinner from "../parts/spinner";
 
 interface Props {
   open: boolean;
-  client: Client;
   setClose: () => void;
   success: () => void;
 }

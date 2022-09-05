@@ -23,7 +23,6 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { BooksResponseBooksInner } from "../../../api_client";
-import Config from "../../../config";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
@@ -66,7 +65,7 @@ const Dashboard = () => {
   const choseClient = useRecoilValue(useChoseClient);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
-  const [bookCategory, setBookCategory] = useRecoilState(useBookCategories);
+  const [, setBookCategory] = useRecoilState(useBookCategories);
   const [tabList, setTabList] = React.useState<Array<{ label: string }>>([{ label: "ALL" }]);
   const [openTabValue, setOpenTabValue] = React.useState("ALL");
   const [loading, setLoading] = React.useState(false);
@@ -113,9 +112,9 @@ const Dashboard = () => {
   };
 
   const bookCategoryFiltered = (): Array<any> => {
-    let filtered = response.books;
+    let filtered = books;
     if (bookSearchString) {
-      filtered = filtered.filter((book: Book) => {
+      filtered = books.filter((book) => {
         if (book.title.indexOf(bookSearchString) !== -1) {
           return book;
         }
@@ -124,7 +123,7 @@ const Dashboard = () => {
     if (openTabValue === "ALL") {
       return filtered;
     }
-    return filtered.filter((book: Book) => {
+    return filtered.filter((book) => {
       return book.category === openTabValue;
     });
   };
@@ -205,7 +204,7 @@ const Dashboard = () => {
   };
 
   const handleSuccess = () => {
-    mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/books`);
+    fetchBooks();
     setBookInfoDialogOpen(false);
     setApplicationDialogOpen(false);
   };
@@ -215,12 +214,7 @@ const Dashboard = () => {
       {selectedBook && (
         <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
       )}
-      <BookPurchaseApply
-        open={applicationDialogOpen}
-        setClose={() => setApplicationDialogOpen(false)}
-        success={handleSuccess}
-        client={response.client}
-      />
+      <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
 
       <Box className={styles.dashboard__head}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
