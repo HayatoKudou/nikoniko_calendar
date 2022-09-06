@@ -182,6 +182,92 @@ export interface BookPurchaseAppliesListResponseBookPurchaseAppliesInnerUser {
 /**
  *
  * @export
+ * @interface BookUpdateRequest
+ */
+export interface BookUpdateRequest {
+  /**
+   *
+   * @type {number}
+   * @memberof BookUpdateRequest
+   */
+  id: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BookUpdateRequest
+   */
+  category: string;
+  /**
+   *
+   * @type {number}
+   * @memberof BookUpdateRequest
+   */
+  status: number;
+  /**
+   *
+   * @type {string}
+   * @memberof BookUpdateRequest
+   */
+  title: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BookUpdateRequest
+   */
+  description?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof BookUpdateRequest
+   */
+  image?: string | null;
+  /**
+   *
+   * @type {string}
+   * @memberof BookUpdateRequest
+   */
+  url?: string | null;
+}
+/**
+ *
+ * @export
+ * @interface BookUpdateValidateErrorResponse
+ */
+export interface BookUpdateValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookUpdateValidateErrorResponse
+   */
+  id?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookUpdateValidateErrorResponse
+   */
+  category?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookUpdateValidateErrorResponse
+   */
+  status?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookUpdateValidateErrorResponse
+   */
+  title?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookUpdateValidateErrorResponse
+   */
+  description?: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface BooksResponse
  */
 export interface BooksResponse {
@@ -681,6 +767,43 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary 書籍更新
+     * @param {number} clientId
+     * @param {BookUpdateRequest} [bookUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBookPut: async (clientId: number, bookUpdateRequest?: BookUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiClientIdBookPut", "clientId", clientId);
+      const localVarPath = `/api/{clientId}/book`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "PUT", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(bookUpdateRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary 書籍一覧
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -944,6 +1067,22 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary 書籍更新
+     * @param {number} clientId
+     * @param {BookUpdateRequest} [bookUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiClientIdBookPut(
+      clientId: number,
+      bookUpdateRequest?: BookUpdateRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBookPut(clientId, bookUpdateRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary 書籍一覧
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -1066,6 +1205,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary 書籍更新
+     * @param {number} clientId
+     * @param {BookUpdateRequest} [bookUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiClientIdBookPut(clientId: number, bookUpdateRequest?: BookUpdateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiClientIdBookPut(clientId, bookUpdateRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary 書籍一覧
      * @param {number} clientId
      * @param {*} [options] Override http request option.
@@ -1157,6 +1307,21 @@ export class DefaultApi extends BaseAPI {
   public apiClientIdBookPurchaseAppliesGet(clientId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiClientIdBookPurchaseAppliesGet(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary 書籍更新
+   * @param {number} clientId
+   * @param {BookUpdateRequest} [bookUpdateRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiClientIdBookPut(clientId: number, bookUpdateRequest?: BookUpdateRequest, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiClientIdBookPut(clientId, bookUpdateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

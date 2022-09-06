@@ -12,8 +12,9 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BookUpdateRequest, BookUpdateValidateErrorResponse } from "../../../api_client";
 import AmazonImage from "../../api/book/amazon_image";
-import UpdateBook, { UpdateBookRequestErrors, UpdateBookRequestPayload } from "../../api/book/update";
+import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -36,7 +37,7 @@ const Update = (props: Props) => {
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<Blob | null>(props.book.image);
-  const [formValues, setFormValues] = React.useState<UpdateBookRequestPayload>({
+  const [formValues, setFormValues] = React.useState<BookUpdateRequest>({
     id: 0,
     category: "",
     status: 0,
@@ -44,9 +45,8 @@ const Update = (props: Props) => {
     description: "",
     image: null,
     url: "",
-    apiToken: "",
   });
-  const [UpdateBookRequestErrors, setUpdateUserRequestErrors] = React.useState<Partial<UpdateBookRequestErrors>>({});
+  const [UpdateBookRequestErrors, setUpdateUserRequestErrors] = React.useState<BookUpdateValidateErrorResponse>({});
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -58,7 +58,6 @@ const Update = (props: Props) => {
       description: props.book.description || "",
       image: props.book.image,
       url: props.book.url,
-      apiToken: me.apiToken,
     });
     setSelectedImage(props.book.image);
   }, [props.open]);
@@ -74,36 +73,30 @@ const Update = (props: Props) => {
 
   const handleUpdate = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    UpdateBook(choseClient.clientId, {
-      id: formValues.id,
-      category: formValues.category,
-      status: formValues.status,
-      title: formValues.title,
-      description: formValues.description,
-      image: image,
-      url: formValues.url,
-      apiToken: formValues.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setUpdateUserRequestErrors({});
-          enqueueSnackbar("書籍の更新に成功しました。", {
-            variant: "success",
-          });
-          props.onSuccess();
-          props.onClose();
-        } else {
-          setUpdateUserRequestErrors(res.errors);
-          enqueueSnackbar(`書籍の更新に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenConfirm(false);
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiClientIdBookPut(choseClient.clientId, {
+        id: formValues.id,
+        category: formValues.category,
+        status: formValues.status,
+        title: formValues.title,
+        description: formValues.description,
+        // @ts-ignore
+        image: image,
+        url: formValues.url,
       })
-      .catch(() => {
+      .then((res) => {
         setLoading(false);
-        enqueueSnackbar(`書籍の更新に失敗しました`, { variant: "error" });
+        setOpenConfirm(false);
+        setUpdateUserRequestErrors({});
+        enqueueSnackbar("更新に成功しました", { variant: "success" });
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch((res) => {
+        setLoading(false);
+        setOpenConfirm(false);
+        setUpdateUserRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -184,7 +177,6 @@ const Update = (props: Props) => {
             fullWidth
             variant="standard"
           />
-          <FormError errors={UpdateBookRequestErrors?.url} />
         </Box>
       </DialogContent>
       <DialogActions>
