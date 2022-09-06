@@ -42,8 +42,10 @@ const MenuList = (props: { open: boolean }) => {
     { name: "dashboard", title: "ダッシュボード", path: `/dashboard` },
     { name: "books", title: "書籍管理", path: `/books` },
     { name: "users", title: "ユーザー管理", path: `/users` },
-    me.role.isBookManager && { name: "purchaseApplies", title: "書籍購入申請", path: `/purchase-applies` },
   ];
+  if (me.role.isBookManager) {
+    menuList.push({ name: "purchaseApplies", title: "書籍購入申請", path: `/purchase-applies` });
+  }
 
   React.useEffect(() => {
     setSelectedPath(router.asPath);

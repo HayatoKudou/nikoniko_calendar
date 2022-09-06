@@ -1,9 +1,10 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { BooksResponseBooksInner } from "../../../api_client";
 import DeleteBook from "../../api/book/delete";
 import ApiClient from "../../lib/apiClient";
+import { useBookCategories } from "../../store/book/categories";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
@@ -16,7 +17,7 @@ import CustomTable from "./table";
 const Books = () => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
-  const chosenClient = useRecoilValue(useChoseClient);
+  const [, setBookCategories] = useRecoilState(useBookCategories);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
@@ -29,7 +30,7 @@ const Books = () => {
 
   React.useEffect(() => {
     fetchBooks();
-  }, [chosenClient]);
+  }, [choseClient]);
 
   if (loading) return <Spinner />;
 
@@ -39,6 +40,7 @@ const Books = () => {
       .apiClientIdBooksGet(choseClient.clientId)
       .then((res) => {
         setBooks(res.data.books);
+        setBookCategories(res.data.bookCategories);
         setLoading(false);
       })
       .catch(() => {
