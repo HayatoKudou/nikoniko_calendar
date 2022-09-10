@@ -11,6 +11,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../api_client";
 import styles from "../../styles/components/purchase_applies/table.module.scss";
 import { bookPurchaseAcceptStep } from "../../util/book";
 import { getComparator, stableSort } from "../../util/table";
@@ -20,8 +21,11 @@ type Order = "asc" | "desc";
 
 interface Props {
   bookPurchaseApplies: Array<any>;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: PurchaseApply) => void;
-  handleInit: (purchaseApply: PurchaseApply) => void;
+  handleEdit: (
+    e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>,
+    book: BookPurchaseAppliesListResponseBookPurchaseAppliesInner
+  ) => void;
+  handleInit: (purchaseApply: BookPurchaseAppliesListResponseBookPurchaseAppliesInner) => void;
 }
 
 const headCells: readonly TableHeadCell[] = [
@@ -97,7 +101,7 @@ const CustomTable = (props: Props) => {
             {stableSort(props.bookPurchaseApplies, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               //@ts-ignore
-              .map((purchaseApply: PurchaseApply) => {
+              .map((purchaseApply: BookPurchaseAppliesListResponseBookPurchaseAppliesInner) => {
                 return (
                   <TableRow key={purchaseApply.book.id} sx={{ backgroundColor: purchaseApply.step === 0 ? "text.disabled" : "" }}>
                     <TableCell>

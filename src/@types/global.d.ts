@@ -62,13 +62,3 @@ interface TableHeadCell {
   id: string;
   label: string;
 }
-
-interface PurchaseApply {
-  price: number;
-  reason: string;
-  step: number;
-  location: string;
-  createdAt: string;
-  user: User;
-  book: Book;
-}

@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../api_client";
 import Notification, { BookPurchaseNotificationRequestErrors } from "../../../api/book/purchase_apply/notification";
 import Refuse from "../../../api/book/purchase_apply/refuse";
 import { useChoseClient } from "../../../store/choseClient";
@@ -19,7 +20,7 @@ import Spinner from "../../parts/spinner";
 interface Props {
   canNotification: boolean;
   bookImage: Blob | null;
-  purchaseApply: PurchaseApply;
+  purchaseApply: BookPurchaseAppliesListResponseBookPurchaseAppliesInner;
   onSuccess: () => void;
   onClose: () => void;
 }

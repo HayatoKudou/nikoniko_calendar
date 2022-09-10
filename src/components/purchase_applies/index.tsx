@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookPurchaseAppliesListResponse } from "../../../api_client";
+import { BookPurchaseAppliesListResponse, BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../api_client";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
@@ -14,8 +14,8 @@ import CustomTable from "./table";
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
   const choseClient = useRecoilValue(useChoseClient);
-  const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<PurchaseApply>();
-  const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<PurchaseApply>();
+  const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>();
+  const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>();
   const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
   const [openInitConfirm, setOpenInitConfirm] = React.useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -29,12 +29,18 @@ const PurchaseApplies = () => {
       .then((res) => {
         setLoading(false);
         setResponse(res.data);
+        if (selectedEditPurchaseApply) {
+          setSelectedEditPurchaseApply(
+            res.data.bookPurchaseApplies.find((bookPurchaseApply) => bookPurchaseApply.book.id === selectedEditPurchaseApply.book.id)
+          );
+        }
       })
       .catch(() => {
         setLoading(false);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
+  console.log(selectedEditPurchaseApply);
 
   React.useEffect(() => {
     fetchPurchaseApplies();
@@ -48,7 +54,7 @@ const PurchaseApplies = () => {
     setApprovalOpen(true);
   };
 
-  const handleInitClick = (purchaseApply: PurchaseApply) => {
+  const handleInitClick = (purchaseApply: BookPurchaseAppliesListResponseBookPurchaseAppliesInner) => {
     setOpenInitConfirm(true);
     setSelectedInitPurchaseApply(purchaseApply);
   };
