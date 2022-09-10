@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -15,7 +16,7 @@ import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
 interface Props {
-  bookInfo: Book;
+  bookInfo: BooksResponseBooksInner;
   onSuccess: () => void;
 }
 
@@ -102,7 +103,7 @@ const BookReviews = (props: Props) => {
         </Box>
       </Box>
       <ConfirmDialog message={"レビューを投稿しますか？"} open={openConfirm} onClose={handleConfirmClose} handleSubmit={handleSubmit} />
-      {props.bookInfo.reviews.map((review: Review, index: number) => (
+      {props.bookInfo.reviews.map((review, index: number) => (
         <Box key={index} className={styles.review__listContainer}>
           <Box className={styles.review__valueContainer}>
             <Rating value={review.rate} className={styles.review__ratingReview} readOnly />

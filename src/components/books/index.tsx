@@ -19,7 +19,7 @@ const Books = () => {
   const choseClient = useRecoilValue(useChoseClient);
   const [, setBookCategories] = useRecoilState(useBookCategories);
   const { enqueueSnackbar } = useSnackbar();
-  const [selectedEditBook, setSelectedEditBook] = React.useState<Book>();
+  const [selectedEditBook, setSelectedEditBook] = React.useState<BooksResponseBooksInner>();
   const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
@@ -49,7 +49,7 @@ const Books = () => {
       });
   };
 
-  const handleEditBook = (e: { stopPropagation: any }, book: Book) => {
+  const handleEditBook = (e: { stopPropagation: any }, book: BooksResponseBooksInner) => {
     e.stopPropagation();
     setSelectedEditBook(book);
     setUpdateDialogOpen(true);

@@ -1,3 +1,4 @@
+import { BooksResponse } from "../../../../api_client";
 import Config from "../../../../config";
 
 export interface BookPurchaseApplyRequestErrors {
@@ -11,7 +12,7 @@ export interface BookPurchaseApplyRequestErrors {
 
 interface BookPurchaseApplyResult {
   succeeded: boolean;
-  books: Array<Book> | null;
+  books: BooksResponse | null;
   errors: Partial<BookPurchaseApplyRequestErrors>;
 }
 

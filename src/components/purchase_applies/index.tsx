@@ -40,7 +40,6 @@ const PurchaseApplies = () => {
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
-  console.log(selectedEditPurchaseApply);
 
   React.useEffect(() => {
     fetchPurchaseApplies();

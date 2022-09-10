@@ -18,11 +18,11 @@ import Tooltip from "@mui/material/Tooltip";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
+import { UsersListResponseUsersInner } from "../../../api_client";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/users/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
-import {UsersListResponseUsersInner} from "../../../api_client";
 
 type Order = "asc" | "desc";
 

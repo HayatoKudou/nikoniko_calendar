@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookUpdateRequest, BookUpdateValidateErrorResponse } from "../../../api_client";
+import { BooksResponseBooksInner, BookUpdateRequest, BookUpdateValidateErrorResponse } from "../../../api_client";
 import AmazonImage from "../../api/book/amazon_image";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
@@ -25,7 +25,7 @@ import Spinner from "../parts/spinner";
 
 interface Props {
   open: boolean;
-  book: Book;
+  book: BooksResponseBooksInner;
   onSuccess: () => void;
   onClose: () => void;
 }
@@ -36,7 +36,7 @@ const Update = (props: Props) => {
   const choseClient = useRecoilValue(useChoseClient);
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState<Blob | null>(props.book.image);
+  const [selectedImage, setSelectedImage] = React.useState<string | null>(props.book.image);
   const [formValues, setFormValues] = React.useState<BookUpdateRequest>({
     id: 0,
     category: "",
@@ -104,6 +104,7 @@ const Update = (props: Props) => {
     e.preventDefault();
     if (selectedImage) {
       const reader = new FileReader();
+      // @ts-ignore
       reader.readAsDataURL(selectedImage);
       reader.onload = function () {
         handleUpdate(reader.result);
@@ -120,6 +121,7 @@ const Update = (props: Props) => {
 
       AmazonImage(dp)
         .then((blob) => {
+          // @ts-ignore
           setSelectedImage(blob);
         })
         .catch(() => {
@@ -139,7 +141,7 @@ const Update = (props: Props) => {
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.category} name="category" label="role" variant="standard">
-              {bookCategories?.map((bookCategory: BookCategory, index: number) => (
+              {bookCategories?.map((bookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
                 </MenuItem>

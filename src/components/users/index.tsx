@@ -1,6 +1,7 @@
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { UsersListResponseUsersInner } from "../../../api_client";
 import DeleteUser from "../../api/user/delete";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
@@ -10,7 +11,6 @@ import Spinner from "../parts/spinner";
 import CreateUser from "./create";
 import CustomTable from "./table";
 import UpdateUser from "./update";
-import {UsersListResponseUsersInner} from "../../../api_client";
 
 const Users = () => {
   const me = useRecoilValue(useMe);

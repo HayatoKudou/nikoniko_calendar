@@ -1,3 +1,4 @@
+import { BooksResponse } from "../../../api_client";
 import Config from "../../../config";
 
 export interface RegisterBookRequestErrors {
@@ -9,7 +10,7 @@ export interface RegisterBookRequestErrors {
 
 interface RegisterBookResult {
   succeeded: boolean;
-  books: Array<Book> | null;
+  books: BooksResponse | null;
   errors: Partial<RegisterBookRequestErrors>;
 }
 

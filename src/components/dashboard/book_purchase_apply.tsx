@@ -137,7 +137,7 @@ const BookPurchaseApply = (props: Props) => {
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
             <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
-              {bookCategories?.map((bookCategory: BookCategory, index: number) => (
+              {bookCategories?.map((bookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
                 </MenuItem>

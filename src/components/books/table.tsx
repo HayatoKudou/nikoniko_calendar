@@ -41,7 +41,7 @@ interface TableToolbarProps {
 interface Props {
   books: Array<BooksResponseBooksInner>;
   handleCreate: () => void;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: Book) => void;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: BooksResponseBooksInner) => void;
   handleDelete: () => void;
   handleCsvUpload: () => void;
   selected: Array<any>;

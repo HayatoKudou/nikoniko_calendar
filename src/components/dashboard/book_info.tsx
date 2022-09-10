@@ -7,6 +7,7 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/dashboards/book_info.module.scss";
 import { bookStatusName, BOOK_STATUS } from "../../util/book";
@@ -17,7 +18,7 @@ import BookReviews from "./book_reviews";
 
 interface Props {
   open: boolean;
-  bookInfo: Book;
+  bookInfo: BooksResponseBooksInner;
   setClose: () => void;
   success: () => void;
 }
@@ -37,7 +38,7 @@ const BookInfo = (props: Props) => {
   let rateAverage = 0;
   if (props.bookInfo.reviews.length > 0) {
     const rateSum = props.bookInfo.reviews
-      .map((review: Review) => review.rate)
+      .map((review) => review.rate)
       .reduce((a: number, b: number) => {
         return a + b;
       });
@@ -77,10 +78,10 @@ const BookInfo = (props: Props) => {
             <BookInfoDetail title={"ステータス"} value={bookStatusName(props.bookInfo.status)} />
 
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant && (
-              <BookInfoDetail title={"貸出者"} value={props.bookInfo.rentalApplicant.name} />
+              <BookInfoDetail title={"貸出者"} value={props.bookInfo.rentalApplicant.name ?? ""} />
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && props.bookInfo.purchaseApplicant && (
-              <BookInfoDetail title={"購入申請者"} value={props.bookInfo.purchaseApplicant.name} />
+              <BookInfoDetail title={"購入申請者"} value={props.bookInfo.purchaseApplicant.name ?? ""} />
             )}
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant?.id === me.id && (
               <BookReturn bookInfo={props.bookInfo} success={props.success} />

@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import BookReturn from "../../api/book/return";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -10,7 +11,7 @@ import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 
 interface Props {
-  bookInfo: Book;
+  bookInfo: BooksResponseBooksInner;
   success: () => void;
 }
 

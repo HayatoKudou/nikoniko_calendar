@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import {UserUpdateValidateErrorResponse, UserUpdateRequest, UsersListResponseUsersInner} from "../../../api_client";
+import { UserUpdateValidateErrorResponse, UserUpdateRequest, UsersListResponseUsersInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";

@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BooksResponseBooksInner } from "../../../api_client";
 import CreateBookRentalApply, { BookRentalApplyRequestErrors } from "../../api/book/rental_apply/create";
 import { useChoseClient } from "../../store/choseClient";
 import { useMe } from "../../store/me";
@@ -15,7 +16,7 @@ import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
 
 interface Props {
-  bookInfo: Book;
+  bookInfo: BooksResponseBooksInner;
   success: () => void;
 }
 
