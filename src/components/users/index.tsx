@@ -10,6 +10,7 @@ import Spinner from "../parts/spinner";
 import CreateUser from "./create";
 import CustomTable from "./table";
 import UpdateUser from "./update";
+import {UsersListResponseUsersInner} from "../../../api_client";
 
 const Users = () => {
   const me = useRecoilValue(useMe);
@@ -17,15 +18,15 @@ const Users = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
-  const [selectUser, setSelectUser] = React.useState<User>();
+  const [users, setUsers] = React.useState<Array<UsersListResponseUsersInner>>([]);
+  const [selectUser, setSelectUser] = React.useState<UsersListResponseUsersInner>();
   const [selectedUserIds, setSelectedUserIds] = React.useState<number[]>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [openCreateConfirm, setOpenCreateConfirm] = React.useState<boolean>(false);
-  const [users, setUsers] = React.useState<Array<User>>([]);
 
   React.useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [choseClient]);
 
   const fetchUsers = () => {
     setLoading(true);
@@ -45,7 +46,7 @@ const Users = () => {
 
   if (loading) return <Spinner />;
 
-  const handleEditUser = (e: { stopPropagation: any }, user: User) => {
+  const handleEditUser = (e: { stopPropagation: any }, user: UsersListResponseUsersInner) => {
     e.stopPropagation();
     setUpdateDialogOpen(true);
     setSelectUser(user);

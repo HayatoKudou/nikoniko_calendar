@@ -22,6 +22,7 @@ import { useMe } from "../../store/me";
 import styles from "../../styles/components/users/table.module.scss";
 import { getComparator, stableSort } from "../../util/table";
 import TableHead from "../parts/table_head";
+import {UsersListResponseUsersInner} from "../../../api_client";
 
 type Order = "asc" | "desc";
 
@@ -33,9 +34,9 @@ interface EnhancedTableToolbarProps {
 }
 
 interface Props {
-  users: Array<User>;
+  users: Array<UsersListResponseUsersInner>;
   handleCreate: () => void;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, user: User) => void;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, user: UsersListResponseUsersInner) => void;
   handleDelete: () => void;
   selected: Array<any>;
   setSelected: Dispatch<SetStateAction<any>>;

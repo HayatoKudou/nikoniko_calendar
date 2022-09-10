@@ -1,21 +1,3 @@
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  apiToken?: string;
-  role: {
-    isAccountManager: boolean;
-    isBookManager: boolean;
-    isClientManager: boolean;
-  };
-}
-
-interface Client {
-  id: number;
-  name: string;
-  plan: string;
-}
-
 interface PurchaseApplicantName {
   id: number;
   name: string;
