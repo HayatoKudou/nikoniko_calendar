@@ -107,6 +107,19 @@ const ClientProfile = (props: Props) => {
       });
   };
 
+  const connectSlack = () => {
+    ApiClient(me.apiToken)
+      .apiClientIdSlackConnectGet(choseClient.clientId)
+      .then(() => {
+        open("https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=", "_blank")
+      })
+      .catch((res) => {
+        console.log(res)
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+        setLoading(false);
+      });
+  }
+
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth maxWidth={"md"}>
       <DialogContent sx={{ paddingBottom: 0 }}>
@@ -208,19 +221,15 @@ const ClientProfile = (props: Props) => {
                   購入申請通知・入荷通知で利用するSlackチャンネルと連携
                   <br />※ 連携後、チャンネルにアプリを追加してください
                 </Typography>
-                <a
-                  target={"_blank"}
-                  href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
-                  rel="noreferrer"
-                >
-                  <img
-                    alt="Add to Slack"
-                    height="40"
-                    width="139"
-                    src="https://platform.slack-edge.com/img/add_to_slack.png"
-                    srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-                  />
-                </a>
+                <img
+                  style={{cursor: "pointer"}}
+                  onClick={connectSlack}
+                  alt="Add to Slack"
+                  height="40"
+                  width="139"
+                  src="https://platform.slack-edge.com/img/add_to_slack.png"
+                  srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                />
               </>
             )}
             <ConfirmDialog message={"本当に更新しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
