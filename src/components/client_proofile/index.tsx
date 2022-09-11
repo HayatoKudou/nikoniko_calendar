@@ -109,7 +109,7 @@ const ClientProfile = (props: Props) => {
 
   const connectSlack = () => {
     ApiClient(me.apiToken)
-      .apiClientIdSlackConnectGet(choseClient.clientId)
+      .apiSlackClientIdConnectGet(choseClient.clientId)
       .then(() => {
         open(
           "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",

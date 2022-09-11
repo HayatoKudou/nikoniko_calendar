@@ -999,39 +999,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiClientIdSlackConnectGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdSlackConnectGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/slack/connect`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication Bearer required
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
      * @summary ユーザー追加
      * @param {number} clientId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1115,6 +1082,39 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       // verify required parameter 'clientId' is not null or undefined
       assertParamExists("apiClientIdUsersGet", "clientId", clientId);
       const localVarPath = `/api/{clientId}/users`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Slack連携
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiSlackClientIdConnectGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists("apiSlackClientIdConnectGet", "clientId", clientId);
+      const localVarPath = `/api/slack/{clientId}/connect`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1251,20 +1251,6 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiClientIdSlackConnectGet(
-      clientId: number,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdSlackConnectGet(clientId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
      * @summary ユーザー追加
      * @param {number} clientId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1307,6 +1293,20 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersListResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUsersGet(clientId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @summary Slack連携
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiSlackClientIdConnectGet(
+      clientId: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiSlackClientIdConnectGet(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
   };
@@ -1393,16 +1393,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiClientIdSlackConnectGet(clientId: number, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdSlackConnectGet(clientId, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
      * @summary ユーザー追加
      * @param {number} clientId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1432,6 +1422,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      */
     apiClientIdUsersGet(clientId: number, options?: any): AxiosPromise<UsersListResponse> {
       return localVarFp.apiClientIdUsersGet(clientId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Slack連携
+     * @param {number} clientId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiSlackClientIdConnectGet(clientId: number, options?: any): AxiosPromise<void> {
+      return localVarFp.apiSlackClientIdConnectGet(clientId, options).then((request) => request(axios, basePath));
     },
   };
 };
@@ -1545,20 +1545,6 @@ export class DefaultApi extends BaseAPI {
 
   /**
    *
-   * @summary Slack連携
-   * @param {number} clientId
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public apiClientIdSlackConnectGet(clientId: number, options?: AxiosRequestConfig) {
-    return DefaultApiFp(this.configuration)
-      .apiClientIdSlackConnectGet(clientId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
    * @summary ユーザー追加
    * @param {number} clientId
    * @param {UserCreateRequest} [userCreateRequest]
@@ -1598,6 +1584,20 @@ export class DefaultApi extends BaseAPI {
   public apiClientIdUsersGet(clientId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiClientIdUsersGet(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Slack連携
+   * @param {number} clientId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiSlackClientIdConnectGet(clientId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiSlackClientIdConnectGet(clientId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
