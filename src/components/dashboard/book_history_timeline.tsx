@@ -18,7 +18,7 @@ import { useMe } from "../../store/me";
 import styles from "../../styles/components/book_history_timeline.module.scss";
 import { historyActionName, historyActionIcon } from "../../util/bookHistory";
 
-const BookHistoryTimeline = (props: {bookId: number}) => {
+const BookHistoryTimeline = (props: { bookId: number }) => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
   const choseClient = useRecoilValue(useChoseClient);

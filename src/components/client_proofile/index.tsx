@@ -111,14 +111,17 @@ const ClientProfile = (props: Props) => {
     ApiClient(me.apiToken)
       .apiClientIdSlackConnectGet(choseClient.clientId)
       .then(() => {
-        open("https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=", "_blank")
+        open(
+          "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",
+          "_blank"
+        );
       })
       .catch((res) => {
-        console.log(res)
+        console.log(res);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
         setLoading(false);
       });
-  }
+  };
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullWidth maxWidth={"md"}>
@@ -222,7 +225,7 @@ const ClientProfile = (props: Props) => {
                   <br />※ 連携後、チャンネルにアプリを追加してください
                 </Typography>
                 <img
-                  style={{cursor: "pointer"}}
+                  style={{ cursor: "pointer" }}
                   onClick={connectSlack}
                   alt="Add to Slack"
                   height="40"
