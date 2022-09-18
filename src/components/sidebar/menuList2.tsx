@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { ClientsResponseInner, WorkspaceCreateValidateErrorResponse } from "../../../api_client";
+import { WorkspacesResponseInner, WorkspaceCreateValidateErrorResponse } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
@@ -24,7 +24,7 @@ const MenuList = (props: { open: boolean }) => {
   const me = useRecoilValue(useMe);
   const [choseWorkspace, setChoseClient] = useRecoilState(useChoseWorkspace);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [clients, setClients] = React.useState<null | Array<ClientsResponseInner>>(null);
+  const [workspaces, setWorkspaces] = React.useState<null | Array<WorkspacesResponseInner>>(null);
   const [openClient, setOpenClient] = React.useState<boolean>(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [createWorkspaceRequestErrors, setCreateWorkspaceRequestErrors] = React.useState<WorkspaceCreateValidateErrorResponse>();
@@ -46,12 +46,11 @@ const MenuList = (props: { open: boolean }) => {
   };
 
   const fetchClient = () => {
-    console.log("fetchClient");
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientsGet(choseWorkspace.workspaceId)
+      .apiWorkspaceIdWorkspacesGet(choseWorkspace.workspaceId)
       .then((res) => {
-        setClients(res.data);
+        setWorkspaces(res.data);
         setLoading(false);
       })
       .catch(() => {
@@ -65,7 +64,7 @@ const MenuList = (props: { open: boolean }) => {
   const createClient = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientPost(choseWorkspace.workspaceId, { name: formValues.name })
+      .apiWorkspaceIdWorkspacePost(choseWorkspace.workspaceId, { name: formValues.name })
       .then((res) => {
         setLoading(false);
         enqueueSnackbar("ワークスペースを追加しました", { variant: "success" });
@@ -86,7 +85,7 @@ const MenuList = (props: { open: boolean }) => {
 
   return (
     <List component="div">
-      {clients?.map((client, index) => (
+      {workspaces?.map((client, index) => (
         <Tooltip title={client.name} key={index} placement={"right"}>
           <ListItemButton
             open={props.open}
