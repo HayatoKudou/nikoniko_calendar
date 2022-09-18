@@ -18,7 +18,7 @@ import * as React from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/sidebar/index.module.scss";
-import ClientProfile from "../client_proofile";
+import WorkspaceProfile from "../workspace_proofile";
 import ConfirmDialog from "../parts/confirm_dialog";
 import StyleSetting from "../style_setting";
 import MeProfile from "../users/profile";
@@ -106,7 +106,7 @@ export default function Sidebar(props: { children: any }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openLogoutConfirm, setOpenLogoutConfirm] = React.useState<boolean>(false);
   const [openMeProfile, setOpenMeProfile] = React.useState<boolean>(false);
-  const [openClientProfile, setOpenClientProfile] = React.useState<boolean>(false);
+  const [openWorkspaceProfile, setOpenWorkspaceProfile] = React.useState<boolean>(false);
   const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -148,13 +148,13 @@ export default function Sidebar(props: { children: any }) {
           {loggedIn && (
             <>
               <MeProfile open={openMeProfile} onClose={() => setOpenMeProfile(false)} />
-              <ClientProfile open={openClientProfile} onClose={() => setOpenClientProfile(false)} />
+              <WorkspaceProfile open={openWorkspaceProfile} onClose={() => setOpenWorkspaceProfile(false)} />
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
                 <AccountCircle className={styles.sidebar__styleSettingIcon} />
               </IconButton>
               <Menu anchorEl={anchorEl} color="inherit" open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem onClick={() => setOpenMeProfile(true)}>プロフィール設定</MenuItem>
-                <MenuItem onClick={() => setOpenClientProfile(true)} sx={{ display: !me.role.isWorkspaceManager ? "none" : "" }}>
+                <MenuItem onClick={() => setOpenWorkspaceProfile(true)} sx={{ display: !me.role.isWorkspaceManager ? "none" : "" }}>
                   ワークスペース設定
                 </MenuItem>
                 <MenuItem onClick={() => setOpenLogoutConfirm(true)}>ログアウト</MenuItem>

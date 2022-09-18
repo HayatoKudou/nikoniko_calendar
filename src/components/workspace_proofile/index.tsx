@@ -29,7 +29,7 @@ interface Props {
 
 const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { label: "通知設定" }];
 
-const ClientProfile = (props: Props) => {
+const WorkspaceProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
@@ -238,4 +238,4 @@ const ClientProfile = (props: Props) => {
   );
 };
 
-export default ClientProfile;
+export default WorkspaceProfile;
