@@ -198,7 +198,7 @@ const CustomTable = (props: Props) => {
                     <TableCell align="center">
                       {user.role.isAccountManager ? <Chip label="アカウント管理" sx={{ margin: "2px" }} /> : null}
                       {user.role.isBookManager ? <Chip label="書籍管理" sx={{ margin: "2px" }} /> : null}
-                      {user.role.isClientManager ? <Chip label="ワークスペース管理" sx={{ margin: "2px" }} /> : null}
+                      {user.role.isWorkspaceManager ? <Chip label="ワークスペース管理" sx={{ margin: "2px" }} /> : null}
                     </TableCell>
                   </TableRow>
                 );

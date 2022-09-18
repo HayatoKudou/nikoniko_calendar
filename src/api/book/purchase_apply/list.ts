@@ -2,14 +2,14 @@ import { useSnackbar } from "notistack";
 import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 import Config from "../../../../config";
-import { useChoseClient } from "../../../store/choseClient";
+import { useChoseWorkspace } from "../../../store/choseWorkspace";
 import { useMe } from "../../../store/me";
 
 const usePurchaseApplies = () => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
-  const endpoint = `${Config.apiOrigin}/api/${choseClient.clientId}/bookPurchaseApplies`;
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
+  const endpoint = `${Config.apiOrigin}/api/${choseWorkspace.workspaceId}/bookPurchaseApplies`;
   const fetcher = (endpoint: string) =>
     fetch(endpoint, {
       headers: { Accept: "application/json", Authorization: `Bearer ${me.apiToken}` },

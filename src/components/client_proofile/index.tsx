@@ -17,7 +17,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import Update, { UpdateClientRequestErrors } from "../../api/client/update";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -32,7 +32,7 @@ const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { labe
 const ClientProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     id: 0,
@@ -45,14 +45,14 @@ const ClientProfile = (props: Props) => {
 
   React.useEffect(() => {
     fetchClient();
-  }, [choseClient]);
+  }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
 
   const fetchClient = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientGet(choseClient.clientId)
+      .apiWorkspaceIdClientGet(choseWorkspace.workspaceId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);
@@ -80,7 +80,7 @@ const ClientProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(choseClient.clientId, {
+    Update(choseWorkspace.workspaceId, {
       name: formValues.name,
       apiToken: me.apiToken,
     })
@@ -109,7 +109,7 @@ const ClientProfile = (props: Props) => {
 
   const connectSlack = () => {
     ApiClient(me.apiToken)
-      .apiSlackWorkspaceIdConnectGet(choseClient.clientId)
+      .apiSlackWorkspaceIdConnectGet(choseWorkspace.workspaceId)
       .then(() => {
         open(
           "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",

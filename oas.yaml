@@ -339,7 +339,7 @@ components:
           required:
             - isAccountManager
             - isBookManager
-            - isClientManager
+            - isWorkspaceManager
           properties:
             isAccountManager:
               type: boolean
@@ -347,7 +347,7 @@ components:
             isBookManager:
               type: boolean
               example: true
-            isClientManager:
+            isWorkspaceManager:
               type: boolean
               example: true
         workspaces:
@@ -397,7 +397,7 @@ components:
                 required:
                   - isAccountManager
                   - isBookManager
-                  - isClientManager
+                  - isWorkspaceManager
                 properties:
                   isAccountManager:
                     type: boolean
@@ -405,7 +405,7 @@ components:
                   isBookManager:
                     type: boolean
                     example: true
-                  isClientManager:
+                  isWorkspaceManager:
                     type: boolean
                     example: true
     UserUpdateRequest:

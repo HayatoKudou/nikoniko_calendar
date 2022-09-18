@@ -13,7 +13,7 @@ import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ClientsResponseInner, WorkspaceCreateValidateErrorResponse } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -22,7 +22,7 @@ import ListItemButton from "./listItemButton";
 const MenuList = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const [choseClient, setChoseClient] = useRecoilState(useChoseClient);
+  const [choseWorkspace, setChoseClient] = useRecoilState(useChoseWorkspace);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [clients, setClients] = React.useState<null | Array<ClientsResponseInner>>(null);
   const [openClient, setOpenClient] = React.useState<boolean>(false);
@@ -49,7 +49,7 @@ const MenuList = (props: { open: boolean }) => {
     console.log("fetchClient");
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientsGet(choseClient.clientId)
+      .apiWorkspaceIdClientsGet(choseWorkspace.workspaceId)
       .then((res) => {
         setClients(res.data);
         setLoading(false);
@@ -65,7 +65,7 @@ const MenuList = (props: { open: boolean }) => {
   const createClient = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientPost(choseClient.clientId, { name: formValues.name })
+      .apiWorkspaceIdClientPost(choseWorkspace.workspaceId, { name: formValues.name })
       .then((res) => {
         setLoading(false);
         enqueueSnackbar("ワークスペースを追加しました", { variant: "success" });
@@ -81,7 +81,7 @@ const MenuList = (props: { open: boolean }) => {
   };
 
   const handleSelect = (workspaceId: number) => {
-    setChoseClient({ clientId: workspaceId });
+    setChoseClient({ workspaceId: workspaceId });
   };
 
   return (
@@ -91,7 +91,7 @@ const MenuList = (props: { open: boolean }) => {
           <ListItemButton
             open={props.open}
             listItemText={client.name}
-            selected={choseClient.clientId == client.id}
+            selected={choseWorkspace.workspaceId == client.id}
             icon={<ApartmentIcon />}
             handleSelect={() => handleSelect(client.id)}
           />

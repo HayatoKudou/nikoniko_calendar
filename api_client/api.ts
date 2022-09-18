@@ -567,7 +567,7 @@ export interface MeResponseRole {
    * @type {boolean}
    * @memberof MeResponseRole
    */
-  isClientManager: boolean;
+  isWorkspaceManager: boolean;
 }
 /**
  *

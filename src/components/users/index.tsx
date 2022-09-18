@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { UsersListResponseUsersInner } from "../../../api_client";
 import DeleteUser from "../../api/user/delete";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -14,7 +14,7 @@ import UpdateUser from "./update";
 
 const Users = () => {
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false);
@@ -26,12 +26,12 @@ const Users = () => {
 
   React.useEffect(() => {
     fetchUsers();
-  }, [choseClient]);
+  }, [choseWorkspace]);
 
   const fetchUsers = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdUsersGet(choseClient.clientId)
+      .apiWorkspaceIdUsersGet(choseWorkspace.workspaceId)
       .then((res) => {
         setLoading(false);
         setUsers(res.data.users);
@@ -66,7 +66,7 @@ const Users = () => {
 
   const handleDeleteUser = () => {
     setLoading(true);
-    DeleteUser(choseClient.clientId, {
+    DeleteUser(choseWorkspace.workspaceId, {
       user_ids: selectedUserIds,
       apiToken: me.apiToken,
     })

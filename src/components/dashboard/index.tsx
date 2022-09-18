@@ -26,7 +26,7 @@ import { BooksResponseBooksInner } from "../../../api_client";
 import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
@@ -62,7 +62,7 @@ function TabPanel(props: TabPanelProps) {
 const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
   const [, setBookCategory] = useRecoilState(useBookCategories);
@@ -82,14 +82,14 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     fetchBooks();
-  }, [choseClient]);
+  }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
 
   const fetchBooks = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdBooksGet(choseClient.clientId)
+      .apiWorkspaceIdBooksGet(choseWorkspace.workspaceId)
       .then((res) => {
         setBooks(res.data.books);
         setBookCategory(res.data.bookCategories);
@@ -170,7 +170,7 @@ const Dashboard = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    CreateBookCategory(choseClient.clientId, {
+    CreateBookCategory(choseWorkspace.workspaceId, {
       name: bookCategoryFormValue,
       apiToken: me.apiToken,
     })

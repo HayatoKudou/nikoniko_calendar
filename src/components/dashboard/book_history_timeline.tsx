@@ -13,7 +13,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { BookHistoriesListResponseInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/book_history_timeline.module.scss";
 import { historyActionName, historyActionIcon } from "../../util/bookHistory";
@@ -21,7 +21,7 @@ import { historyActionName, historyActionIcon } from "../../util/bookHistory";
 const BookHistoryTimeline = (props: { bookId: number }) => {
   const me = useRecoilValue(useMe);
   const { enqueueSnackbar } = useSnackbar();
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [bookHistories, setBookHistories] = React.useState<Array<BookHistoriesListResponseInner> | null>(null);
 
@@ -32,7 +32,7 @@ const BookHistoryTimeline = (props: { bookId: number }) => {
   const fetchBookHistories = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdBookIdHistoriesGet(choseClient.clientId, props.bookId)
+      .apiWorkspaceIdBookIdHistoriesGet(choseWorkspace.workspaceId, props.bookId)
       .then((res) => {
         setLoading(false);
         setBookHistories(res.data);

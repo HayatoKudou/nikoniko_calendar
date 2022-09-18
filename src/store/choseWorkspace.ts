@@ -3,10 +3,10 @@ import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-export const useChoseClient = atom({
-  key: "choseClient",
+export const useChoseWorkspace = atom({
+  key: "choseWorkspace",
   default: {
-    clientId: null,
+    workspaceId: null,
   },
   effects_UNSTABLE: [persistAtom],
 });

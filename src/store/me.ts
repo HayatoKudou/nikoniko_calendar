@@ -13,7 +13,7 @@ export const useMe = atom({
     role: {
       isAccountManager: false,
       isBookManager: false,
-      isClientManager: false,
+      isWorkspaceManager: false,
     },
     clients: [
       {

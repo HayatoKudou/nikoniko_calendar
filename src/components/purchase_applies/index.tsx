@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { BookPurchaseAppliesListResponse, BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../api_client";
 import InitBookPurchase from "../../api/book/purchase_apply/init";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -13,7 +13,7 @@ import CustomTable from "./table";
 
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [selectedInitPurchaseApply, setSelectedInitPurchaseApply] = React.useState<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>();
   const [selectedEditPurchaseApply, setSelectedEditPurchaseApply] = React.useState<BookPurchaseAppliesListResponseBookPurchaseAppliesInner>();
   const [approvalOpen, setApprovalOpen] = React.useState<boolean>(false);
@@ -25,7 +25,7 @@ const PurchaseApplies = () => {
   const fetchPurchaseApplies = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdBookPurchaseAppliesGet(choseClient.clientId)
+      .apiWorkspaceIdBookPurchaseAppliesGet(choseWorkspace.workspaceId)
       .then((res) => {
         setLoading(false);
         setResponse(res.data);
@@ -43,7 +43,7 @@ const PurchaseApplies = () => {
 
   React.useEffect(() => {
     fetchPurchaseApplies();
-  }, [choseClient]);
+  }, [choseWorkspace]);
 
   if (loading || !response) return <Spinner />;
 
@@ -63,7 +63,7 @@ const PurchaseApplies = () => {
       return;
     }
     setLoading(true);
-    InitBookPurchase(choseClient.clientId, selectedInitPurchaseApply.book.id, {
+    InitBookPurchase(choseWorkspace.workspaceId, selectedInitPurchaseApply.book.id, {
       apiToken: me.apiToken,
     })
       .then(() => {

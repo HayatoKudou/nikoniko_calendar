@@ -10,7 +10,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { UserUpdateValidateErrorResponse, UserUpdateRequest } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -23,7 +23,7 @@ interface Props {
 const MyProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<UserUpdateRequest>({
     id: 0,
@@ -55,7 +55,7 @@ const MyProfile = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdUserPut(choseClient.clientId, {
+      .apiWorkspaceIdUserPut(choseWorkspace.workspaceId, {
         id: formValues.id,
         name: formValues.name,
         email: formValues.email,
