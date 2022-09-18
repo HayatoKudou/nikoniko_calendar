@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Update, { UpdateClientRequestErrors } from "../../api/client/update";
+import { WorkspaceUpdateValidateErrorResponse } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
@@ -39,20 +39,20 @@ const ClientProfile = (props: Props) => {
     name: "",
     plan: "",
   });
-  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
+  const [updateRequestErrors, setUpdateRequestErrors] = React.useState<WorkspaceUpdateValidateErrorResponse>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
   const [loading, setLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    fetchClient();
+    fetchWorkspace();
   }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
 
-  const fetchClient = () => {
+  const fetchWorkspace = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdClientGet(choseWorkspace.workspaceId)
+      .apiWorkspaceIdWorkspaceGet(choseWorkspace.workspaceId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);
@@ -80,30 +80,19 @@ const ClientProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(choseWorkspace.workspaceId, {
-      name: formValues.name,
-      apiToken: me.apiToken,
-    })
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId)
       .then((res) => {
-        if (res.succeeded) {
-          setCreateRequestErrors({});
-          enqueueSnackbar("更新に成功しました。", {
-            variant: "success",
-          });
-          fetchClient();
-          setOpenConfirm(false);
-        } else {
-          setCreateRequestErrors(res.errors);
-          enqueueSnackbar(`更新に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenConfirm(false);
         setLoading(false);
+        enqueueSnackbar("更新に成功しました。", { variant: "success" });
+        fetchWorkspace();
+        setOpenConfirm(false);
+        setUpdateRequestErrors({});
       })
-      .catch(() => {
+      .catch((res) => {
         setLoading(false);
         enqueueSnackbar(`更新に失敗しました`, { variant: "error" });
+        setUpdateRequestErrors(res.response.data.errors);
       });
   };
 
@@ -144,8 +133,8 @@ const ClientProfile = (props: Props) => {
                 inputProps={{ minLength: 1, maxLength: 255 }}
                 variant="standard"
                 margin={"normal"}
-                helperText={createRequestErrors?.name}
-                error={createRequestErrors?.name !== undefined}
+                helperText={updateRequestErrors?.name}
+                error={updateRequestErrors?.name !== undefined}
               />
             )}
 
