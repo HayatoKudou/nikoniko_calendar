@@ -2,7 +2,6 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { UsersListResponseUsersInner } from "../../../api_client";
-import DeleteUser from "../../api/user/delete";
 import ApiClient from "../../lib/apiClient";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
@@ -66,21 +65,19 @@ const Users = () => {
 
   const handleDeleteUser = () => {
     setLoading(true);
-    DeleteUser(choseWorkspace.workspaceId, {
-      user_ids: selectedUserIds,
-      apiToken: me.apiToken,
-    })
-      .then(() => {
-        enqueueSnackbar("削除しました", {
-          variant: "success",
-        });
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdUserDelete(choseWorkspace.workspaceId, {
+        userIds: selectedUserIds,
+      })
+      .then((res) => {
+        setLoading(false);
+        enqueueSnackbar("削除しました", { variant: "success" });
         fetchUsers();
         setOpenDeleteConfirm(false);
-        setLoading(false);
       })
-      .catch(() => {
+      .catch((res) => {
         setLoading(false);
-        enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
+        enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
       });
   };
 

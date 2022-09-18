@@ -591,6 +591,19 @@ export interface UserCreateValidateErrorResponse {
 /**
  *
  * @export
+ * @interface UserDeleteRequest
+ */
+export interface UserDeleteRequest {
+  /**
+   *
+   * @type {Array<number>}
+   * @memberof UserDeleteRequest
+   */
+  userIds: Array<number>;
+}
+/**
+ *
+ * @export
  * @interface UserUpdateRequest
  */
 export interface UserUpdateRequest {
@@ -1034,6 +1047,47 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary ユーザー削除
+     * @param {number} workspaceId
+     * @param {UserDeleteRequest} [userDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdUserDelete: async (
+      workspaceId: number,
+      userDeleteRequest?: UserDeleteRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdUserDelete", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/user`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "DELETE", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(userDeleteRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary ユーザー追加
      * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1395,6 +1449,22 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary ユーザー削除
+     * @param {number} workspaceId
+     * @param {UserDeleteRequest} [userDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiWorkspaceIdUserDelete(
+      workspaceId: number,
+      userDeleteRequest?: UserDeleteRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdUserDelete(workspaceId, userDeleteRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary ユーザー追加
      * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1573,6 +1643,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary ユーザー削除
+     * @param {number} workspaceId
+     * @param {UserDeleteRequest} [userDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdUserDelete(workspaceId: number, userDeleteRequest?: UserDeleteRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdUserDelete(workspaceId, userDeleteRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary ユーザー追加
      * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
@@ -1738,6 +1819,21 @@ export class DefaultApi extends BaseAPI {
   public apiWorkspaceIdMeGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiWorkspaceIdMeGet(workspaceId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary ユーザー削除
+   * @param {number} workspaceId
+   * @param {UserDeleteRequest} [userDeleteRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiWorkspaceIdUserDelete(workspaceId: number, userDeleteRequest?: UserDeleteRequest, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiWorkspaceIdUserDelete(workspaceId, userDeleteRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
