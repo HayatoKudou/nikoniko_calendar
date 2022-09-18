@@ -5,7 +5,7 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ApiClient from "../lib/apiClient";
-import { useChoseClient } from "../store/choseClient";
+import { useChoseWorkspace } from "../store/choseWorkspace";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
 import Sidebar from "./sidebar";
@@ -13,7 +13,7 @@ import Sidebar from "./sidebar";
 const Layout = ({ children }: any) => {
   const router = useRouter();
   const [me, setMe] = useRecoilState(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const colorMode = useRecoilValue(useColorMode);
   const theme = createTheme({
     palette: {
@@ -30,7 +30,7 @@ const Layout = ({ children }: any) => {
         router.push("/sign-in");
       }
       authenticatedAccount();
-      if (me.id && choseClient.clientId && pathname === "/") {
+      if (me.id && choseWorkspace.workspaceId && pathname === "/") {
         router.push(`/dashboard`);
       }
     }
@@ -38,7 +38,7 @@ const Layout = ({ children }: any) => {
 
   const authenticatedAccount = () => {
     ApiClient(me.apiToken)
-      .apiClientIdMeGet(choseClient.clientId)
+      .apiWorkspaceIdMeGet(choseWorkspace.workspaceId)
       .then((res) => {
         setMe(res.data);
       })

@@ -16,7 +16,7 @@ import { useRecoilValue } from "recoil";
 import AmazonImage from "../../api/book/amazon_image";
 import register, { RegisterBookRequestErrors } from "../../api/book/create";
 import { useBookCategories } from "../../store/book/categories";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -31,7 +31,7 @@ interface Props {
 
 const Create = (props: Props) => {
   const me = useRecoilValue(useMe);
-  const chosenClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
@@ -57,7 +57,7 @@ const Create = (props: Props) => {
 
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    register(chosenClient.clientId, {
+    register(choseWorkspace.workspaceId, {
       bookCategoryName: formValues.bookCategoryName,
       title: title,
       description: formValues.description,

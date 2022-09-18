@@ -16,7 +16,7 @@ import { BooksResponseBooksInner, BookUpdateRequest, BookUpdateValidateErrorResp
 import AmazonImage from "../../api/book/amazon_image";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -33,7 +33,7 @@ interface Props {
 const Update = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<string | null>(props.book.image);
@@ -74,7 +74,7 @@ const Update = (props: Props) => {
   const handleUpdate = (image: string | ArrayBuffer | null) => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBookPut(choseClient.clientId, {
+      .apiWorkspaceIdBookPut(choseWorkspace.workspaceId, {
         id: formValues.id,
         category: formValues.category,
         status: formValues.status,

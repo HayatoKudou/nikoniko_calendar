@@ -15,9 +15,9 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import Update, { UpdateClientRequestErrors } from "../../api/client/update";
+import { WorkspaceUpdateValidateErrorResponse } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -29,30 +29,30 @@ interface Props {
 
 const tabList = [{ label: "基本情報" }, { label: "プラン選択" }, { label: "通知設定" }];
 
-const ClientProfile = (props: Props) => {
+const WorkspaceProfile = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     id: 0,
     name: "",
     plan: "",
   });
-  const [createRequestErrors, setCreateRequestErrors] = React.useState<Partial<UpdateClientRequestErrors>>({});
+  const [updateRequestErrors, setUpdateRequestErrors] = React.useState<WorkspaceUpdateValidateErrorResponse>({});
   const [openTabValue, setOpenTabValue] = React.useState("基本情報");
   const [loading, setLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    fetchClient();
-  }, [choseClient]);
+    fetchWorkspace();
+  }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
 
-  const fetchClient = () => {
+  const fetchWorkspace = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdClientGet(choseClient.clientId)
+      .apiWorkspaceIdWorkspaceGet(choseWorkspace.workspaceId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);
@@ -80,44 +80,32 @@ const ClientProfile = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Update(choseClient.clientId, {
-      name: formValues.name,
-      apiToken: me.apiToken,
-    })
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId)
       .then((res) => {
-        if (res.succeeded) {
-          setCreateRequestErrors({});
-          enqueueSnackbar("更新に成功しました。", {
-            variant: "success",
-          });
-          fetchClient();
-          setOpenConfirm(false);
-        } else {
-          setCreateRequestErrors(res.errors);
-          enqueueSnackbar(`更新に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenConfirm(false);
         setLoading(false);
+        enqueueSnackbar("更新に成功しました。", { variant: "success" });
+        fetchWorkspace();
+        setOpenConfirm(false);
+        setUpdateRequestErrors({});
       })
-      .catch(() => {
+      .catch((res) => {
         setLoading(false);
         enqueueSnackbar(`更新に失敗しました`, { variant: "error" });
+        setUpdateRequestErrors(res.response.data.errors);
       });
   };
 
   const connectSlack = () => {
     ApiClient(me.apiToken)
-      .apiSlackClientIdConnectGet(choseClient.clientId)
+      .apiSlackWorkspaceIdConnectGet(choseWorkspace.workspaceId)
       .then(() => {
         open(
           "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",
           "_blank"
         );
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
         setLoading(false);
       });
@@ -140,13 +128,13 @@ const ClientProfile = (props: Props) => {
                 fullWidth
                 onChange={handleChange}
                 name={"name"}
-                label={"組織名"}
+                label={"ワークスペース名"}
                 required
                 inputProps={{ minLength: 1, maxLength: 255 }}
                 variant="standard"
                 margin={"normal"}
-                helperText={createRequestErrors?.name}
-                error={createRequestErrors?.name !== undefined}
+                helperText={updateRequestErrors?.name}
+                error={updateRequestErrors?.name !== undefined}
               />
             )}
 
@@ -250,4 +238,4 @@ const ClientProfile = (props: Props) => {
   );
 };
 
-export default ClientProfile;
+export default WorkspaceProfile;

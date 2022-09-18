@@ -18,11 +18,11 @@ interface BookPurchaseNotificationRequestPayload {
 }
 
 const NotificationBookPurchase = async (
-  clientId: string,
+  workspaceId: string,
   bookId: number,
   payload: BookPurchaseNotificationRequestPayload
 ): Promise<BookPurchaseNotificationResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/notification`;
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/purchase/notification`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

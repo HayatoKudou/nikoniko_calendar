@@ -2,13 +2,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useSetRecoilState } from "recoil";
 import Spinner from "../components/parts/spinner";
-import { useChoseClient } from "../store/choseClient";
+import { useChoseWorkspace } from "../store/choseWorkspace";
 import { useMe } from "../store/me";
 
 const Index = () => {
   const router = useRouter();
   const setMe = useSetRecoilState(useMe);
-  const setChoseClient = useSetRecoilState(useChoseClient);
+  const setChoseClient = useSetRecoilState(useChoseWorkspace);
 
   React.useEffect(() => {
     if (router.query.id !== undefined) {
@@ -20,16 +20,16 @@ const Index = () => {
         role: {
           isAccountManager: Boolean(router.query.isAccountManager),
           isBookManager: Boolean(router.query.isBookManager),
-          isClientManager: Boolean(router.query.isClientManager),
+          isWorkspaceManager: Boolean(router.query.isWorkspaceManager),
         },
         clients: [
           {
-            id: router.query.clientId,
+            id: router.query.workspaceId,
             name: router.query.clientName,
           },
         ],
       });
-      setChoseClient({ clientId: router.query.clientId });
+      setChoseClient({ workspaceId: router.query.workspaceId });
       router.push(`/dashboard`);
     }
   }, [router.query]);

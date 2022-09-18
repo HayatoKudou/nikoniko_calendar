@@ -5,7 +5,7 @@ import { BooksResponseBooksInner } from "../../../api_client";
 import DeleteBook from "../../api/book/delete";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import Update from "../books/update";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -16,7 +16,7 @@ import CustomTable from "./table";
 
 const Books = () => {
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [, setBookCategories] = useRecoilState(useBookCategories);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedEditBook, setSelectedEditBook] = React.useState<BooksResponseBooksInner>();
@@ -30,14 +30,14 @@ const Books = () => {
 
   React.useEffect(() => {
     fetchBooks();
-  }, [choseClient]);
+  }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
 
   const fetchBooks = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBooksGet(choseClient.clientId)
+      .apiWorkspaceIdBooksGet(choseWorkspace.workspaceId)
       .then((res) => {
         setBooks(res.data.books);
         setBookCategories(res.data.bookCategories);
@@ -76,7 +76,7 @@ const Books = () => {
   };
 
   const handleDeleteBook = () => {
-    DeleteBook(choseClient.clientId, {
+    DeleteBook(choseWorkspace.workspaceId, {
       book_ids: selectedBookIds,
       apiToken: me.apiToken,
     })
@@ -101,7 +101,7 @@ const Books = () => {
           book={selectedEditBook}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
-          // onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseClient.clientId}/user/list`)}
+          // onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseWorkspace.workspaceId}/user/list`)}
           onSuccess={fetchBooks}
         />
       )}

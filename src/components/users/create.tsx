@@ -15,7 +15,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { UserCreateValidateErrorResponse, UserCreateRequest } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
@@ -30,7 +30,7 @@ interface Props {
 const CreateUser = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<UserCreateRequest>({
@@ -62,7 +62,7 @@ const CreateUser = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdUserPost(choseClient.clientId, {
+      .apiWorkspaceIdUserPost(choseWorkspace.workspaceId, {
         name: formValues.name,
         email: formValues.email,
         roles: formValues.roles,
@@ -83,15 +83,15 @@ const CreateUser = (props: Props) => {
       });
   };
 
-  const roles = ["isAccountManager", "isBookManager", "isClientManager"];
+  const roles = ["isAccountManager", "isBookManager", "isWorkspaceManager"];
   const displayRoleName = (roleValue: string) => {
     switch (roleValue) {
       case "isAccountManager":
         return "アカウント管理";
       case "isBookManager":
         return "書籍管理";
-      case "isClientManager":
-        return "組織管理";
+      case "isWorkspaceManager":
+        return "ワークスペース管理";
       default:
         return "unknown";
     }

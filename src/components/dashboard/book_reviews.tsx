@@ -8,7 +8,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { BooksResponseBooksInner } from "../../../api_client";
 import CreateBookReview, { CreateBookReviewRequestErrors } from "../../api/book/review/create";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import styles from "../../styles/components/dashboards/book_review.module.scss";
 import ConfirmDialog from "../parts/confirm_dialog";
@@ -23,7 +23,7 @@ interface Props {
 const BookReviews = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
@@ -47,7 +47,7 @@ const BookReviews = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    CreateBookReview(choseClient.clientId, props.bookInfo.id, {
+    CreateBookReview(choseWorkspace.workspaceId, props.bookInfo.id, {
       rate: formValues.rate,
       review: formValues.review,
       apiToken: me.apiToken,

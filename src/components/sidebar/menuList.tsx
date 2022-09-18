@@ -5,14 +5,11 @@ import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { useMe } from "../../store/me";
+import ListItemButton from "./listItemButton";
 
 const MenuListIcon = (props: { name: string }) => {
   switch (props.name) {
@@ -34,7 +31,6 @@ const MenuListIcon = (props: { name: string }) => {
 };
 
 const MenuList = (props: { open: boolean }) => {
-  const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
   const [selectedPath, setSelectedPath] = React.useState<string>("");
@@ -59,29 +55,13 @@ const MenuList = (props: { open: boolean }) => {
     <List component="div">
       {menuList.map((menu, index) => (
         <ListItemButton
-          onClick={() => handleSelect(menu.path)}
           key={index}
-          sx={{
-            minHeight: 48,
-            justifyContent: props.open ? "initial" : "center",
-            px: 2.5,
-            "&.Mui-selected": {
-              backgroundColor: theme.palette.mode === "light" ? "#455a6478" : "",
-            },
-          }}
+          open={props.open}
+          listItemText={menu.title}
           selected={selectedPath == menu.path}
-        >
-          <ListItemIcon
-            sx={{
-              minWidth: 0,
-              mr: props.open ? 3 : "auto",
-              justifyContent: "center",
-            }}
-          >
-            <MenuListIcon name={menu.name} />
-          </ListItemIcon>
-          <ListItemText primary={menu.title} sx={{ opacity: props.open ? 1 : 0 }} />
-        </ListItemButton>
+          icon={<MenuListIcon name={menu.name} />}
+          handleSelect={() => handleSelect(menu.path)}
+        />
       ))}
     </List>
   );

@@ -5,7 +5,7 @@ import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { BooksResponseBooksInner } from "../../../api_client";
 import BookReturn from "../../api/book/return";
-import { useChoseClient } from "../../store/choseClient";
+import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
@@ -19,7 +19,7 @@ const BookReturnForm = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const me = useRecoilValue(useMe);
-  const choseClient = useRecoilValue(useChoseClient);
+  const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -34,7 +34,7 @@ const BookReturnForm = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    BookReturn(choseClient.clientId, props.bookInfo.id, {
+    BookReturn(choseWorkspace.workspaceId, props.bookInfo.id, {
       apiToken: me.apiToken,
     })
       .then(() => {

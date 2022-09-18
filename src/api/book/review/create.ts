@@ -16,8 +16,8 @@ interface CreateBookReviewRequestPayload {
   apiToken: string;
 }
 
-const CreateBookReview = async (clientId: string, bookId: number, payload: CreateBookReviewRequestPayload): Promise<CreateBookReviewResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/bookReview`;
+const CreateBookReview = async (workspaceId: string, bookId: number, payload: CreateBookReviewRequestPayload): Promise<CreateBookReviewResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/bookReview`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

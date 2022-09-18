@@ -3,8 +3,8 @@ interface BookPurchaseDoneRequestPayload {
   apiToken: string;
 }
 
-const InitBookPurchase = async (clientId: string, bookId: number, payload: BookPurchaseDoneRequestPayload) => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/init`;
+const InitBookPurchase = async (workspaceId: string, bookId: number, payload: BookPurchaseDoneRequestPayload) => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/purchase/init`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
