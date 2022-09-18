@@ -31,7 +31,7 @@ const Users = () => {
   const fetchUsers = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdUsersGet(choseClient.clientId)
+      .apiWorkspaceIdUsersGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setUsers(res.data.users);

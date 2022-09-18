@@ -14,8 +14,8 @@ interface UpdateClientRequestPayload {
   apiToken: string;
 }
 
-const Update = async (clientId: string, payload: UpdateClientRequestPayload): Promise<UpdateClientResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/client`;
+const Update = async (workspaceId: string, payload: UpdateClientRequestPayload): Promise<UpdateClientResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/client`;
   const res = await fetch(endpoint, {
     method: "PUT",
     headers: {

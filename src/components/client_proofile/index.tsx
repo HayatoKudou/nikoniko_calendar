@@ -52,7 +52,7 @@ const ClientProfile = (props: Props) => {
   const fetchClient = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdClientGet(choseClient.clientId)
+      .apiWorkspaceIdClientGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setFormValues(res.data);
@@ -109,15 +109,14 @@ const ClientProfile = (props: Props) => {
 
   const connectSlack = () => {
     ApiClient(me.apiToken)
-      .apiSlackClientIdConnectGet(choseClient.clientId)
+      .apiSlackWorkspaceIdConnectGet(choseClient.clientId)
       .then(() => {
         open(
           "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",
           "_blank"
         );
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
         setLoading(false);
       });
@@ -140,7 +139,7 @@ const ClientProfile = (props: Props) => {
                 fullWidth
                 onChange={handleChange}
                 name={"name"}
-                label={"組織名"}
+                label={"ワークスペース名"}
                 required
                 inputProps={{ minLength: 1, maxLength: 255 }}
                 variant="standard"

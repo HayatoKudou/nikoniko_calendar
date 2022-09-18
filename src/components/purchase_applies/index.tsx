@@ -25,7 +25,7 @@ const PurchaseApplies = () => {
   const fetchPurchaseApplies = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBookPurchaseAppliesGet(choseClient.clientId)
+      .apiWorkspaceIdBookPurchaseAppliesGet(choseClient.clientId)
       .then((res) => {
         setLoading(false);
         setResponse(res.data);

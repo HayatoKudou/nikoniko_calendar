@@ -62,7 +62,7 @@ const CreateUser = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdUserPost(choseClient.clientId, {
+      .apiWorkspaceIdUserPost(choseClient.clientId, {
         name: formValues.name,
         email: formValues.email,
         roles: formValues.roles,
@@ -91,7 +91,7 @@ const CreateUser = (props: Props) => {
       case "isBookManager":
         return "書籍管理";
       case "isClientManager":
-        return "組織管理";
+        return "ワークスペース管理";
       default:
         return "unknown";
     }

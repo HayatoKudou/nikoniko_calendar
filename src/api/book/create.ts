@@ -23,8 +23,8 @@ interface RegisterBookRequestPayload {
   apiToken: string;
 }
 
-const Create = async (clientId: string, payload: RegisterBookRequestPayload): Promise<RegisterBookResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/book`;
+const Create = async (workspaceId: string, payload: RegisterBookRequestPayload): Promise<RegisterBookResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/book`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

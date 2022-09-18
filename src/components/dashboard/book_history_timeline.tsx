@@ -32,7 +32,7 @@ const BookHistoryTimeline = (props: { bookId: number }) => {
   const fetchBookHistories = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBookIdHistoriesGet(choseClient.clientId, props.bookId)
+      .apiWorkspaceIdBookIdHistoriesGet(choseClient.clientId, props.bookId)
       .then((res) => {
         setLoading(false);
         setBookHistories(res.data);

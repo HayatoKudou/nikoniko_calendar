@@ -4,8 +4,8 @@ interface BookPurchaseAcceptRequestPayload {
   apiToken: string;
 }
 
-const AcceptBookPurchase = async (clientId: string, bookId: number, payload: BookPurchaseAcceptRequestPayload) => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/accept`;
+const AcceptBookPurchase = async (workspaceId: string, bookId: number, payload: BookPurchaseAcceptRequestPayload) => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/purchase/accept`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

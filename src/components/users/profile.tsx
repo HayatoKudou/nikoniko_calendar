@@ -55,7 +55,7 @@ const MyProfile = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdUserPut(choseClient.clientId, {
+      .apiWorkspaceIdUserPut(choseClient.clientId, {
         id: formValues.id,
         name: formValues.name,
         email: formValues.email,

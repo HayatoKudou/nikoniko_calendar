@@ -16,8 +16,8 @@ interface BookRentalApplyRequestPayload {
   apiToken: string;
 }
 
-const CreateBookRentalApply = async (clientId: string, bookId: number, payload: BookRentalApplyRequestPayload): Promise<BookRentalApplyResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/rentalApply`;
+const CreateBookRentalApply = async (workspaceId: string, bookId: number, payload: BookRentalApplyRequestPayload): Promise<BookRentalApplyResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/rentalApply`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

@@ -38,7 +38,7 @@ const Layout = ({ children }: any) => {
 
   const authenticatedAccount = () => {
     ApiClient(me.apiToken)
-      .apiClientIdMeGet(choseClient.clientId)
+      .apiWorkspaceIdMeGet(choseClient.clientId)
       .then((res) => {
         setMe(res.data);
       })

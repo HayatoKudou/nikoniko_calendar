@@ -15,8 +15,8 @@ interface CreateBookCategoryRequestPayload {
   apiToken: string;
 }
 
-const CreateBookCategory = async (clientId: string, payload: CreateBookCategoryRequestPayload): Promise<CreateBookCategoryResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/bookCategory`;
+const CreateBookCategory = async (workspaceId: string, payload: CreateBookCategoryRequestPayload): Promise<CreateBookCategoryResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/bookCategory`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

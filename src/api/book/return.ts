@@ -4,8 +4,8 @@ interface BookReturnRequestPayload {
   apiToken: string;
 }
 
-const BookReturn = async (clientId: string, bookId: number, payload: BookReturnRequestPayload) => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/bookReturn`;
+const BookReturn = async (workspaceId: string, bookId: number, payload: BookReturnRequestPayload) => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/bookReturn`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

@@ -5,8 +5,8 @@ export interface DeleteUserRequestPayload {
   apiToken: string;
 }
 
-const Delete = async (clientId: string, payload: DeleteUserRequestPayload) => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/user`;
+const Delete = async (workspaceId: string, payload: DeleteUserRequestPayload) => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/user`;
   const res = await fetch(endpoint, {
     method: "DELETE",
     headers: {

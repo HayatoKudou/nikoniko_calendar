@@ -539,29 +539,10 @@ export interface MeResponse {
   role: MeResponseRole;
   /**
    *
-   * @type {Array<MeResponseClientsInner>}
+   * @type {Array<MeResponseWorkspacesInner>}
    * @memberof MeResponse
    */
-  clients: Array<MeResponseClientsInner>;
-}
-/**
- *
- * @export
- * @interface MeResponseClientsInner
- */
-export interface MeResponseClientsInner {
-  /**
-   *
-   * @type {number}
-   * @memberof MeResponseClientsInner
-   */
-  id: number;
-  /**
-   *
-   * @type {string}
-   * @memberof MeResponseClientsInner
-   */
-  name: string;
+  workspaces: Array<MeResponseWorkspacesInner>;
 }
 /**
  *
@@ -587,6 +568,25 @@ export interface MeResponseRole {
    * @memberof MeResponseRole
    */
   isClientManager: boolean;
+}
+/**
+ *
+ * @export
+ * @interface MeResponseWorkspacesInner
+ */
+export interface MeResponseWorkspacesInner {
+  /**
+   *
+   * @type {number}
+   * @memberof MeResponseWorkspacesInner
+   */
+  id: number;
+  /**
+   *
+   * @type {string}
+   * @memberof MeResponseWorkspacesInner
+   */
+  name: string;
 }
 /**
  *
@@ -750,6 +750,32 @@ export interface UsersListResponseUsersInner {
    */
   role: MeResponseRole;
 }
+/**
+ *
+ * @export
+ * @interface WorkspaceCreateRequest
+ */
+export interface WorkspaceCreateRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof WorkspaceCreateRequest
+   */
+  name: string;
+}
+/**
+ *
+ * @export
+ * @interface WorkspaceCreateValidateErrorResponse
+ */
+export interface WorkspaceCreateValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof WorkspaceCreateValidateErrorResponse
+   */
+  name?: Array<string>;
+}
 
 /**
  * DefaultApi - axios parameter creator
@@ -759,19 +785,52 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
+     * @summary Slack連携
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiSlackWorkspaceIdConnectGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiSlackWorkspaceIdConnectGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/slack/{workspaceId}/connect`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary 書籍履歴
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {number} bookId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookIdHistoriesGet: async (clientId: number, bookId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdBookIdHistoriesGet", "clientId", clientId);
+    apiWorkspaceIdBookIdHistoriesGet: async (workspaceId: number, bookId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdBookIdHistoriesGet", "workspaceId", workspaceId);
       // verify required parameter 'bookId' is not null or undefined
-      assertParamExists("apiClientIdBookIdHistoriesGet", "bookId", bookId);
-      const localVarPath = `/api/{clientId}/{bookId}/histories`
-        .replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)))
+      assertParamExists("apiWorkspaceIdBookIdHistoriesGet", "bookId", bookId);
+      const localVarPath = `/api/{workspaceId}/{bookId}/histories`
+        .replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)))
         .replace(`{${"bookId"}}`, encodeURIComponent(String(bookId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -798,14 +857,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary 書籍購入申請一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookPurchaseAppliesGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdBookPurchaseAppliesGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/bookPurchaseApplies`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdBookPurchaseAppliesGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdBookPurchaseAppliesGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/bookPurchaseApplies`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -831,15 +890,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary 書籍更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {BookUpdateRequest} [bookUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookPut: async (clientId: number, bookUpdateRequest?: BookUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdBookPut", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/book`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdBookPut: async (
+      workspaceId: number,
+      bookUpdateRequest?: BookUpdateRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdBookPut", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/book`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -868,14 +931,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary 書籍一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBooksGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdBooksGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/books`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdBooksGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdBooksGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/books`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -900,15 +963,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
-     * @summary 組織情報
-     * @param {number} clientId
+     * @summary ワークスペース情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdClientGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/client`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdClientGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdClientGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/client`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -933,15 +996,56 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
-     * @summary 組織一覧
-     * @param {number} clientId
+     * @summary ワークスペース追加
+     * @param {number} workspaceId
+     * @param {WorkspaceCreateRequest} [workspaceCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientsGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdClientsGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/clients`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdClientPost: async (
+      workspaceId: number,
+      workspaceCreateRequest?: WorkspaceCreateRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdClientPost", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/client`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "POST", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(workspaceCreateRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary ワークスペース一覧
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdClientsGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdClientsGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/clients`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -967,14 +1071,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary 自分の情報
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdMeGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdMeGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/me`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdMeGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdMeGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/me`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1000,15 +1104,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary ユーザー追加
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPost: async (clientId: number, userCreateRequest?: UserCreateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdUserPost", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdUserPost: async (
+      workspaceId: number,
+      userCreateRequest?: UserCreateRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdUserPost", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/user`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1037,15 +1145,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary ユーザー更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPut: async (clientId: number, userUpdateRequest?: UserUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdUserPut", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/user`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdUserPut: async (
+      workspaceId: number,
+      userUpdateRequest?: UserUpdateRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdUserPut", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/user`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1073,48 +1185,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
-     * @summary 組織に所属しているユーザー情報
-     * @param {number} clientId
+     * @summary ワークスペースに所属しているユーザー情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUsersGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiClientIdUsersGet", "clientId", clientId);
-      const localVarPath = `/api/{clientId}/users`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: "GET", ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication Bearer required
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiSlackClientIdConnectGet: async (clientId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists("apiSlackClientIdConnectGet", "clientId", clientId);
-      const localVarPath = `/api/slack/{clientId}/connect`.replace(`{${"clientId"}}`, encodeURIComponent(String(clientId)));
+    apiWorkspaceIdUsersGet: async (workspaceId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdUsersGet", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/users`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1149,164 +1228,180 @@ export const DefaultApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary Slack連携
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiSlackWorkspaceIdConnectGet(
+      workspaceId: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiSlackWorkspaceIdConnectGet(workspaceId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary 書籍履歴
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {number} bookId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdBookIdHistoriesGet(
-      clientId: number,
+    async apiWorkspaceIdBookIdHistoriesGet(
+      workspaceId: number,
       bookId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BookHistoriesListResponseInner>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBookIdHistoriesGet(clientId, bookId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary 書籍購入申請一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdBookPurchaseAppliesGet(
-      clientId: number,
+    async apiWorkspaceIdBookPurchaseAppliesGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BookPurchaseAppliesListResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBookPurchaseAppliesGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookPurchaseAppliesGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary 書籍更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {BookUpdateRequest} [bookUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdBookPut(
-      clientId: number,
+    async apiWorkspaceIdBookPut(
+      workspaceId: number,
       bookUpdateRequest?: BookUpdateRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBookPut(clientId, bookUpdateRequest, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookPut(workspaceId, bookUpdateRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary 書籍一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdBooksGet(
-      clientId: number,
+    async apiWorkspaceIdBooksGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BooksResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdBooksGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBooksGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
-     * @summary 組織情報
-     * @param {number} clientId
+     * @summary ワークスペース情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdClientGet(
-      clientId: number,
+    async apiWorkspaceIdClientGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClientResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdClientGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdClientGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
-     * @summary 組織一覧
-     * @param {number} clientId
+     * @summary ワークスペース追加
+     * @param {number} workspaceId
+     * @param {WorkspaceCreateRequest} [workspaceCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdClientsGet(
-      clientId: number,
+    async apiWorkspaceIdClientPost(
+      workspaceId: number,
+      workspaceCreateRequest?: WorkspaceCreateRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdClientPost(workspaceId, workspaceCreateRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @summary ワークスペース一覧
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiWorkspaceIdClientsGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ClientsResponseInner>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdClientsGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdClientsGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary 自分の情報
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdMeGet(
-      clientId: number,
+    async apiWorkspaceIdMeGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdMeGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdMeGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary ユーザー追加
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdUserPost(
-      clientId: number,
+    async apiWorkspaceIdUserPost(
+      workspaceId: number,
       userCreateRequest?: UserCreateRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPost(clientId, userCreateRequest, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdUserPost(workspaceId, userCreateRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
      * @summary ユーザー更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdUserPut(
-      clientId: number,
+    async apiWorkspaceIdUserPut(
+      workspaceId: number,
       userUpdateRequest?: UserUpdateRequest,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUserPut(clientId, userUpdateRequest, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdUserPut(workspaceId, userUpdateRequest, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
      *
-     * @summary 組織に所属しているユーザー情報
-     * @param {number} clientId
+     * @summary ワークスペースに所属しているユーザー情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiClientIdUsersGet(
-      clientId: number,
+    async apiWorkspaceIdUsersGet(
+      workspaceId: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersListResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiClientIdUsersGet(clientId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiSlackClientIdConnectGet(
-      clientId: number,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiSlackClientIdConnectGet(clientId, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdUsersGet(workspaceId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
   };
@@ -1321,117 +1416,128 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
+     * @summary Slack連携
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiSlackWorkspaceIdConnectGet(workspaceId: number, options?: any): AxiosPromise<void> {
+      return localVarFp.apiSlackWorkspaceIdConnectGet(workspaceId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary 書籍履歴
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {number} bookId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookIdHistoriesGet(clientId: number, bookId: number, options?: any): AxiosPromise<Array<BookHistoriesListResponseInner>> {
-      return localVarFp.apiClientIdBookIdHistoriesGet(clientId, bookId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: any): AxiosPromise<Array<BookHistoriesListResponseInner>> {
+      return localVarFp.apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary 書籍購入申請一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookPurchaseAppliesGet(clientId: number, options?: any): AxiosPromise<BookPurchaseAppliesListResponse> {
-      return localVarFp.apiClientIdBookPurchaseAppliesGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdBookPurchaseAppliesGet(workspaceId: number, options?: any): AxiosPromise<BookPurchaseAppliesListResponse> {
+      return localVarFp.apiWorkspaceIdBookPurchaseAppliesGet(workspaceId, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary 書籍更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {BookUpdateRequest} [bookUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBookPut(clientId: number, bookUpdateRequest?: BookUpdateRequest, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdBookPut(clientId, bookUpdateRequest, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdBookPut(workspaceId: number, bookUpdateRequest?: BookUpdateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdBookPut(workspaceId, bookUpdateRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary 書籍一覧
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdBooksGet(clientId: number, options?: any): AxiosPromise<BooksResponse> {
-      return localVarFp.apiClientIdBooksGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdBooksGet(workspaceId: number, options?: any): AxiosPromise<BooksResponse> {
+      return localVarFp.apiWorkspaceIdBooksGet(workspaceId, options).then((request) => request(axios, basePath));
     },
     /**
      *
-     * @summary 組織情報
-     * @param {number} clientId
+     * @summary ワークスペース情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientGet(clientId: number, options?: any): AxiosPromise<ClientResponse> {
-      return localVarFp.apiClientIdClientGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdClientGet(workspaceId: number, options?: any): AxiosPromise<ClientResponse> {
+      return localVarFp.apiWorkspaceIdClientGet(workspaceId, options).then((request) => request(axios, basePath));
     },
     /**
      *
-     * @summary 組織一覧
-     * @param {number} clientId
+     * @summary ワークスペース追加
+     * @param {number} workspaceId
+     * @param {WorkspaceCreateRequest} [workspaceCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdClientsGet(clientId: number, options?: any): AxiosPromise<Array<ClientsResponseInner>> {
-      return localVarFp.apiClientIdClientsGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdClientPost(workspaceId: number, workspaceCreateRequest?: WorkspaceCreateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdClientPost(workspaceId, workspaceCreateRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary ワークスペース一覧
+     * @param {number} workspaceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdClientsGet(workspaceId: number, options?: any): AxiosPromise<Array<ClientsResponseInner>> {
+      return localVarFp.apiWorkspaceIdClientsGet(workspaceId, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary 自分の情報
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdMeGet(clientId: number, options?: any): AxiosPromise<MeResponse> {
-      return localVarFp.apiClientIdMeGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdMeGet(workspaceId: number, options?: any): AxiosPromise<MeResponse> {
+      return localVarFp.apiWorkspaceIdMeGet(workspaceId, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary ユーザー追加
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserCreateRequest} [userCreateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdUserPost(clientId, userCreateRequest, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdUserPost(workspaceId: number, userCreateRequest?: UserCreateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdUserPost(workspaceId, userCreateRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary ユーザー更新
-     * @param {number} clientId
+     * @param {number} workspaceId
      * @param {UserUpdateRequest} [userUpdateRequest]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUserPut(clientId: number, userUpdateRequest?: UserUpdateRequest, options?: any): AxiosPromise<void> {
-      return localVarFp.apiClientIdUserPut(clientId, userUpdateRequest, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdUserPut(workspaceId: number, userUpdateRequest?: UserUpdateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdUserPut(workspaceId, userUpdateRequest, options).then((request) => request(axios, basePath));
     },
     /**
      *
-     * @summary 組織に所属しているユーザー情報
-     * @param {number} clientId
+     * @summary ワークスペースに所属しているユーザー情報
+     * @param {number} workspaceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiClientIdUsersGet(clientId: number, options?: any): AxiosPromise<UsersListResponse> {
-      return localVarFp.apiClientIdUsersGet(clientId, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
-     * @summary Slack連携
-     * @param {number} clientId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiSlackClientIdConnectGet(clientId: number, options?: any): AxiosPromise<void> {
-      return localVarFp.apiSlackClientIdConnectGet(clientId, options).then((request) => request(axios, basePath));
+    apiWorkspaceIdUsersGet(workspaceId: number, options?: any): AxiosPromise<UsersListResponse> {
+      return localVarFp.apiWorkspaceIdUsersGet(workspaceId, options).then((request) => request(axios, basePath));
     },
   };
 };
@@ -1445,159 +1551,174 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 export class DefaultApi extends BaseAPI {
   /**
    *
+   * @summary Slack連携
+   * @param {number} workspaceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiSlackWorkspaceIdConnectGet(workspaceId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiSlackWorkspaceIdConnectGet(workspaceId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary 書籍履歴
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {number} bookId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdBookIdHistoriesGet(clientId: number, bookId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdBookIdHistoriesGet(clientId, bookId, options)
+      .apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary 書籍購入申請一覧
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdBookPurchaseAppliesGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdBookPurchaseAppliesGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdBookPurchaseAppliesGet(clientId, options)
+      .apiWorkspaceIdBookPurchaseAppliesGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary 書籍更新
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {BookUpdateRequest} [bookUpdateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdBookPut(clientId: number, bookUpdateRequest?: BookUpdateRequest, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdBookPut(workspaceId: number, bookUpdateRequest?: BookUpdateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdBookPut(clientId, bookUpdateRequest, options)
+      .apiWorkspaceIdBookPut(workspaceId, bookUpdateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary 書籍一覧
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdBooksGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdBooksGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdBooksGet(clientId, options)
+      .apiWorkspaceIdBooksGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
-   * @summary 組織情報
-   * @param {number} clientId
+   * @summary ワークスペース情報
+   * @param {number} workspaceId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdClientGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdClientGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdClientGet(clientId, options)
+      .apiWorkspaceIdClientGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
-   * @summary 組織一覧
-   * @param {number} clientId
+   * @summary ワークスペース追加
+   * @param {number} workspaceId
+   * @param {WorkspaceCreateRequest} [workspaceCreateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdClientsGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdClientPost(workspaceId: number, workspaceCreateRequest?: WorkspaceCreateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdClientsGet(clientId, options)
+      .apiWorkspaceIdClientPost(workspaceId, workspaceCreateRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary ワークスペース一覧
+   * @param {number} workspaceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiWorkspaceIdClientsGet(workspaceId: number, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiWorkspaceIdClientsGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary 自分の情報
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdMeGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdMeGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdMeGet(clientId, options)
+      .apiWorkspaceIdMeGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary ユーザー追加
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {UserCreateRequest} [userCreateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUserPost(clientId: number, userCreateRequest?: UserCreateRequest, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdUserPost(workspaceId: number, userCreateRequest?: UserCreateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUserPost(clientId, userCreateRequest, options)
+      .apiWorkspaceIdUserPost(workspaceId, userCreateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary ユーザー更新
-   * @param {number} clientId
+   * @param {number} workspaceId
    * @param {UserUpdateRequest} [userUpdateRequest]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUserPut(clientId: number, userUpdateRequest?: UserUpdateRequest, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdUserPut(workspaceId: number, userUpdateRequest?: UserUpdateRequest, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUserPut(clientId, userUpdateRequest, options)
+      .apiWorkspaceIdUserPut(workspaceId, userUpdateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
-   * @summary 組織に所属しているユーザー情報
-   * @param {number} clientId
+   * @summary ワークスペースに所属しているユーザー情報
+   * @param {number} workspaceId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiClientIdUsersGet(clientId: number, options?: AxiosRequestConfig) {
+  public apiWorkspaceIdUsersGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiClientIdUsersGet(clientId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @summary Slack連携
-   * @param {number} clientId
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public apiSlackClientIdConnectGet(clientId: number, options?: AxiosRequestConfig) {
-    return DefaultApiFp(this.configuration)
-      .apiSlackClientIdConnectGet(clientId, options)
+      .apiWorkspaceIdUsersGet(workspaceId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

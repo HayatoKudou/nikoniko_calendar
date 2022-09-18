@@ -6,15 +6,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import Send, { FeedBackRequestErrors } from "../../api/feed_back/send";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
+import ListItemButton from "./listItemButton";
 
 const MenuList3 = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -65,24 +63,12 @@ const MenuList3 = (props: { open: boolean }) => {
     <>
       <List component="div">
         <ListItemButton
-          sx={{
-            minHeight: 48,
-            justifyContent: props.open ? "initial" : "center",
-            px: 2.5,
-          }}
-        >
-          <ListItemIcon
-            onClick={() => setDialogOpen(true)}
-            sx={{
-              minWidth: 0,
-              mr: props.open ? 3 : "auto",
-              justifyContent: "center",
-            }}
-          >
-            <FeedbackIcon />
-          </ListItemIcon>
-          <ListItemText primary={"フィードバック"} sx={{ opacity: props.open ? 1 : 0 }} />
-        </ListItemButton>
+          open={props.open}
+          listItemText={"フィードバック"}
+          selected={false}
+          icon={<FeedbackIcon />}
+          handleSelect={() => setDialogOpen(true)}
+        />
       </List>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>

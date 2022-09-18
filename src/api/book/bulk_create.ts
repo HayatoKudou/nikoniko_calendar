@@ -10,8 +10,8 @@ interface CsvBulkCreateBookRequestPayload {
   apiToken: string;
 }
 
-const BulkCreate = async (clientId: string, payload: CsvBulkCreateBookRequestPayload): Promise<CsvBulkCreateBookResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/book/csvBulk`;
+const BulkCreate = async (workspaceId: string, payload: CsvBulkCreateBookRequestPayload): Promise<CsvBulkCreateBookResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/book/csvBulk`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

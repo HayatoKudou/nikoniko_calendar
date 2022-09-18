@@ -14,8 +14,8 @@ interface BookPurchaseDoneRequestPayload {
   apiToken: string;
 }
 
-const DoneBookPurchase = async (clientId: string, bookId: number, payload: BookPurchaseDoneRequestPayload): Promise<BookPurchaseDoneResult> => {
-  const endpoint = `${Config.apiOrigin}/api/${clientId}/${bookId}/purchase/done`;
+const DoneBookPurchase = async (workspaceId: string, bookId: number, payload: BookPurchaseDoneRequestPayload): Promise<BookPurchaseDoneResult> => {
+  const endpoint = `${Config.apiOrigin}/api/${workspaceId}/${bookId}/purchase/done`;
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

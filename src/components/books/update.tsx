@@ -74,7 +74,7 @@ const Update = (props: Props) => {
   const handleUpdate = (image: string | ArrayBuffer | null) => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBookPut(choseClient.clientId, {
+      .apiWorkspaceIdBookPut(choseClient.clientId, {
         id: formValues.id,
         category: formValues.category,
         status: formValues.status,

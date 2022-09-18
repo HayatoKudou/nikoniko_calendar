@@ -89,7 +89,7 @@ const Dashboard = () => {
   const fetchBooks = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdBooksGet(choseClient.clientId)
+      .apiWorkspaceIdBooksGet(choseClient.clientId)
       .then((res) => {
         setBooks(res.data.books);
         setBookCategory(res.data.bookCategories);

@@ -46,7 +46,7 @@ const UpdateUser = (props: Props) => {
     const roles: Array<string> = [];
     if (props.user.role.isAccountManager) roles.push("アカウント管理");
     if (props.user.role.isBookManager) roles.push("書籍管理");
-    if (props.user.role.isClientManager) roles.push("組織管理");
+    if (props.user.role.isClientManager) roles.push("ワークスペース管理");
     setFormValues({
       id: props.user.id,
       name: props.user.name,
@@ -75,7 +75,7 @@ const UpdateUser = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiClientIdUserPut(choseClient.clientId, {
+      .apiWorkspaceIdUserPut(choseClient.clientId, {
         id: formValues.id,
         name: formValues.name,
         email: formValues.email,
@@ -103,7 +103,7 @@ const UpdateUser = (props: Props) => {
       case "isBookManager":
         return "書籍管理";
       case "isClientManager":
-        return "組織管理";
+        return "ワークスペース管理";
       default:
         return "unknown";
     }
@@ -136,8 +136,8 @@ const UpdateUser = (props: Props) => {
             onChange={handleMultiSelectChange}
             renderValue={(selected) => (
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
+                {selected.map((value, index) => (
+                  <Chip key={index} label={value} />
                 ))}
               </Box>
             )}

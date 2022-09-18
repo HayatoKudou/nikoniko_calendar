@@ -16,7 +16,7 @@ const useBooks = () => {
     }).then((res) => {
       if (!res.ok) {
         if (res.status === 402) {
-          enqueueSnackbar(`ユーザは指定された組織に所属していません`, {
+          enqueueSnackbar(`ユーザは指定されたワークスペースに所属していません`, {
             variant: "error",
           });
         } else {
