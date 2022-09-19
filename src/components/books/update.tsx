@@ -84,7 +84,7 @@ const Update = (props: Props) => {
         image: image,
         url: formValues.url,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         setOpenConfirm(false);
         setUpdateUserRequestErrors({});

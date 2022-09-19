@@ -60,6 +60,32 @@ export interface BookCategoryCreateValidateErrorResponse {
 /**
  *
  * @export
+ * @interface BookCategoryDeleteRequest
+ */
+export interface BookCategoryDeleteRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof BookCategoryDeleteRequest
+   */
+  name: string;
+}
+/**
+ *
+ * @export
+ * @interface BookCategoryDeleteValidateErrorResponse
+ */
+export interface BookCategoryDeleteValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof BookCategoryDeleteValidateErrorResponse
+   */
+  name?: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface BookHistoriesListResponseInner
  */
 export interface BookHistoriesListResponseInner {
@@ -895,6 +921,47 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary 書籍カテゴリ削除
+     * @param {number} workspaceId
+     * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdBookCategoryDelete: async (
+      workspaceId: number,
+      bookCategoryDeleteRequest?: BookCategoryDeleteRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdBookCategoryDelete", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/bookCategory`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "DELETE", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(bookCategoryDeleteRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary 書籍カテゴリ追加
      * @param {number} workspaceId
      * @param {BookCategoryCreateRequest} [bookCategoryCreateRequest]
@@ -1442,6 +1509,22 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary 書籍カテゴリ削除
+     * @param {number} workspaceId
+     * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiWorkspaceIdBookCategoryDelete(
+      workspaceId: number,
+      bookCategoryDeleteRequest?: BookCategoryDeleteRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookCategoryDelete(workspaceId, bookCategoryDeleteRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary 書籍カテゴリ追加
      * @param {number} workspaceId
      * @param {BookCategoryCreateRequest} [bookCategoryCreateRequest]
@@ -1674,6 +1757,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary 書籍カテゴリ削除
+     * @param {number} workspaceId
+     * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdBookCategoryDelete(workspaceId: number, bookCategoryDeleteRequest?: BookCategoryDeleteRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdBookCategoryDelete(workspaceId, bookCategoryDeleteRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary 書籍カテゴリ追加
      * @param {number} workspaceId
      * @param {BookCategoryCreateRequest} [bookCategoryCreateRequest]
@@ -1841,6 +1935,21 @@ export class DefaultApi extends BaseAPI {
   public apiSlackWorkspaceIdConnectGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiSlackWorkspaceIdConnectGet(workspaceId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary 書籍カテゴリ削除
+   * @param {number} workspaceId
+   * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiWorkspaceIdBookCategoryDelete(workspaceId: number, bookCategoryDeleteRequest?: BookCategoryDeleteRequest, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiWorkspaceIdBookCategoryDelete(workspaceId, bookCategoryDeleteRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

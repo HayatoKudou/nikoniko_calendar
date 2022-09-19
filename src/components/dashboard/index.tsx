@@ -1,8 +1,10 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CircleIcon from "@mui/icons-material/Circle";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import { ListItemIcon, Menu } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -31,6 +33,7 @@ import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
 import styles from "../../styles/components/dashboards/index.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
+import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
@@ -56,6 +59,9 @@ const Dashboard = () => {
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
   const [bookSortedOption, setBookSortedOption] = React.useState<string>("新しい順");
   const [books, setBooks] = React.useState<Array<BooksResponseBooksInner>>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectTagContext, setSelectTagContext] = React.useState(null);
+  const [openDeleteTagConfirm, setOpenDeleteTagConfirm] = React.useState<boolean>(false);
   const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
 
   React.useEffect(() => {
@@ -172,19 +178,44 @@ const Dashboard = () => {
     setApplicationDialogOpen(false);
   };
 
+  const handleTabContextMenu = (e: any) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+    setSelectTagContext(e.target.innerText);
+  };
+
+  const handleTabContextMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteTag = () => {
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookCategoryDelete(choseWorkspace.workspaceId, {
+        name: selectTagContext!,
+      })
+      .then(() => {
+        setLoading(false);
+        setSelectTagContext(null);
+        setOpenTabValue("ALL");
+        setOpenDeleteTagConfirm(false);
+        enqueueSnackbar("カテゴリの削除に成功しました。", { variant: "success" });
+        fetchBooks();
+        handleTabContextMenuClose();
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+      });
+  };
+
   return (
     <>
       <Box className={styles.dashboard__head}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
-            <Tab label={tab.label} key={index} value={tab.label} />
+            <Tab label={tab.label} key={index} value={tab.label} onContextMenu={handleTabContextMenu} />
           ))}
-          {/*<ContextMenuTrigger id={tab.label}>*/}
-          {/*  <Tab label={tab.label} key={index} value={tab.label} />*/}
-          {/*</ContextMenuTrigger>*/}
-          {/*<ContextMenu id={tab.label}>*/}
-          {/*  a*/}
-          {/*</ContextMenu>*/}
           {me.role.isBookManager && (
             <Box className={styles.dashboard__bookCategoryForm}>
               <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
@@ -205,6 +236,22 @@ const Dashboard = () => {
             </Box>
           )}
         </Tabs>
+
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleTabContextMenuClose} onClick={handleTabContextMenuClose}>
+          <MenuItem onClick={() => setOpenDeleteTagConfirm(true)}>
+            <ListItemIcon>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            削除
+          </MenuItem>
+        </Menu>
+
+        <ConfirmDialog
+          message={"本当に削除しますか？"}
+          open={openDeleteTagConfirm}
+          onClose={() => setOpenDeleteTagConfirm(false)}
+          handleSubmit={handleDeleteTag}
+        />
 
         <Box className={styles.dashboard__headRight}>
           <FormControl className={styles.dashboard__sortForm} size="small">

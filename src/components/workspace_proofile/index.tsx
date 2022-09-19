@@ -82,7 +82,7 @@ const WorkspaceProfile = (props: Props) => {
     setLoading(true);
     ApiClient(me.apiToken)
       .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId)
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         enqueueSnackbar("更新に成功しました。", { variant: "success" });
         fetchWorkspace();

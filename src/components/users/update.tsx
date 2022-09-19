@@ -81,7 +81,7 @@ const UpdateUser = (props: Props) => {
         email: formValues.email,
         roles: formValues.roles,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         setOpenUpdateConfirm(false);
         enqueueSnackbar("更新に成功しました", { variant: "success" });

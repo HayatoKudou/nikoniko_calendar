@@ -64,7 +64,7 @@ const MenuList = (props: { open: boolean }) => {
     setLoading(true);
     ApiClient(me.apiToken)
       .apiWorkspaceIdWorkspacePost(choseWorkspace.workspaceId, { name: formValues.name })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         enqueueSnackbar("ワークスペースを追加しました", { variant: "success" });
         setCreateWorkspaceRequestErrors({});
