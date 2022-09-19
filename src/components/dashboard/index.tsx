@@ -62,10 +62,13 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectTagContext, setSelectTagContext] = React.useState(null);
   const [openDeleteTagConfirm, setOpenDeleteTagConfirm] = React.useState<boolean>(false);
+  const [canEditBookCategory, setCanEditBookCategory] = React.useState<boolean>(false);
+
   const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
 
   React.useEffect(() => {
     fetchBooks();
+    setCanEditBookCategory(me.role.isBookManager);
   }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
@@ -216,7 +219,7 @@ const Dashboard = () => {
           {tabList.map((tab, index) => (
             <Tab label={tab.label} key={index} value={tab.label} onContextMenu={handleTabContextMenu} />
           ))}
-          {me.role.isBookManager && (
+          {canEditBookCategory && (
             <Box className={styles.dashboard__bookCategoryForm}>
               <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
                 {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}

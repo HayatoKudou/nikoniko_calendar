@@ -8,7 +8,7 @@ import ApiClient from "../lib/apiClient";
 import { useChoseWorkspace } from "../store/choseWorkspace";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
-import Sidebar from "./sidebar";
+import { Sidebar } from "./sidebar";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
@@ -53,7 +53,6 @@ const Layout = ({ children }: any) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Sidebar>{children}</Sidebar>
-      {/*{children}*/}
     </ThemeProvider>
   );
 };
