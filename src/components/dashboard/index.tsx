@@ -270,8 +270,8 @@ const Dashboard = () => {
                     </CardContent>
                   )}
                 </CardActionArea>
-                <CardActions className={styles.dashboard__bookCardActionContainer}>
-                  <Box className={styles.dashboard__bookCardActionDetailContent}>
+                <CardActions className={styles.dashboard__bookCardAction}>
+                  <Box className={styles.dashboard__bookCardActionDetail}>
                     <Rating name="rate" value={rateAverage} readOnly precision={0.5} sx={{ fontSize: imageSize.height / 12 }} />
                     <Button size="small" className={styles.dashboard__bookCardActionDetailButton}>
                       {book.reviews.length}
