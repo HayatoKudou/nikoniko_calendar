@@ -67,11 +67,11 @@ const Users = () => {
     setLoading(true);
     ApiClient(me.apiToken)
       .apiWorkspaceIdUserDelete(choseWorkspace.workspaceId, {
-        userIds: selectedUserIds
+        userIds: selectedUserIds,
       })
       .then((res) => {
         setLoading(false);
-        enqueueSnackbar("削除しました", {variant: "success"});
+        enqueueSnackbar("削除しました", { variant: "success" });
         fetchUsers();
         setOpenDeleteConfirm(false);
       })

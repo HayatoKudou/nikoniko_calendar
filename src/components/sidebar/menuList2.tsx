@@ -7,7 +7,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -86,17 +85,22 @@ const MenuList = (props: { open: boolean }) => {
   return (
     <List component="div">
       {workspaces?.map((client, index) => (
-        <Tooltip title={client.name} key={index} placement={"right"}>
-          <ListItemButton
-            open={props.open}
-            listItemText={client.name}
-            selected={choseWorkspace.workspaceId == client.id}
-            icon={<ApartmentIcon />}
-            handleSelect={() => handleSelect(client.id)}
-          />
-        </Tooltip>
+        <ListItemButton
+          key={index}
+          open={props.open}
+          listItemText={client.name}
+          selected={choseWorkspace.workspaceId == client.id}
+          icon={<ApartmentIcon />}
+          handleSelect={() => handleSelect(client.id)}
+        />
       ))}
-      <ListItemButton open={props.open} selected={false} icon={<AddIcon />} handleSelect={() => setOpenClient(true)} />
+      <ListItemButton
+        listItemText={"ワークスペース追加"}
+        open={props.open}
+        selected={false}
+        icon={<AddIcon />}
+        handleSelect={() => setOpenClient(true)}
+      />
 
       <Dialog open={openClient} onClose={() => setOpenClient(false)} fullWidth scroll={"paper"}>
         <DialogTitle>ワークスペース追加</DialogTitle>

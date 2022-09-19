@@ -22,8 +22,7 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { BooksResponseBooksInner } from "../../../api_client";
-import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
+import { BookCategoryCreateValidateErrorResponse, BooksResponseBooksInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
@@ -73,7 +72,7 @@ const Dashboard = () => {
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState<boolean>(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
-  const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
+  const [createBookCategoryRequestErrors, setCreateBookCategoryRequestErrors] = React.useState<BookCategoryCreateValidateErrorResponse>({});
   const [selectedBook, setSelectedBook] = React.useState<BooksResponseBooksInner | null>(null);
   const [bookSearchStringInput, setBookSearchStringInput] = React.useState<string>("");
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
@@ -170,35 +169,22 @@ const Dashboard = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    CreateBookCategory(choseWorkspace.workspaceId, {
-      name: bookCategoryFormValue,
-      apiToken: me.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setBookCategoryFormError({});
-          enqueueSnackbar("カテゴリの登録に成功しました。", {
-            variant: "success",
-          });
-
-          if (res.bookCategories) {
-            const bookCategories = res.bookCategories.map((bookCategory) => {
-              return { label: bookCategory.name };
-            });
-            setBookCategory(res.bookCategories);
-            setTabList(bookCategories);
-          }
-          setBookCategoryFormOpen(false);
-          setBookCategoryFormValue("");
-        } else {
-          setBookCategoryFormError(res.errors);
-          enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
-        }
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookCategoryPost(choseWorkspace.workspaceId, {
+        name: bookCategoryFormValue,
       })
-      .catch(() => {
-        enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
+      .then(() => {
         setLoading(false);
+        setCreateBookCategoryRequestErrors({});
+        setBookCategoryFormOpen(false);
+        setBookCategoryFormValue("");
+        enqueueSnackbar("カテゴリの登録に成功しました。", { variant: "success" });
+        fetchBooks();
+      })
+      .catch((res) => {
+        setLoading(false);
+        setCreateBookCategoryRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -237,8 +223,8 @@ const Dashboard = () => {
                     onChange={(e) => setBookCategoryFormValue(e.target.value)}
                     size="small"
                     className={styles.dashboard__bookCategoryInput}
-                    helperText={bookCategoryFormError?.name}
-                    error={bookCategoryFormError?.name !== undefined}
+                    helperText={createBookCategoryRequestErrors?.name}
+                    error={createBookCategoryRequestErrors?.name !== undefined}
                   />
                 </form>
               )}
