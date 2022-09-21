@@ -95,7 +95,7 @@ const UpdateUser = (props: Props) => {
       });
   };
 
-  const roles = ["is_account_manager", "isBookManager", "isWorkspaceManager"];
+  const roles = ["isAccountManager", "isBookManager", "isWorkspaceManager"];
   const displayRoleName = (roleValue: string) => {
     switch (roleValue) {
       case "isAccountManager":

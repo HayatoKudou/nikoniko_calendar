@@ -101,7 +101,6 @@ const Books = () => {
           book={selectedEditBook}
           open={updateDialogOpen}
           onClose={() => setUpdateDialogOpen(false)}
-          // onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseWorkspace.workspaceId}/user/list`)}
           onSuccess={fetchBooks}
         />
       )}

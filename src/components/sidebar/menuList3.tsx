@@ -13,6 +13,7 @@ import Send, { FeedBackRequestErrors } from "../../api/feed_back/send";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 import ListItemButton from "./listItemButton";
+import Typography from "@mui/material/Typography";
 
 const MenuList3 = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -73,6 +74,7 @@ const MenuList3 = (props: { open: boolean }) => {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>
         <DialogContent>
+          <Typography>※ フォローバックは匿名で送信されます。</Typography>
           <TextField
             onChange={handleChange}
             value={formValues.message}
