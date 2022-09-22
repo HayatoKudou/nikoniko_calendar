@@ -12,6 +12,7 @@ import { Sidebar } from "./sidebar";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const [me, setMe] = useRecoilState(useMe);
   const [isDarkMode, setIsDarkMode] = React.useState<boolean>(false);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
@@ -21,11 +22,6 @@ const Layout = ({ children }: any) => {
   useIsomorphicLayoutEffect(() => {
     setIsDarkMode(colorMode === "dark");
   }, [colorMode]);
-
-  const darkTheme = createTheme({ palette: { mode: "dark" } });
-  const lightTheme = createTheme({ palette: { mode: "light" } });
-
-  const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {
     const authExclusionPath = ["/sign-in"];
@@ -55,7 +51,7 @@ const Layout = ({ children }: any) => {
   };
 
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={createTheme({ palette: { mode: isDarkMode ? "dark" : "light" } })}>
       <CssBaseline />
       <Sidebar>{children}</Sidebar>
     </ThemeProvider>
