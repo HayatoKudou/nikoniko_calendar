@@ -74,7 +74,7 @@ const MenuList3 = (props: { open: boolean }) => {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>
         <DialogContent>
-          <Typography>※ フォローバックは匿名で送信されます。</Typography>
+          <Typography>※ フィードバックは匿名で送信されます。</Typography>
           <TextField
             onChange={handleChange}
             value={formValues.message}

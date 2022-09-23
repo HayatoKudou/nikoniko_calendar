@@ -1,4 +1,4 @@
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
+import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import * as React from "react";
 
 export default class Document extends NextDocument {
@@ -18,8 +18,8 @@ export default class Document extends NextDocument {
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <body>
-        <Main />
-        <NextScript />
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );

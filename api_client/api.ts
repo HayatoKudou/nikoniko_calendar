@@ -593,6 +593,44 @@ export interface MeResponseWorkspacesInner {
 /**
  *
  * @export
+ * @interface MeUpdateRequest
+ */
+export interface MeUpdateRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof MeUpdateRequest
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof MeUpdateRequest
+   */
+  email: string;
+}
+/**
+ *
+ * @export
+ * @interface MeUpdateValidateErrorResponse
+ */
+export interface MeUpdateValidateErrorResponse {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof MeUpdateValidateErrorResponse
+   */
+  name?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof MeUpdateValidateErrorResponse
+   */
+  email?: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface UserCreateRequest
  */
 export interface UserCreateRequest {
@@ -1181,6 +1219,43 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary プロフィール更新
+     * @param {number} workspaceId
+     * @param {MeUpdateRequest} [meUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdMePut: async (workspaceId: number, meUpdateRequest?: MeUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'workspaceId' is not null or undefined
+      assertParamExists("apiWorkspaceIdMePut", "workspaceId", workspaceId);
+      const localVarPath = `/api/{workspaceId}/me`.replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: "PUT", ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication Bearer required
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(meUpdateRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary ユーザー削除
      * @param {number} workspaceId
      * @param {UserDeleteRequest} [userDeleteRequest]
@@ -1615,6 +1690,22 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary プロフィール更新
+     * @param {number} workspaceId
+     * @param {MeUpdateRequest} [meUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiWorkspaceIdMePut(
+      workspaceId: number,
+      meUpdateRequest?: MeUpdateRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdMePut(workspaceId, meUpdateRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
      * @summary ユーザー削除
      * @param {number} workspaceId
      * @param {UserDeleteRequest} [userDeleteRequest]
@@ -1831,6 +1922,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary プロフィール更新
+     * @param {number} workspaceId
+     * @param {MeUpdateRequest} [meUpdateRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiWorkspaceIdMePut(workspaceId: number, meUpdateRequest?: MeUpdateRequest, options?: any): AxiosPromise<void> {
+      return localVarFp.apiWorkspaceIdMePut(workspaceId, meUpdateRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary ユーザー削除
      * @param {number} workspaceId
      * @param {UserDeleteRequest} [userDeleteRequest]
@@ -2037,6 +2139,21 @@ export class DefaultApi extends BaseAPI {
   public apiWorkspaceIdMeGet(workspaceId: number, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .apiWorkspaceIdMeGet(workspaceId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary プロフィール更新
+   * @param {number} workspaceId
+   * @param {MeUpdateRequest} [meUpdateRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiWorkspaceIdMePut(workspaceId: number, meUpdateRequest?: MeUpdateRequest, options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiWorkspaceIdMePut(workspaceId, meUpdateRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
