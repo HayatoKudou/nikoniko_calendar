@@ -65,7 +65,7 @@
       &Form {
         display: flex;
         align-items: center;
-        margin-left: 0;
+        margin-left: 0 !important;
         &Button {
           padding-left: 0;
         }
