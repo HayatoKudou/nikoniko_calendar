@@ -23,12 +23,7 @@ import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
 
-const Update = (props: {
-  open: boolean;
-  book: BooksResponseBooksInner;
-  onSuccess: () => void;
-  onClose: () => void;
-}) => {
+const Update = (props: { open: boolean; book: BooksResponseBooksInner; onSuccess: () => void; onClose: () => void }) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);

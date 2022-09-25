@@ -1,6 +1,6 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -8,6 +8,7 @@ import ApiClient from "../lib/apiClient";
 import { useChoseWorkspace } from "../store/choseWorkspace";
 import { useMe } from "../store/me";
 import { useColorMode } from "../store/styles/color_mode";
+import Spinner from "./parts/spinner";
 import { Sidebar } from "./sidebar";
 
 const Layout = ({ children }: any) => {
@@ -17,6 +18,18 @@ const Layout = ({ children }: any) => {
   const [isDarkMode, setIsDarkMode] = React.useState<boolean>(false);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const colorMode = useRecoilValue(useColorMode);
+  const [redirecting, setRedirecting] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    Router.events.on("routeChangeStart", () => setRedirecting(true));
+    Router.events.on("routeChangeComplete", () => setRedirecting(false));
+    Router.events.on("routeChangeError", () => setRedirecting(false));
+    return () => {
+      Router.events.off("routeChangeStart", () => setRedirecting(true));
+      Router.events.off("routeChangeComplete", () => setRedirecting(false));
+      Router.events.off("routeChangeError", () => setRedirecting(false));
+    };
+  });
 
   const useIsomorphicLayoutEffect = typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
   useIsomorphicLayoutEffect(() => {
@@ -53,7 +66,7 @@ const Layout = ({ children }: any) => {
   return (
     <ThemeProvider theme={createTheme({ palette: { mode: isDarkMode ? "dark" : "light" } })}>
       <CssBaseline />
-      <Sidebar>{children}</Sidebar>
+      <Sidebar>{redirecting ? <Spinner /> : children}</Sidebar>
     </ThemeProvider>
   );
 };
