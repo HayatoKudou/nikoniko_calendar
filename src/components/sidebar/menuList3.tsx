@@ -11,20 +11,24 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import Send, { FeedBackRequestErrors } from "../../api/feed_back/send";
+import { useRecoilValue } from "recoil";
+import { FeedBackSendRequest, FeedBackSendValidateErrorResponse } from "../../../api_client";
+import ApiClient from "../../lib/apiClient";
+import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 import ListItemButton from "./listItemButton";
 
 const MenuList3 = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
+  const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = React.useState<FeedBackSendRequest>({
     message: "",
   });
-  const [feedBackRequestErrors, setFeedBackRequestErrors] = React.useState<Partial<FeedBackRequestErrors>>({});
+  const [feedBackRequestErrors, setFeedBackRequestErrors] = React.useState<FeedBackSendValidateErrorResponse>({});
 
   if (loading) return <Spinner />;
 
@@ -37,27 +41,18 @@ const MenuList3 = (props: { open: boolean }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Send({
-      message: formValues.message,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setFeedBackRequestErrors({});
-          enqueueSnackbar("フィードバックを送信しました。ありがとうございます。", {
-            variant: "success",
-          });
-        } else {
-          setFeedBackRequestErrors(res.errors);
-          enqueueSnackbar(`フィードバックの送信に失敗しました。`, {
-            variant: "error",
-          });
-        }
+    ApiClient(me.apiToken)
+      .apiFeedBackSendPost({ message: formValues.message })
+      .then(() => {
+        setLoading(false);
         setOpenConfirm(false);
-        setLoading(false);
+        setFeedBackRequestErrors({});
+        enqueueSnackbar("フィードバックを送信しました。ありがとうございます。", { variant: "success" });
       })
-      .catch(() => {
+      .catch((res) => {
         setLoading(false);
-        enqueueSnackbar(`フィードバックの送信に失敗しました。`, { variant: "error" });
+        setFeedBackRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
