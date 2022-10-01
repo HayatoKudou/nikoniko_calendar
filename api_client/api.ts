@@ -426,10 +426,10 @@ export interface BooksResponseBooksInner {
     'purchaseApplicant': BooksResponseBooksInnerPurchaseApplicant;
     /**
      * 
-     * @type {BooksResponseBooksInnerPurchaseApplicant}
+     * @type {BooksResponseBooksInnerRentalApplicant}
      * @memberof BooksResponseBooksInner
      */
-    'rentalApplicant': BooksResponseBooksInnerPurchaseApplicant;
+    'rentalApplicant': BooksResponseBooksInnerRentalApplicant;
     /**
      * 
      * @type {Array<BooksResponseBooksInnerReviewsInner>}
@@ -461,6 +461,31 @@ export interface BooksResponseBooksInnerPurchaseApplicant {
      * @memberof BooksResponseBooksInnerPurchaseApplicant
      */
     'name'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface BooksResponseBooksInnerRentalApplicant
+ */
+export interface BooksResponseBooksInnerRentalApplicant {
+    /**
+     * 
+     * @type {number}
+     * @memberof BooksResponseBooksInnerRentalApplicant
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BooksResponseBooksInnerRentalApplicant
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BooksResponseBooksInnerRentalApplicant
+     */
+    'expectedReturnDate'?: string;
 }
 /**
  * 
