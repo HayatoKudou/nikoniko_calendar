@@ -69,13 +69,13 @@ const Users = () => {
       .apiWorkspaceIdUserDelete(choseWorkspace.workspaceId, {
         userIds: selectedUserIds,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         enqueueSnackbar("削除しました", { variant: "success" });
         fetchUsers();
         setOpenDeleteConfirm(false);
       })
-      .catch((res) => {
+      .catch(() => {
         setLoading(false);
         enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
       });

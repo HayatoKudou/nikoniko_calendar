@@ -17,6 +17,9 @@
   &__headRight {
     margin-left: auto;
     display: flex;
+    &BookSearchForm {
+      margin-right: 8px;
+    }
   }
 
   &__sortForm {
@@ -28,5 +31,48 @@
     margin-right: 8px;
     white-space: nowrap;
     height: 40px;
+  }
+
+  &__bookCard {
+    margin: 6px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    &NonImage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &Content {
+      padding: 8px 8px 0 8px;
+      &Text {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+    }
+    &Action {
+      display: block;
+      padding-top: 0;
+      &Detail {
+        display: flex;
+        align-items: center;
+        &Button {
+          min-width: 20px;
+        }
+      }
+      &Form {
+        display: flex;
+        align-items: center;
+        margin-left: 0 !important;
+        &Button {
+          padding-left: 0;
+        }
+        &Circle {
+          margin-left: auto;
+        }
+      }
+    }
   }
 }

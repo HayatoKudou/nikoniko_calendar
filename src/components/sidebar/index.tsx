@@ -96,7 +96,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function Sidebar(props: { children: any }) {
+export const Sidebar = (props: { children: any }) => {
   const theme = useTheme();
   const router = useRouter();
   const me = useRecoilValue(useMe);
@@ -141,7 +141,7 @@ export default function Sidebar(props: { children: any }) {
           )}
 
           <Typography onClick={() => router.push(`/dashboard`)} className={styles.sidebar__toolbarTitle}>
-            Read Worth
+            Read Worth β版
           </Typography>
 
           <StyleSetting />
@@ -184,4 +184,4 @@ export default function Sidebar(props: { children: any }) {
       <Box className={styles.sidebar__children}>{props.children}</Box>
     </Box>
   );
-}
+};

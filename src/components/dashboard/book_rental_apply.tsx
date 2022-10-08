@@ -97,6 +97,7 @@ const BookRentalApply = (props: Props) => {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="返却予定日"
+            minDate={new Date()}
             inputFormat="yyyy/MM/dd"
             value={expectedReturnDate}
             onChange={(e) => {
@@ -109,9 +110,9 @@ const BookRentalApply = (props: Props) => {
           </Box>
         </LocalizationProvider>
         <Button variant="contained" onClick={() => setOpenConfirm(true)} sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }}>
-          貸出申請
+          貸出
         </Button>
-        <ConfirmDialog message={"本当に貸出申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
+        <ConfirmDialog message={"本当に貸出しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
       </Box>
     </Box>
   );

@@ -1,8 +1,10 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CircleIcon from "@mui/icons-material/Circle";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import { ListItemIcon, Menu } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -22,8 +24,7 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { BooksResponseBooksInner } from "../../../api_client";
-import CreateBookCategory, { CreateBookCategoryRequestErrors } from "../../api/book/category/create";
+import { BookCategoryCreateValidateErrorResponse, BooksResponseBooksInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
@@ -32,32 +33,11 @@ import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
 import styles from "../../styles/components/dashboards/index.module.scss";
 import { bookStatusColor, bookStatusName } from "../../util/book";
+import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 import BookInfo from "./book_info";
 import BookPurchaseApply from "./book_purchase_apply";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: string;
-  value: string;
-}
-
-const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div role="tabpanel" hidden={value !== index} {...other}>
-      {value === index && (
-        <Box sx={{ p: 1 }}>
-          <Typography component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
-            {children}
-          </Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+import { TabPanel } from "./tab_panel";
 
 const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -73,15 +53,22 @@ const Dashboard = () => {
   const [bookInfoDialogOpen, setBookInfoDialogOpen] = React.useState<boolean>(false);
   const [bookCategoryFormOpen, setBookCategoryFormOpen] = React.useState<boolean>(false);
   const [bookCategoryFormValue, setBookCategoryFormValue] = React.useState("");
-  const [bookCategoryFormError, setBookCategoryFormError] = React.useState<Partial<CreateBookCategoryRequestErrors>>({});
+  const [createBookCategoryRequestErrors, setCreateBookCategoryRequestErrors] = React.useState<BookCategoryCreateValidateErrorResponse>({});
   const [selectedBook, setSelectedBook] = React.useState<BooksResponseBooksInner | null>(null);
   const [bookSearchStringInput, setBookSearchStringInput] = React.useState<string>("");
   const [bookSearchString, setBookSearchString] = React.useState<string>("");
   const [bookSortedOption, setBookSortedOption] = React.useState<string>("新しい順");
   const [books, setBooks] = React.useState<Array<BooksResponseBooksInner>>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectTagContext, setSelectTagContext] = React.useState(null);
+  const [openDeleteTagConfirm, setOpenDeleteTagConfirm] = React.useState<boolean>(false);
+  const [canEditBookCategory, setCanEditBookCategory] = React.useState<boolean>(false);
+
+  const sortOptions = ["新しい順", "古い順", "貸出順", "評価順"];
 
   React.useEffect(() => {
     fetchBooks();
+    setCanEditBookCategory(me.role.isBookManager);
   }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
@@ -111,35 +98,29 @@ const Dashboard = () => {
     }
   };
 
-  const bookCategoryFiltered = (): Array<any> => {
-    let filtered = books;
-    if (bookSearchString) {
-      filtered = books.filter((book) => {
-        if (book.title.indexOf(bookSearchString) !== -1) {
-          return book;
-        }
-      });
-    }
-    if (openTabValue === "ALL") {
-      return filtered;
-    }
+  const bookCategoryFiltered = (): Array<BooksResponseBooksInner> => {
+    let filtered = Object.create(books) as Array<BooksResponseBooksInner>;
+    // 検索文字列フィルタ
+    filtered = filtered.filter((book) => {
+      if (book.title.indexOf(bookSearchString) !== -1) {
+        return book;
+      }
+    });
+    if (openTabValue === "ALL") return filtered;
+    // タブフィルタ
     return filtered.filter((book) => {
       return book.category === openTabValue;
     });
   };
 
-  const bookSorted = (filtered: Array<any>): Array<any> => {
+  const bookSorted = (filtered: Array<BooksResponseBooksInner>): Array<BooksResponseBooksInner> => {
     switch (bookSortedOption) {
       case "新しい順":
-        return filtered.sort(
-          (a: BooksResponseBooksInner, b: BooksResponseBooksInner) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       case "古い順":
-        return filtered.sort(
-          (a: BooksResponseBooksInner, b: BooksResponseBooksInner) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+        return filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       case "評価順":
-        return filtered.sort((a: BooksResponseBooksInner, b: BooksResponseBooksInner) => {
+        return filtered.sort((a, b) => {
           let rateAverage_A = 0;
           let rateAverage_B = 0;
           if (a.reviews.length > 0) {
@@ -161,7 +142,7 @@ const Dashboard = () => {
           return rateAverage_B - rateAverage_A;
         });
       case "貸出順":
-        return filtered.sort((a: BooksResponseBooksInner, b: BooksResponseBooksInner) => b.rentalCount - a.rentalCount);
+        return filtered.sort((a, b) => b.rentalCount - a.rentalCount);
       default:
         return filtered;
     }
@@ -170,35 +151,22 @@ const Dashboard = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    CreateBookCategory(choseWorkspace.workspaceId, {
-      name: bookCategoryFormValue,
-      apiToken: me.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setBookCategoryFormError({});
-          enqueueSnackbar("カテゴリの登録に成功しました。", {
-            variant: "success",
-          });
-
-          if (res.bookCategories) {
-            const bookCategories = res.bookCategories.map((bookCategory) => {
-              return { label: bookCategory.name };
-            });
-            setBookCategory(res.bookCategories);
-            setTabList(bookCategories);
-          }
-          setBookCategoryFormOpen(false);
-          setBookCategoryFormValue("");
-        } else {
-          setBookCategoryFormError(res.errors);
-          enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
-        }
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookCategoryPost(choseWorkspace.workspaceId, {
+        name: bookCategoryFormValue,
       })
-      .catch(() => {
-        enqueueSnackbar(`カテゴリの登録に失敗しました`, { variant: "error" });
+      .then(() => {
         setLoading(false);
+        setCreateBookCategoryRequestErrors({});
+        setBookCategoryFormOpen(false);
+        setBookCategoryFormValue("");
+        enqueueSnackbar("カテゴリの登録に成功しました。", { variant: "success" });
+        fetchBooks();
+      })
+      .catch((res) => {
+        setLoading(false);
+        setCreateBookCategoryRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -213,19 +181,45 @@ const Dashboard = () => {
     setApplicationDialogOpen(false);
   };
 
+  const handleTabContextMenu = (e: any) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+    setSelectTagContext(e.target.innerText);
+  };
+
+  const handleTabContextMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteTag = () => {
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookCategoryDelete(choseWorkspace.workspaceId, {
+        name: selectTagContext!,
+      })
+      .then(() => {
+        setLoading(false);
+        setSelectTagContext(null);
+        setOpenTabValue("ALL");
+        setOpenDeleteTagConfirm(false);
+        enqueueSnackbar("カテゴリの削除に成功しました。", { variant: "success" });
+        fetchBooks();
+        handleTabContextMenuClose();
+      })
+      .catch(() => {
+        setLoading(false);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
+      });
+  };
+
   return (
     <>
-      {selectedBook && (
-        <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
-      )}
-      <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
-
       <Box className={styles.dashboard__head}>
         <Tabs value={openTabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {tabList.map((tab, index) => (
-            <Tab label={tab.label} key={index} value={tab.label} />
+            <Tab label={tab.label} key={index} value={tab.label} onContextMenu={handleTabContextMenu} />
           ))}
-          {me.role.isBookManager && (
+          {canEditBookCategory && (
             <Box className={styles.dashboard__bookCategoryForm}>
               <IconButton onClick={() => setBookCategoryFormOpen(!bookCategoryFormOpen)}>
                 {bookCategoryFormOpen ? <RemoveCircleIcon /> : <AddCircleIcon />}
@@ -237,14 +231,30 @@ const Dashboard = () => {
                     onChange={(e) => setBookCategoryFormValue(e.target.value)}
                     size="small"
                     className={styles.dashboard__bookCategoryInput}
-                    helperText={bookCategoryFormError?.name}
-                    error={bookCategoryFormError?.name !== undefined}
+                    helperText={createBookCategoryRequestErrors?.name}
+                    error={createBookCategoryRequestErrors?.name !== undefined}
                   />
                 </form>
               )}
             </Box>
           )}
         </Tabs>
+
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleTabContextMenuClose} onClick={handleTabContextMenuClose}>
+          <MenuItem onClick={() => setOpenDeleteTagConfirm(true)}>
+            <ListItemIcon>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            削除
+          </MenuItem>
+        </Menu>
+
+        <ConfirmDialog
+          message={"本当に削除しますか？"}
+          open={openDeleteTagConfirm}
+          onClose={() => setOpenDeleteTagConfirm(false)}
+          handleSubmit={handleDeleteTag}
+        />
 
         <Box className={styles.dashboard__headRight}>
           <FormControl className={styles.dashboard__sortForm} size="small">
@@ -259,7 +269,7 @@ const Dashboard = () => {
           <TextField
             value={bookSearchStringInput}
             onChange={(e) => setBookSearchStringInput(e.target.value)}
-            sx={{ marginRight: 1 }}
+            className={styles.dashboard__headRightBookSearchForm}
             label="書籍検索"
             size="small"
             InputProps={{
@@ -278,7 +288,7 @@ const Dashboard = () => {
 
       {tabList.map((tab, index) => (
         <TabPanel value={openTabValue} index={tab.label} key={index}>
-          {bookSorted(bookCategoryFiltered()).map((book: BooksResponseBooksInner, index: number) => {
+          {bookSorted(bookCategoryFiltered()).map((book, index: number) => {
             let rateAverage = 0;
             if (book.reviews.length > 0) {
               const rateSum = book.reviews
@@ -289,17 +299,7 @@ const Dashboard = () => {
               rateAverage = rateSum / book.reviews.length;
             }
             return (
-              <Card
-                sx={{
-                  width: imageSize.width,
-                  margin: 1,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  border: book.rentalApplicant?.id === me.id ? "solid red" : "",
-                }}
-                key={index}
-              >
+              <Card key={index} className={styles.dashboard__bookCard} sx={{ width: imageSize.width }}>
                 <CardActionArea onClick={() => handleDetailBook(book)}>
                   {book.image ? (
                     <CardMedia
@@ -308,38 +308,30 @@ const Dashboard = () => {
                       src={book.image ? `data:image/png;base64, ${book.image}` : "../../no_image.png"}
                     />
                   ) : (
-                    <Box sx={{ height: imageSize.height, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <Box className={styles.dashboard__bookCardNonImage} sx={{ height: imageSize.height }}>
                       <ImageNotSupportedIcon fontSize="large" />
                     </Box>
                   )}
                   {bookCardStyle === "rich" && (
-                    <CardContent sx={{ padding: "8px 8px 0px 8px" }}>
-                      <Typography
-                        sx={{
-                          fontSize: imageSize.height / 15,
-                          display: "-webkit-box",
-                          overflow: "hidden",
-                          WebkitLineClamp: "3",
-                          WebkitBoxOrient: "vertical",
-                        }}
-                      >
+                    <CardContent className={styles.dashboard__bookCardContent}>
+                      <Typography className={styles.dashboard__bookCardContentText} sx={{ fontSize: imageSize.height / 15 }}>
                         {book.title}
                       </Typography>
                     </CardContent>
                   )}
                 </CardActionArea>
-                <CardActions sx={{ display: "block", paddingTop: 0 }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                <CardActions className={styles.dashboard__bookCardAction}>
+                  <Box className={styles.dashboard__bookCardActionDetail}>
                     <Rating name="rate" value={rateAverage} readOnly precision={0.5} sx={{ fontSize: imageSize.height / 12 }} />
-                    <Button size="small" sx={{ minWidth: "20px" }}>
+                    <Button size="small" className={styles.dashboard__bookCardActionDetailButton}>
                       {book.reviews.length}
                     </Button>
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", marginLeft: "0px !important" }}>
-                    <Button size="small" sx={{ paddingLeft: 0 }}>
+                  <Box className={styles.dashboard__bookCardActionForm}>
+                    <Button size="small" className={styles.dashboard__bookCardActionFormButton}>
                       {bookStatusName(book.status)}
                     </Button>
-                    <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} sx={{ marginLeft: "auto" }} />
+                    <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} className={styles.dashboard__bookCardActionFormCircle} />
                   </Box>
                 </CardActions>
               </Card>
@@ -347,6 +339,10 @@ const Dashboard = () => {
           })}
         </TabPanel>
       ))}
+      {selectedBook && (
+        <BookInfo open={bookInfoDialogOpen} success={handleSuccess} setClose={() => setBookInfoDialogOpen(false)} bookInfo={selectedBook} />
+      )}
+      <BookPurchaseApply open={applicationDialogOpen} setClose={() => setApplicationDialogOpen(false)} success={handleSuccess} />
     </>
   );
 };

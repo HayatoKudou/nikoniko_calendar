@@ -204,7 +204,7 @@ const CustomTable = (props: Props) => {
             {/*@ts-ignore*/}
             {stableSort(props.books, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((book: any, index) => {
+              .map((book: any) => {
                 const isItemSelected = isSelected(book.id);
 
                 return (

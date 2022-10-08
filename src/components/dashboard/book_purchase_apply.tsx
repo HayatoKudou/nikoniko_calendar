@@ -23,13 +23,7 @@ import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
 
-interface Props {
-  open: boolean;
-  setClose: () => void;
-  success: () => void;
-}
-
-const BookPurchaseApply = (props: Props) => {
+const BookPurchaseApply = (props: { open: boolean; setClose: () => void; success: () => void }) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
@@ -47,6 +41,7 @@ const BookPurchaseApply = (props: Props) => {
     price: 0,
   });
   const [selectedImage, setSelectedImage] = React.useState<Blob | null>(null);
+  const [amazonUrlError, setAmazonUrlError] = React.useState<string | null>(null);
 
   if (loading) return <Spinner />;
 
@@ -106,14 +101,36 @@ const BookPurchaseApply = (props: Props) => {
     }
   };
 
+  function getParam(name: string, url: string) {
+    name = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return "";
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
   const fetchBookImage = () => {
     if (formValues.url && formValues.url.match(/www.amazon.co.jp/)) {
-      const decodedUrl = decodeURI(formValues.url).match(/www.amazon.co.jp\/(.*)\/dp/);
-      if (decodedUrl) {
-        setTitle(decodedUrl![1]);
+      const decodedUrl = decodeURI(formValues.url);
+      const paramUrl = getParam("url", decodedUrl);
+      let dp: string;
+
+      if (paramUrl) {
+        setTitle("");
+        dp = paramUrl.match(/dp\/(.*)\//)![1];
+      } else {
+        const title = decodedUrl.match(/www.amazon.co.jp\/(.*)\/dp/);
+        setTitle(title ? title[1] : "");
+        const dpStartIndexOf = decodedUrl.indexOf("dp/") + 3;
+        dp = decodedUrl.substring(dpStartIndexOf, dpStartIndexOf + 10);
       }
-      const dpStartIndexOf = formValues.url.indexOf("dp/") + 3;
-      const dp = formValues.url.substring(dpStartIndexOf, dpStartIndexOf + 10);
+
+      if (!dp) {
+        setTitle("");
+        setSelectedImage(null);
+        setAmazonUrlError("無効なURLです");
+      }
 
       AmazonImage(dp)
         .then((blob) => {
@@ -128,7 +145,7 @@ const BookPurchaseApply = (props: Props) => {
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
       <ConfirmDialog message={"本当に申請しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
-      <DialogTitle>書籍申請</DialogTitle>
+      <DialogTitle>書籍購入申請</DialogTitle>
       <DialogContent sx={{ display: "flex", padding: "0px 20px", justifyContent: "center", alignItems: "center" }}>
         <Box sx={{ textAlign: "center", width: "40%" }}>
           <ImageForm selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
@@ -210,6 +227,8 @@ const BookPurchaseApply = (props: Props) => {
             label="URL"
             fullWidth
             variant="standard"
+            helperText={amazonUrlError}
+            error={Boolean(amazonUrlError)}
           />
 
           <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>

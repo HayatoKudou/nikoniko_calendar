@@ -67,7 +67,7 @@ const CreateUser = (props: Props) => {
         email: formValues.email,
         roles: formValues.roles,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         setOpenConfirm(false);
         setCreateUserRequestErrors({});

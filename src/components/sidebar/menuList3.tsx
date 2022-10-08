@@ -1,4 +1,5 @@
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import HelpIcon from "@mui/icons-material/Help";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,22 +8,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import Send, { FeedBackRequestErrors } from "../../api/feed_back/send";
+import { useRecoilValue } from "recoil";
+import { FeedBackSendRequest, FeedBackSendValidateErrorResponse } from "../../../api_client";
+import ApiClient from "../../lib/apiClient";
+import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
 import ListItemButton from "./listItemButton";
 
 const MenuList3 = (props: { open: boolean }) => {
   const { enqueueSnackbar } = useSnackbar();
+  const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = React.useState<FeedBackSendRequest>({
     message: "",
   });
-  const [feedBackRequestErrors, setFeedBackRequestErrors] = React.useState<Partial<FeedBackRequestErrors>>({});
+  const [feedBackRequestErrors, setFeedBackRequestErrors] = React.useState<FeedBackSendValidateErrorResponse>({});
 
   if (loading) return <Spinner />;
 
@@ -35,27 +41,18 @@ const MenuList3 = (props: { open: boolean }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Send({
-      message: formValues.message,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setFeedBackRequestErrors({});
-          enqueueSnackbar("フィードバックを送信しました。ありがとうございます。", {
-            variant: "success",
-          });
-        } else {
-          setFeedBackRequestErrors(res.errors);
-          enqueueSnackbar(`フィードバックの送信に失敗しました。`, {
-            variant: "error",
-          });
-        }
+    ApiClient(me.apiToken)
+      .apiFeedBackSendPost({ message: formValues.message })
+      .then(() => {
+        setLoading(false);
         setOpenConfirm(false);
-        setLoading(false);
+        setFeedBackRequestErrors({});
+        enqueueSnackbar("フィードバックを送信しました。ありがとうございます。", { variant: "success" });
       })
-      .catch(() => {
+      .catch((res) => {
         setLoading(false);
-        enqueueSnackbar(`フィードバックの送信に失敗しました。`, { variant: "error" });
+        setFeedBackRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -69,10 +66,18 @@ const MenuList3 = (props: { open: boolean }) => {
           icon={<FeedbackIcon />}
           handleSelect={() => setDialogOpen(true)}
         />
+        <ListItemButton
+          open={props.open}
+          listItemText={"ヘルプ"}
+          selected={false}
+          icon={<HelpIcon />}
+          handleSelect={() => window.open("https://www.notion.so/Read-Worth-0cae3af1832d496da668d0c9e442749a", "_blank")}
+        />
       </List>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>
         <DialogContent>
+          <Typography>※ フィードバックは匿名で送信されます。</Typography>
           <TextField
             onChange={handleChange}
             value={formValues.message}

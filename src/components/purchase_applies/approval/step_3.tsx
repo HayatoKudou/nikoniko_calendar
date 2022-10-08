@@ -47,7 +47,7 @@ const Step3 = (props: Props) => {
     Refuse(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
       apiToken: me.apiToken,
     })
-      .then((res) => {
+      .then(() => {
         enqueueSnackbar("却下しました", { variant: "success" });
         setLoading(false);
         props.onSuccess();

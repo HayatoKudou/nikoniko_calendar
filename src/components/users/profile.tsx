@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { UserUpdateValidateErrorResponse, UserUpdateRequest } from "../../../api_client";
+import { MeUpdateValidateErrorResponse, MeUpdateRequest } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
@@ -25,21 +25,17 @@ const MyProfile = (props: Props) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const [loading, setLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<UserUpdateRequest>({
-    id: 0,
+  const [formValues, setFormValues] = React.useState<MeUpdateRequest>({
     name: "",
     email: "",
-    roles: [],
   });
-  const [updateRequestErrors, setUpdateRequestErrors] = React.useState<UserUpdateValidateErrorResponse>({});
+  const [updateRequestErrors, setUpdateRequestErrors] = React.useState<MeUpdateValidateErrorResponse>({});
   const [openUpdateConfirm, setOpenUpdateConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setFormValues({
-      id: me.id,
       name: me.name,
       email: me.email,
-      roles: me.role,
     });
   }, []);
 
@@ -55,13 +51,11 @@ const MyProfile = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdUserPut(choseWorkspace.workspaceId, {
-        id: formValues.id,
+      .apiWorkspaceIdMePut(choseWorkspace.workspaceId, {
         name: formValues.name,
         email: formValues.email,
-        roles: formValues.roles,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         setOpenUpdateConfirm(false);
         setUpdateRequestErrors({});

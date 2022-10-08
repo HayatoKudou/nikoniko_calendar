@@ -16,19 +16,7 @@ import BookRentalApply from "./book_rental_apply";
 import BookReturn from "./book_return";
 import BookReviews from "./book_reviews";
 
-interface Props {
-  open: boolean;
-  bookInfo: BooksResponseBooksInner;
-  setClose: () => void;
-  success: () => void;
-}
-
-interface BookInfoDetail {
-  title: string;
-  value: string;
-}
-
-const BookInfo = (props: Props) => {
+const BookInfo = (props: { open: boolean; bookInfo: BooksResponseBooksInner; setClose: () => void; success: () => void }) => {
   const me = useRecoilValue(useMe);
 
   const handleClose = () => {
@@ -45,7 +33,7 @@ const BookInfo = (props: Props) => {
     rateAverage = rateSum / props.bookInfo.reviews.length;
   }
 
-  const BookInfoDetail = (props: BookInfoDetail) => {
+  const BookInfoDetail = (props: { title: string; value: string }) => {
     return (
       <Box className={styles.bookInfo__dialogContentBookInfo}>
         <Typography className={styles.bookInfo__dialogContentBookInfoTitle}>{props.title}</Typography>
@@ -77,15 +65,18 @@ const BookInfo = (props: Props) => {
             <BookInfoDetail title={"本の説明"} value={props.bookInfo.description ? props.bookInfo.description : "なし"} />
             <BookInfoDetail title={"ステータス"} value={bookStatusName(props.bookInfo.status)} />
 
-            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant && (
-              <BookInfoDetail title={"貸出者"} value={props.bookInfo.rentalApplicant.name ?? ""} />
+            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && (
+              <>
+                <BookInfoDetail title={"貸出者"} value={props.bookInfo.rentalApplicant.name ?? ""} />
+                <BookInfoDetail title={"返却予定日"} value={props.bookInfo.rentalApplicant.expectedReturnDate ?? ""} />
+                {props.bookInfo.rentalApplicant?.id === me.id && <BookReturn bookInfo={props.bookInfo} success={props.success} />}
+              </>
             )}
-            {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && props.bookInfo.purchaseApplicant && (
+
+            {props.bookInfo.status === BOOK_STATUS.STATUS_APPLYING && (
               <BookInfoDetail title={"購入申請者"} value={props.bookInfo.purchaseApplicant.name ?? ""} />
             )}
-            {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_NOT_LEND && props.bookInfo.rentalApplicant?.id === me.id && (
-              <BookReturn bookInfo={props.bookInfo} success={props.success} />
-            )}
+
             {props.bookInfo.status === BOOK_STATUS.STATUS_CAN_LEND && <BookRentalApply bookInfo={props.bookInfo} success={props.success} />}
           </Box>
 

@@ -5,6 +5,23 @@ info:
 servers:
   - url: "http://localhost:8000/"
 paths:
+  /api/feedBack/send:
+    post:
+      summary: フィードバック送信
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/feedBackSendRequest"
+      responses:
+        "200":
+          description: "OK"
+        "422":
+          description: "バリデーションエラー"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/feedBackSendValidateErrorResponse"
   /api/{workspaceId}/me:
     get:
       summary: 自分の情報
@@ -28,6 +45,35 @@ paths:
           description: "apiトークンが無効の場合"
         "403":
           description: "指定されたワークスペースにユーザーがいない場合"
+    put:
+      summary: プロフィール更新
+      parameters:
+        - in: path
+          name: workspaceId
+          schema:
+            type: integer
+          required: true
+          example: 1
+      security:
+        - Bearer: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeUpdateRequest"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "apiトークンが無効の場合"
+        "403":
+          description: "他ユーザーのプロフィールを更新しようとした場合"
+        "422":
+          description: "バリデーションエラー"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeUpdateValidateErrorResponse"
   /api/{workspaceId}/users:
     get:
       summary: ワークスペースに所属しているユーザー情報
@@ -292,6 +338,65 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BookUpdateValidateErrorResponse"
+  /api/{workspaceId}/bookCategory:
+    post:
+      summary: 書籍カテゴリ追加
+      parameters:
+        - in: path
+          name: workspaceId
+          schema:
+            type: integer
+          required: true
+          example: 1
+      security:
+        - Bearer: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCategoryCreateRequest"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "apiトークンが無効の場合"
+        "403":
+          description: "指定されたワークスペースにユーザーがいない場合"
+        "422":
+          description: "バリデーションエラー"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookCategoryCreateValidateErrorResponse"
+    delete:
+      summary: 書籍カテゴリ削除
+      parameters:
+        - in: path
+          name: workspaceId
+          schema:
+            type: integer
+          required: true
+          example: 1
+      security:
+        - Bearer: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCategoryDeleteRequest"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "apiトークンが無効の場合"
+        "403":
+          description: "指定されたワークスペースにユーザーがいない場合"
+        "422":
+          description: "バリデーションエラー"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookCategoryDeleteValidateErrorResponse"
   /api/{workspaceId}/bookPurchaseApplies:
     get:
       summary: 書籍購入申請一覧
@@ -366,6 +471,21 @@ components:
       type: http
       scheme: bear
   schemas:
+    feedBackSendRequest:
+      properties:
+        message:
+          type: string
+          example: "Good!!"
+      required:
+        - message
+    feedBackSendValidateErrorResponse:
+      type: object
+      properties:
+        message:
+          type: array
+          items:
+            type: string
+            example: [ "メッセージは必ず指定してください。" ]
     MeResponse:
       type: object
       required:
@@ -418,6 +538,30 @@ components:
               name:
                 type: string
                 example: "テテマーチ"
+    MeUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: "工藤"
+        email:
+          type: string
+          example: "tetetest@gmail.com"
+      required:
+        - name
+        - email
+    MeUpdateValidateErrorResponse:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example: [ "名前は必ず指定してください。" ]
+        email:
+          type: array
+          items:
+            type: string
+            example: [ "メールアドレスは必ず指定してください。" ]
     UsersListResponse:
       required:
         - users
@@ -690,6 +834,9 @@ components:
                   name:
                     type: string
                     example: "たかし君"
+                  expectedReturnDate:
+                    type: string
+                    example: "2022-10-08"
               reviews:
                 type: array
                 items:
@@ -785,6 +932,38 @@ components:
           items:
             type: string
             example: [ "本の説明は、255文字以下で指定してください。" ]
+    BookCategoryCreateRequest:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: "IT"
+    BookCategoryCreateValidateErrorResponse:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example: [ "カテゴリ名は必ず指定してください。" ]
+    BookCategoryDeleteRequest:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: "IT"
+    BookCategoryDeleteValidateErrorResponse:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example: [ "カテゴリ名は必ず指定してください。" ]
     bookPurchaseAppliesListResponse:
       required:
         - slackCredentialExists

@@ -97,13 +97,7 @@ const Books = () => {
       <CsvUpload open={csvUploadDialogOpen} handleClose={() => setCsvUploadDialogOpen(false)} handleSuccess={handleSuccess} />
       <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={handleSuccess} />
       {selectedEditBook && (
-        <Update
-          book={selectedEditBook}
-          open={updateDialogOpen}
-          onClose={() => setUpdateDialogOpen(false)}
-          // onSuccess={() => mutate(`${Config.apiOrigin}/api/${choseWorkspace.workspaceId}/user/list`)}
-          onSuccess={fetchBooks}
-        />
+        <Update book={selectedEditBook} open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)} onSuccess={fetchBooks} />
       )}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
       <CustomTable
