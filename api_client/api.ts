@@ -76,6 +76,75 @@ export interface BookCategoryDeleteValidateErrorResponse {
 /**
  * 
  * @export
+ * @interface BookCreateRequest
+ */
+export interface BookCreateRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof BookCreateRequest
+     */
+    'category': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookCreateRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookCreateRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookCreateRequest
+     */
+    'url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookCreateRequest
+     */
+    'image'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface BookCreateValidateErrorResponse
+ */
+export interface BookCreateValidateErrorResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BookCreateValidateErrorResponse
+     */
+    'category'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BookCreateValidateErrorResponse
+     */
+    'title'?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface BookDeleteValidateErrorResponse
+ */
+export interface BookDeleteValidateErrorResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BookDeleteValidateErrorResponse
+     */
+    'book_ids'?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface BookHistoriesListResponseInner
  */
 export interface BookHistoriesListResponseInner {
@@ -517,6 +586,19 @@ export interface BooksResponseBooksInnerReviewsInner {
      * @memberof BooksResponseBooksInnerReviewsInner
      */
     'reviewer': string;
+}
+/**
+ * 
+ * @export
+ * @interface ConnectGoogleResponse
+ */
+export interface ConnectGoogleResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ConnectGoogleResponse
+     */
+    'connectUrl': string;
 }
 /**
  * 
@@ -1117,6 +1199,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary 書籍削除
+         * @param {number} workspaceId 
+         * @param {Array<number>} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookDelete: async (workspaceId: number, requestBody?: Array<number>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workspaceId' is not null or undefined
+            assertParamExists('apiWorkspaceIdBookDelete', 'workspaceId', workspaceId)
+            const localVarPath = `/api/{workspaceId}/book`
+                .replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary 書籍履歴
          * @param {number} workspaceId 
          * @param {number} bookId 
@@ -1149,6 +1271,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 書籍追加
+         * @param {number} workspaceId 
+         * @param {BookCreateRequest} [bookCreateRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookPost: async (workspaceId: number, bookCreateRequest?: BookCreateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workspaceId' is not null or undefined
+            assertParamExists('apiWorkspaceIdBookPost', 'workspaceId', workspaceId)
+            const localVarPath = `/api/{workspaceId}/book`
+                .replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bookCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1651,6 +1813,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Google連携
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        connectGoogleGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/connect/google`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1709,6 +1901,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary 書籍削除
+         * @param {number} workspaceId 
+         * @param {Array<number>} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookDelete(workspaceId, requestBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary 書籍履歴
          * @param {number} workspaceId 
          * @param {number} bookId 
@@ -1717,6 +1921,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BookHistoriesListResponseInner>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary 書籍追加
+         * @param {number} workspaceId 
+         * @param {BookCreateRequest} [bookCreateRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWorkspaceIdBookPost(workspaceId: number, bookCreateRequest?: BookCreateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookPost(workspaceId, bookCreateRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1869,6 +2085,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdWorkspacesGet(workspaceId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Google連携
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async connectGoogleGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConnectGoogleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.connectGoogleGet(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -1923,6 +2149,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary 書籍削除
+         * @param {number} workspaceId 
+         * @param {Array<number>} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: any): AxiosPromise<void> {
+            return localVarFp.apiWorkspaceIdBookDelete(workspaceId, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary 書籍履歴
          * @param {number} workspaceId 
          * @param {number} bookId 
@@ -1931,6 +2168,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: any): AxiosPromise<Array<BookHistoriesListResponseInner>> {
             return localVarFp.apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 書籍追加
+         * @param {number} workspaceId 
+         * @param {BookCreateRequest} [bookCreateRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookPost(workspaceId: number, bookCreateRequest?: BookCreateRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.apiWorkspaceIdBookPost(workspaceId, bookCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2069,6 +2317,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         apiWorkspaceIdWorkspacesGet(workspaceId: number, options?: any): AxiosPromise<Array<WorkspacesResponseInner>> {
             return localVarFp.apiWorkspaceIdWorkspacesGet(workspaceId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Google連携
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        connectGoogleGet(options?: any): AxiosPromise<ConnectGoogleResponse> {
+            return localVarFp.connectGoogleGet(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2131,6 +2388,19 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary 書籍削除
+     * @param {number} workspaceId 
+     * @param {Array<number>} [requestBody] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiWorkspaceIdBookDelete(workspaceId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary 書籍履歴
      * @param {number} workspaceId 
      * @param {number} bookId 
@@ -2140,6 +2410,19 @@ export class DefaultApi extends BaseAPI {
      */
     public apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 書籍追加
+     * @param {number} workspaceId 
+     * @param {BookCreateRequest} [bookCreateRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiWorkspaceIdBookPost(workspaceId: number, bookCreateRequest?: BookCreateRequest, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiWorkspaceIdBookPost(workspaceId, bookCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2303,6 +2586,17 @@ export class DefaultApi extends BaseAPI {
      */
     public apiWorkspaceIdWorkspacesGet(workspaceId: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).apiWorkspaceIdWorkspacesGet(workspaceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Google連携
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public connectGoogleGet(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).connectGoogleGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

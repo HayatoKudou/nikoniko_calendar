@@ -13,8 +13,9 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
+import { BookCreateValidateErrorResponse } from "../../../api_client";
 import AmazonImage from "../../api/book/amazon_image";
-import register, { RegisterBookRequestErrors } from "../../api/book/create";
+import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
@@ -23,23 +24,17 @@ import FormError from "../parts/form_error";
 import ImageForm from "../parts/image_form";
 import Spinner from "../parts/spinner";
 
-interface Props {
-  open: boolean;
-  setClose: () => void;
-  success: () => void;
-}
-
-const Create = (props: Props) => {
+const Create = (props: { open: boolean; setClose: () => void; success: () => void }) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<Partial<RegisterBookRequestErrors>>({});
+  const [registerBookRequestErrors, setRegisterBookRequestErrors] = React.useState<BookCreateValidateErrorResponse>({});
   const [title, setTitle] = React.useState("");
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
-    bookCategoryName: "",
+    category: "",
     title: "",
     description: "",
     url: "",
@@ -57,35 +52,27 @@ const Create = (props: Props) => {
 
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
-    register(choseWorkspace.workspaceId, {
-      bookCategoryName: formValues.bookCategoryName,
-      title: title,
-      description: formValues.description,
-      image: image,
-      url: formValues.url,
-      apiToken: me.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          setRegisterBookRequestErrors({});
-          enqueueSnackbar("書籍の登録に成功しました。", {
-            variant: "success",
-          });
-          props.success();
-          props.setClose();
-        } else {
-          setRegisterBookRequestErrors(res.errors);
-          enqueueSnackbar(`書籍の登録に失敗しました`, {
-            variant: "error",
-          });
-        }
-        setOpenConfirm(false);
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookPost(choseWorkspace.workspaceId, {
+        category: formValues.category,
+        title: title,
+        description: formValues.description,
+        image: image as string,
+        url: formValues.url,
       })
-      .catch(() => {
-        setLoading(false);
+      .then(() => {
         setRegisterBookRequestErrors({});
-        enqueueSnackbar(`書籍の登録に失敗しました`, { variant: "error" });
+        setLoading(false);
+        setOpenConfirm(false);
+        enqueueSnackbar("書籍の登録に成功しました。", { variant: "success" });
+        props.success();
+        props.setClose();
+      })
+      .catch((res) => {
+        setLoading(false);
+        setOpenConfirm(false);
+        setRegisterBookRequestErrors(res.response.data.errors);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
@@ -122,6 +109,7 @@ const Create = (props: Props) => {
         });
     }
   };
+  console.log(registerBookRequestErrors)
 
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
@@ -133,7 +121,7 @@ const Create = (props: Props) => {
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
+            <Select onChange={handleChange} value={formValues.category} name="category" label="role" variant="standard">
               {bookCategories?.map((bookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
@@ -141,7 +129,7 @@ const Create = (props: Props) => {
               ))}
             </Select>
           </FormControl>
-          <FormError errors={registerBookRequestErrors?.bookCategoryName} />
+          <FormError errors={registerBookRequestErrors?.category} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}
@@ -164,8 +152,6 @@ const Create = (props: Props) => {
             variant="standard"
             multiline
             margin={"dense"}
-            helperText={registerBookRequestErrors?.description}
-            error={registerBookRequestErrors?.description !== undefined}
           />
 
           <TextField
@@ -178,8 +164,6 @@ const Create = (props: Props) => {
             fullWidth
             variant="standard"
             margin={"dense"}
-            helperText={registerBookRequestErrors?.url}
-            error={registerBookRequestErrors?.url !== undefined}
           />
 
           <FormHelperText>URLを入力することで、タイトルとイメージを自動補完します</FormHelperText>

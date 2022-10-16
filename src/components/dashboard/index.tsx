@@ -68,7 +68,7 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     fetchBooks();
-    setCanEditBookCategory(me.role.isBookManager);
+    setCanEditBookCategory(Boolean(me.role.isBookManager));
   }, [choseWorkspace]);
 
   if (loading) return <Spinner />;
@@ -240,14 +240,16 @@ const Dashboard = () => {
           )}
         </Tabs>
 
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleTabContextMenuClose} onClick={handleTabContextMenuClose}>
-          <MenuItem onClick={() => setOpenDeleteTagConfirm(true)}>
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" />
-            </ListItemIcon>
-            削除
-          </MenuItem>
-        </Menu>
+        {canEditBookCategory && (
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleTabContextMenuClose} onClick={handleTabContextMenuClose}>
+            <MenuItem onClick={() => setOpenDeleteTagConfirm(true)}>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              削除
+            </MenuItem>
+          </Menu>
+        )}
 
         <ConfirmDialog
           message={"本当に削除しますか？"}
