@@ -2,7 +2,6 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { BooksResponseBooksInner } from "../../../api_client";
-import DeleteBook from "../../api/book/delete";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
@@ -20,7 +19,7 @@ const Books = () => {
   const [, setBookCategories] = useRecoilState(useBookCategories);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedEditBook, setSelectedEditBook] = React.useState<BooksResponseBooksInner>();
-  const [selectedBookIds, setSelectedBookIds] = React.useState<number[]>([]);
+  const [selectedBookIds, setSelectedBookIds] = React.useState<Array<number>>([]);
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState<boolean>(false);
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = React.useState<boolean>(false);
@@ -71,31 +70,29 @@ const Books = () => {
     setOpenDeleteConfirm(false);
   };
 
-  const handleSuccess = () => {
-    fetchBooks();
-  };
-
   const handleDeleteBook = () => {
-    DeleteBook(choseWorkspace.workspaceId, {
-      book_ids: selectedBookIds,
-      apiToken: me.apiToken,
-    })
-      .then(() => {
-        enqueueSnackbar("削除しました", {
-          variant: "success",
-        });
-        setOpenDeleteConfirm(false);
-        handleSuccess();
+    setLoading(true);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookDelete(choseWorkspace.workspaceId, {
+        bookIds: selectedBookIds,
       })
-      .catch(() => {
-        enqueueSnackbar(`削除に失敗しました`, { variant: "error" });
+      .then(() => {
+        setLoading(false);
+        setOpenDeleteConfirm(false);
+        fetchBooks();
+        enqueueSnackbar("書籍の削除に成功しました。", { variant: "success" });
+      })
+      .catch((res) => {
+        setLoading(false);
+        setOpenDeleteConfirm(false);
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 
   return (
     <>
-      <CsvUpload open={csvUploadDialogOpen} handleClose={() => setCsvUploadDialogOpen(false)} handleSuccess={handleSuccess} />
-      <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={handleSuccess} />
+      <CsvUpload open={csvUploadDialogOpen} handleClose={() => setCsvUploadDialogOpen(false)} handleSuccess={fetchBooks} />
+      <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={fetchBooks} />
       {selectedEditBook && (
         <Update book={selectedEditBook} open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)} onSuccess={fetchBooks} />
       )}

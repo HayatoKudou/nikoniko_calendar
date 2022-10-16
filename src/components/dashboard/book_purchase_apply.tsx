@@ -33,7 +33,7 @@ const BookPurchaseApply = (props: { open: boolean; setClose: () => void; success
   const [title, setTitle] = React.useState("");
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
-    bookCategoryName: "ALL",
+    category: "ALL",
     title: "",
     description: "",
     url: "",
@@ -55,7 +55,7 @@ const BookPurchaseApply = (props: { open: boolean; setClose: () => void; success
   const handleRegister = (image: string | ArrayBuffer | null) => {
     setLoading(true);
     CreateBookPurchaseApply(choseWorkspace.workspaceId, {
-      bookCategoryName: formValues.bookCategoryName,
+      category: formValues.category,
       title: title,
       reason: formValues.reason,
       price: formValues.price,
@@ -153,7 +153,7 @@ const BookPurchaseApply = (props: { open: boolean; setClose: () => void; success
         <Box sx={{ width: "55%" }}>
           <FormControl fullWidth margin={"dense"} required>
             <InputLabel sx={{ left: "-15px" }}>カテゴリ</InputLabel>
-            <Select onChange={handleChange} value={formValues.bookCategoryName} name="bookCategoryName" label="role" variant="standard">
+            <Select onChange={handleChange} value={formValues.category} name="category" label="role" variant="standard">
               {bookCategories?.map((bookCategory, index: number) => (
                 <MenuItem key={index} value={bookCategory.name}>
                   {bookCategory.name}
@@ -161,7 +161,7 @@ const BookPurchaseApply = (props: { open: boolean; setClose: () => void; success
               ))}
             </Select>
           </FormControl>
-          <FormError errors={bookPurchaseApplyRequestErrors?.bookCategoryName} />
+          <FormError errors={bookPurchaseApplyRequestErrors?.category} />
           <TextField
             onChange={(e) => setTitle(e.target.value)}
             value={title}

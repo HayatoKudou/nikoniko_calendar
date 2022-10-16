@@ -3,26 +3,29 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import GenerateGoogleOauthUrl from "../../api/auth/generate_google_oauth_url";
+import { useRecoilValue } from "recoil";
+import ApiClient from "../../lib/apiClient";
+import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
 
 const SignIn = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const me = useRecoilValue(useMe);
   const [loading, setLoading] = React.useState(false);
 
   if (loading) return <Spinner />;
 
   const handleSignInGoogle = () => {
     setLoading(true);
-    GenerateGoogleOauthUrl()
+    ApiClient(me.apiToken)
+      .connectGoogleGet()
       .then((res) => {
-        setLoading(false);
-        router.push(res.connectUrl);
+        router.push(res.data.connectUrl).then(() => setLoading(false));
       })
       .catch(() => {
         setLoading(false);
-        enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
+        enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
   };
 

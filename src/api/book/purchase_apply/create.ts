@@ -2,7 +2,7 @@ import { BooksResponse } from "../../../../api_client";
 import Config from "../../../../config";
 
 export interface BookPurchaseApplyRequestErrors {
-  bookCategoryName: Array<string>;
+  category: Array<string>;
   title: Array<string>;
   reason: Array<string>;
   price: Array<string>;
@@ -17,7 +17,7 @@ interface BookPurchaseApplyResult {
 }
 
 interface BookPurchaseApplyRequestPayload {
-  bookCategoryName: string;
+  category: string;
   title: string;
   reason: string;
   price: number;
