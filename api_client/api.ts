@@ -140,7 +140,7 @@ export interface BookDeleteValidateErrorResponse {
      * @type {Array<string>}
      * @memberof BookDeleteValidateErrorResponse
      */
-    'book_ids'?: Array<string>;
+    'bookIds'?: Array<string>;
 }
 /**
  * 

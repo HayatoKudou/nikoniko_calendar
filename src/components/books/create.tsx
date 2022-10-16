@@ -109,7 +109,6 @@ const Create = (props: { open: boolean; setClose: () => void; success: () => voi
         });
     }
   };
-  console.log(registerBookRequestErrors)
 
   return (
     <Dialog open={props.open} onClose={props.setClose} fullWidth maxWidth={"md"}>
