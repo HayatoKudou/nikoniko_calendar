@@ -132,6 +132,19 @@ export interface BookCreateValidateErrorResponse {
 /**
  * 
  * @export
+ * @interface BookDeleteRequest
+ */
+export interface BookDeleteRequest {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof BookDeleteRequest
+     */
+    'bookIds': Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface BookDeleteValidateErrorResponse
  */
 export interface BookDeleteValidateErrorResponse {
@@ -1201,11 +1214,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary 書籍削除
          * @param {number} workspaceId 
-         * @param {Array<number>} [requestBody] 
+         * @param {BookDeleteRequest} [bookDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiWorkspaceIdBookDelete: async (workspaceId: number, requestBody?: Array<number>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiWorkspaceIdBookDelete: async (workspaceId: number, bookDeleteRequest?: BookDeleteRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'workspaceId' is not null or undefined
             assertParamExists('apiWorkspaceIdBookDelete', 'workspaceId', workspaceId)
             const localVarPath = `/api/{workspaceId}/book`
@@ -1230,7 +1243,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(bookDeleteRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1903,12 +1916,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary 書籍削除
          * @param {number} workspaceId 
-         * @param {Array<number>} [requestBody] 
+         * @param {BookDeleteRequest} [bookDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookDelete(workspaceId, requestBody, options);
+        async apiWorkspaceIdBookDelete(workspaceId: number, bookDeleteRequest?: BookDeleteRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookDelete(workspaceId, bookDeleteRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2151,12 +2164,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary 書籍削除
          * @param {number} workspaceId 
-         * @param {Array<number>} [requestBody] 
+         * @param {BookDeleteRequest} [bookDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: any): AxiosPromise<void> {
-            return localVarFp.apiWorkspaceIdBookDelete(workspaceId, requestBody, options).then((request) => request(axios, basePath));
+        apiWorkspaceIdBookDelete(workspaceId: number, bookDeleteRequest?: BookDeleteRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.apiWorkspaceIdBookDelete(workspaceId, bookDeleteRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2390,13 +2403,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary 書籍削除
      * @param {number} workspaceId 
-     * @param {Array<number>} [requestBody] 
+     * @param {BookDeleteRequest} [bookDeleteRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiWorkspaceIdBookDelete(workspaceId: number, requestBody?: Array<number>, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).apiWorkspaceIdBookDelete(workspaceId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public apiWorkspaceIdBookDelete(workspaceId: number, bookDeleteRequest?: BookDeleteRequest, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiWorkspaceIdBookDelete(workspaceId, bookDeleteRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

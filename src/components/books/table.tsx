@@ -29,24 +29,6 @@ import CsvDownload from "../parts/csv_download";
 import TableHead from "../parts/table_head";
 
 type Order = "asc" | "desc";
-interface TableToolbarProps {
-  books: Array<BooksResponseBooksInner>;
-  numSelected: number;
-  isBookManager: boolean;
-  handleCreate: () => void;
-  handleDelete: () => void;
-  handleCsvUpload: () => void;
-}
-
-interface Props {
-  books: Array<BooksResponseBooksInner>;
-  handleCreate: () => void;
-  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: BooksResponseBooksInner) => void;
-  handleDelete: () => void;
-  handleCsvUpload: () => void;
-  selected: Array<any>;
-  setSelected: Dispatch<SetStateAction<any>>;
-}
 
 const headCells: readonly TableHeadCell[] = [
   {
@@ -71,7 +53,14 @@ const headCells: readonly TableHeadCell[] = [
   },
 ];
 
-const TableToolbar = (props: TableToolbarProps) => {
+const TableToolbar = (props: {
+  books: Array<BooksResponseBooksInner>;
+  numSelected: number;
+  isBookManager: boolean;
+  handleCreate: () => void;
+  handleDelete: () => void;
+  handleCsvUpload: () => void;
+}) => {
   const { numSelected } = props;
   return (
     <Toolbar
@@ -119,7 +108,15 @@ const TableToolbar = (props: TableToolbarProps) => {
   );
 };
 
-const CustomTable = (props: Props) => {
+const CustomTable = (props: {
+  books: Array<BooksResponseBooksInner>;
+  handleCreate: () => void;
+  handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: BooksResponseBooksInner) => void;
+  handleDelete: () => void;
+  handleCsvUpload: () => void;
+  selected: Array<any>;
+  setSelected: Dispatch<SetStateAction<any>>;
+}) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState("createdAt");
   const [page, setPage] = React.useState(0);
