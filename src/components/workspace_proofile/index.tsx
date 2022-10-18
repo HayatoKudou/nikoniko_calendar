@@ -81,7 +81,10 @@ const WorkspaceProfile = (props: Props) => {
   const handleSubmit = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId)
+      .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId, {
+        name: formValues.name,
+        plan: formValues.plan
+      })
       .then(() => {
         setLoading(false);
         enqueueSnackbar("更新に成功しました。", { variant: "success" });
