@@ -21,6 +21,7 @@ import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
+import Config from "../../../app-config";
 
 interface Props {
   open: boolean;
@@ -104,7 +105,7 @@ const WorkspaceProfile = (props: Props) => {
       .apiSlackWorkspaceIdConnectGet(choseWorkspace.workspaceId)
       .then(() => {
         open(
-          "https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope=",
+          `https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&redirect_uri=${Config.oauthSlackRedirectUri}`,
           "_blank"
         );
       })

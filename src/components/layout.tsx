@@ -57,9 +57,8 @@ const Layout = ({ children }: any) => {
         setMe(res.data);
       })
       .catch(() => {
-        enqueueSnackbar("エラーが発生しました", {
-          variant: "error",
-        });
+        enqueueSnackbar("エラーが発生しました", {variant: "error"});
+        router.push("/sign-in");
       });
   };
 
