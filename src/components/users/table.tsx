@@ -54,6 +54,10 @@ const headCells: readonly TableHeadCell[] = [
   {
     id: "role",
     label: "ロール",
+    helpText : "" +
+      "アカウント管理: ユーザーの追加・編集・削除\n" +
+      "書籍管理: 書籍追加 / 編集 / 削除・購入申請の承認・書籍カテゴリ追加 / 削除\n" +
+      "ワークスペース管理: ワークスペース編集・Slack連携"
   },
 ];
 

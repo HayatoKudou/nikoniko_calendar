@@ -6,6 +6,9 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
+import {Tooltip, Typography} from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import {withStyles} from "@material-ui/styles";
 
 type Order = "asc" | "desc";
 
@@ -20,6 +23,12 @@ interface EnhancedTableProps {
   showActionIcon: boolean;
   showCheckBox: boolean;
 }
+
+const CustomTooltip = withStyles({
+  tooltip: {
+    maxWidth: 500
+  }
+})(Tooltip);
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
@@ -47,11 +56,16 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
+              {headCell.helpText && (
+                <CustomTooltip sx={{fontSize: 17}} placement={"top"} title={<Typography sx={{fontSize: 13, whiteSpace: "pre-wrap"}}>{headCell.helpText}</Typography>}>
+                  <HelpOutlineIcon  />
+                </CustomTooltip>
+              )}
+              {orderBy === headCell.id && (
                 <Box sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
-              ) : null}
+              )}
             </TableSortLabel>
           </TableCell>
         ))}
