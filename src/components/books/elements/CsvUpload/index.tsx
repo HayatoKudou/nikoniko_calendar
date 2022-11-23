@@ -14,10 +14,10 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import BulkCreate from "../../api/book/bulk_create";
-import { useChoseWorkspace } from "../../store/choseWorkspace";
-import { useMe } from "../../store/me";
-import Spinner from "../parts/spinner";
+import BulkCreate from "../../../../api/book/bulk_create";
+import { useChoseWorkspace } from "../../../../store/choseWorkspace";
+import { useMe } from "../../../../store/me";
+import Spinner from "../../../parts/spinner";
 
 interface Props {
   open: boolean;
@@ -32,7 +32,7 @@ interface CSV {
   URL: string;
 }
 
-const CsvUpload = (props: Props) => {
+export const CsvUpload = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
@@ -146,5 +146,3 @@ const CsvUpload = (props: Props) => {
     </Dialog>
   );
 };
-
-export default CsvUpload;

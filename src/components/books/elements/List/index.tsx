@@ -20,13 +20,13 @@ import Tooltip from "@mui/material/Tooltip";
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
-import { BooksResponseBooksInner } from "../../../api_client";
-import { useMe } from "../../store/me";
-import styles from "../../styles/components/books/table.module.scss";
-import { bookStatusColor, bookStatusName } from "../../util/book";
-import { getComparator, stableSort } from "../../util/table";
-import CsvDownload from "../parts/csv_download";
-import TableHead from "../parts/table_head";
+import { BooksResponseBooksInner } from "../../../../../api_client";
+import { useMe } from "../../../../store/me";
+import { bookStatusColor, bookStatusName } from "../../../../util/book";
+import { getComparator, stableSort } from "../../../../util/table";
+import CsvDownload from "../../../parts/csv_download";
+import TableHead from "../../../parts/table_head";
+import styles from "./styles.module.scss";
 
 type Order = "asc" | "desc";
 
@@ -72,7 +72,7 @@ const TableToolbar = (props: {
         }),
       }}
     >
-      <Box className={styles.booksTable__toolBar} color="inherit">
+      <Box className={styles.list__toolBar} color="inherit">
         {props.isBookManager && numSelected > 0 ? numSelected + " 選択中" : "書籍管理"}
       </Box>
 
@@ -108,7 +108,7 @@ const TableToolbar = (props: {
   );
 };
 
-const CustomTable = (props: {
+export const List = (props: {
   books: Array<BooksResponseBooksInner>;
   handleCreate: () => void;
   handleEdit: (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>, book: BooksResponseBooksInner) => void;
@@ -185,7 +185,7 @@ const CustomTable = (props: {
         handleDelete={props.handleDelete}
       />
       <TableContainer>
-        <Table className={styles.booksTable} size="small">
+        <Table className={styles.list} size="small">
           <TableHead
             numSelected={props.selected.length}
             order={order}
@@ -228,14 +228,14 @@ const CustomTable = (props: {
                     )}
                     <TableCell align="left">{book.createdAt}</TableCell>
                     <TableCell align="center">
-                      <Box className={styles.booksTable__actionIcon}>
+                      <Box className={styles.list__actionIcon}>
                         <CircleIcon color={bookStatusColor(book.status)} fontSize={"small"} />
                         {bookStatusName(book.status)}
                       </Box>
                     </TableCell>
                     <TableCell align="center">{book.category}</TableCell>
-                    <TableCell className={styles.booksTable__title}>{book.title}</TableCell>
-                    <TableCell className={styles.booksTable__title}>{book.description}</TableCell>
+                    <TableCell className={styles.list__title}>{book.title}</TableCell>
+                    <TableCell className={styles.list__title}>{book.description}</TableCell>
                   </TableRow>
                 );
               })}
@@ -259,5 +259,3 @@ const CustomTable = (props: {
     </Paper>
   );
 };
-
-export default CustomTable;

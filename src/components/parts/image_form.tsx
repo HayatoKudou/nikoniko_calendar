@@ -1,20 +1,13 @@
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import Button from "@mui/material/Button";
 import * as React from "react";
-import { base64ToBlob } from "../../util/image";
 
 interface Props {
-  selectedImage: any;
-  setSelectedImage: any;
+  selectedImage: Blob | null;
+  setSelectedImage: React.Dispatch<React.SetStateAction<Blob | null>>;
 }
 
 const ImageForm = (props: Props) => {
-  React.useEffect(() => {
-    if (props.selectedImage && typeof props.selectedImage === "string") {
-      props.setSelectedImage(base64ToBlob(props.selectedImage));
-    }
-  }, []);
-
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       props.setSelectedImage(e.target.files[0]);

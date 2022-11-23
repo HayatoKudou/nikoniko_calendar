@@ -12,24 +12,25 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BooksResponseBooksInner, BookUpdateRequest, BookUpdateValidateErrorResponse } from "../../../api_client";
-import AmazonImage from "../../api/book/amazon_image";
-import ApiClient from "../../lib/apiClient";
-import { useBookCategories } from "../../store/book/categories";
-import { useChoseWorkspace } from "../../store/choseWorkspace";
-import { useMe } from "../../store/me";
-import ConfirmDialog from "../parts/confirm_dialog";
-import FormError from "../parts/form_error";
-import ImageForm from "../parts/image_form";
-import Spinner from "../parts/spinner";
+import { BooksResponseBooksInner, BookUpdateRequest, BookUpdateValidateErrorResponse } from "../../../../../api_client";
+import AmazonImage from "../../../../api/book/amazon_image";
+import ApiClient from "../../../../lib/apiClient";
+import { useBookCategories } from "../../../../store/book/categories";
+import { useChoseWorkspace } from "../../../../store/choseWorkspace";
+import { useMe } from "../../../../store/me";
+import { base64ToBlob } from "../../../../util/image";
+import ConfirmDialog from "../../../parts/confirm_dialog";
+import FormError from "../../../parts/form_error";
+import ImageForm from "../../../parts/image_form";
+import Spinner from "../../../parts/spinner";
 
-const Update = (props: { open: boolean; book: BooksResponseBooksInner; onSuccess: () => void; onClose: () => void }) => {
+export const Edit = (props: { open: boolean; book: BooksResponseBooksInner; onSuccess: () => void; onClose: () => void }) => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const bookCategories = useRecoilValue(useBookCategories);
   const [loading, setLoading] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState<string | null>(props.book.image);
+  const [selectedImage, setSelectedImage] = React.useState<Blob | null>(null);
   const [formValues, setFormValues] = React.useState<BookUpdateRequest>({
     id: 0,
     category: "",
@@ -52,8 +53,8 @@ const Update = (props: { open: boolean; book: BooksResponseBooksInner; onSuccess
       image: props.book.image,
       url: props.book.url,
     });
-    setSelectedImage(props.book.image);
-  }, [props.open]);
+    if (props.book.image) setSelectedImage(base64ToBlob(props.book.image));
+  }, [props.book]);
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -186,5 +187,3 @@ const Update = (props: { open: boolean; book: BooksResponseBooksInner; onSuccess
     </Dialog>
   );
 };
-
-export default Update;

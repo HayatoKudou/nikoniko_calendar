@@ -16,12 +16,12 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
 import { WorkspaceUpdateValidateErrorResponse } from "../../../api_client";
+import Config from "../../../app-config";
 import ApiClient from "../../lib/apiClient";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import Config from "../../../app-config";
 
 interface Props {
   open: boolean;
@@ -84,7 +84,7 @@ const WorkspaceProfile = (props: Props) => {
     ApiClient(me.apiToken)
       .apiWorkspaceIdWorkspacePut(choseWorkspace.workspaceId, {
         name: formValues.name,
-        plan: formValues.plan
+        plan: formValues.plan,
       })
       .then(() => {
         setLoading(false);

@@ -13,18 +13,18 @@ import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookCreateValidateErrorResponse } from "../../../api_client";
-import AmazonImage from "../../api/book/amazon_image";
-import ApiClient from "../../lib/apiClient";
-import { useBookCategories } from "../../store/book/categories";
-import { useChoseWorkspace } from "../../store/choseWorkspace";
-import { useMe } from "../../store/me";
-import ConfirmDialog from "../parts/confirm_dialog";
-import FormError from "../parts/form_error";
-import ImageForm from "../parts/image_form";
-import Spinner from "../parts/spinner";
+import { BookCreateValidateErrorResponse } from "../../../../../api_client";
+import AmazonImage from "../../../../api/book/amazon_image";
+import ApiClient from "../../../../lib/apiClient";
+import { useBookCategories } from "../../../../store/book/categories";
+import { useChoseWorkspace } from "../../../../store/choseWorkspace";
+import { useMe } from "../../../../store/me";
+import ConfirmDialog from "../../../parts/confirm_dialog";
+import FormError from "../../../parts/form_error";
+import ImageForm from "../../../parts/image_form";
+import Spinner from "../../../parts/spinner";
 
-const Create = (props: { open: boolean; setClose: () => void; success: () => void }) => {
+export const Create = (props: { open: boolean; setClose: () => void; success: () => void }) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
@@ -181,5 +181,3 @@ const Create = (props: { open: boolean; setClose: () => void; success: () => voi
     </Dialog>
   );
 };
-
-export default Create;

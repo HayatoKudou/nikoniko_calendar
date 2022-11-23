@@ -6,12 +6,12 @@ import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
-import Update from "../books/update";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import Create from "./create";
-import CsvUpload from "./csv_upload";
-import CustomTable from "./table";
+import { Create } from "./elements/Create";
+import { CsvUpload } from "./elements/CsvUpload";
+import { Edit } from "./elements/Edit";
+import { List } from "./elements/List";
 
 const Books = () => {
   const me = useRecoilValue(useMe);
@@ -82,7 +82,7 @@ const Books = () => {
         fetchBooks();
         enqueueSnackbar("書籍の削除に成功しました。", { variant: "success" });
       })
-      .catch((res) => {
+      .catch(() => {
         setLoading(false);
         setOpenDeleteConfirm(false);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
@@ -93,11 +93,9 @@ const Books = () => {
     <>
       <CsvUpload open={csvUploadDialogOpen} handleClose={() => setCsvUploadDialogOpen(false)} handleSuccess={fetchBooks} />
       <Create open={createDialogOpen} setClose={() => setCreateDialogOpen(false)} success={fetchBooks} />
-      {selectedEditBook && (
-        <Update book={selectedEditBook} open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)} onSuccess={fetchBooks} />
-      )}
+      {selectedEditBook && <Edit book={selectedEditBook} open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)} onSuccess={fetchBooks} />}
       <ConfirmDialog message={"本当に削除しますか？"} open={openDeleteConfirm} onClose={handleConfirmClose} handleSubmit={handleDeleteBook} />
-      <CustomTable
+      <List
         books={books}
         handleCsvUpload={handleClickCsvUploadButton}
         handleCreate={handleClickCreateButton}
