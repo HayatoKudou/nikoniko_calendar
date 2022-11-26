@@ -8,14 +8,14 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../api_client";
-import Notification, { BookPurchaseNotificationRequestErrors } from "../../../api/book/purchase_apply/notification";
-import Refuse from "../../../api/book/purchase_apply/refuse";
-import { useChoseWorkspace } from "../../../store/choseWorkspace";
-import { useMe } from "../../../store/me";
-import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
-import ConfirmDialog from "../../parts/confirm_dialog";
-import Spinner from "../../parts/spinner";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../../../../api_client";
+import NotificationAPI, { BookPurchaseNotificationRequestErrors } from "../../../../../../api/book/purchase_apply/notification";
+import Refuse from "../../../../../../api/book/purchase_apply/refuse";
+import { useChoseWorkspace } from "../../../../../../store/choseWorkspace";
+import { useMe } from "../../../../../../store/me";
+import styles from "./styles.module.scss";
+import ConfirmDialog from "../../../../../parts/confirm_dialog";
+import Spinner from "../../../../../parts/spinner";
 
 interface Props {
   canNotification: boolean;
@@ -25,7 +25,7 @@ interface Props {
   onClose: () => void;
 }
 
-const Step3 = (props: Props) => {
+export const Notification = (props: Props) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
@@ -38,7 +38,7 @@ const Step3 = (props: Props) => {
   });
   const [bookPurchaseNotificationRequestErrors, setBookPurchaseNotificationRequestErrors] = React.useState<
     Partial<BookPurchaseNotificationRequestErrors>
-  >({});
+    >({});
 
   if (loading) return <Spinner />;
 
@@ -61,7 +61,7 @@ const Step3 = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Notification(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
+    NotificationAPI(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
       title: formValues.title,
       message: formValues.message,
       apiToken: me.apiToken,
@@ -107,9 +107,9 @@ const Step3 = (props: Props) => {
       />
       <DialogContent>
         <Grid container>
-          <Grid item xs={4} className={styles.dialog__imageContainer}>
+          <Grid item xs={4} className={styles.notification__imageContainer}>
             {props.bookImage && props.bookImage instanceof Blob ? (
-              <img className={styles.dialog__image} src={URL.createObjectURL(props.bookImage)} alt={"書籍画像"} />
+              <img className={styles.notification__image} src={URL.createObjectURL(props.bookImage)} alt={"書籍画像"} />
             ) : (
               <ImageNotSupportedIcon fontSize="large" />
             )}
@@ -181,5 +181,3 @@ const Step3 = (props: Props) => {
     </>
   );
 };
-
-export default Step3;

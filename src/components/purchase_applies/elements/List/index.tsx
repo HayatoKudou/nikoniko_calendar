@@ -11,11 +11,11 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../api_client";
-import styles from "../../styles/components/purchase_applies/table.module.scss";
-import { bookPurchaseAcceptStep } from "../../util/book";
-import { getComparator, stableSort } from "../../util/table";
-import TableHead from "../parts/table_head";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../../api_client";
+import { bookPurchaseAcceptStep } from "../../../../util/book";
+import { getComparator, stableSort } from "../../../../util/table";
+import TableHead from "../../../parts/table_head";
+import styles from "./styles.module.scss";
 
 type Order = "asc" | "desc";
 
@@ -59,7 +59,7 @@ const headCells: readonly TableHeadCell[] = [
   },
 ];
 
-const CustomTable = (props: Props) => {
+export const List = (props: Props) => {
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState("createdAt");
   const [page, setPage] = React.useState(0);
@@ -82,11 +82,11 @@ const CustomTable = (props: Props) => {
 
   return (
     <Paper>
-      <Typography className={styles.booksTable__toolBar} variant="h5">
+      <Typography className={styles.list__toolBar} variant="h5">
         申請管理
       </Typography>
       <TableContainer>
-        <Table className={styles.booksTable} size="small">
+        <Table className={styles.list} size="small">
           <TableHead
             order={order}
             orderBy={orderBy}
@@ -119,9 +119,9 @@ const CustomTable = (props: Props) => {
                     <TableCell align="left">{bookPurchaseAcceptStep(purchaseApply.step)}</TableCell>
                     <TableCell align="left">{purchaseApply.user.name}</TableCell>
                     <TableCell align="left">{"¥ " + purchaseApply.price}</TableCell>
-                    <TableCell className={styles.booksTable__title}>{purchaseApply.book.title}</TableCell>
-                    <TableCell className={styles.booksTable__title}>{purchaseApply.reason}</TableCell>
-                    <TableCell className={styles.booksTable__title}>
+                    <TableCell className={styles.list__title}>{purchaseApply.book.title}</TableCell>
+                    <TableCell className={styles.list__title}>{purchaseApply.reason}</TableCell>
+                    <TableCell className={styles.list__title}>
                       {purchaseApply.book.url ? (
                         <Link href={purchaseApply.book.url} target={"__blank"}>
                           {decodeURI(purchaseApply.book.url)}
@@ -148,6 +148,3 @@ const CustomTable = (props: Props) => {
     </Paper>
   );
 };
-
-// @ts-ignore
-export default CustomTable;

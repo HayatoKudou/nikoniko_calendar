@@ -8,8 +8,8 @@ import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import Approval from "./approval/index";
-import CustomTable from "./table";
+import {Approval} from "./elements/Approval";
+import { List } from "./elements/List";
 
 const PurchaseApplies = () => {
   const me = useRecoilValue(useMe);
@@ -96,7 +96,7 @@ const PurchaseApplies = () => {
           onSuccess={() => fetchPurchaseApplies()}
         />
       )}
-      <CustomTable bookPurchaseApplies={response.bookPurchaseApplies} handleEdit={handleEdit} handleInit={handleInitClick} />
+      <List bookPurchaseApplies={response.bookPurchaseApplies} handleEdit={handleEdit} handleInit={handleInitClick} />
     </>
   );
 };

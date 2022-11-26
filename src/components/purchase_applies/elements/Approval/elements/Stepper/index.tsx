@@ -3,13 +3,9 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import * as React from "react";
 
-interface Props {
-  activeStep: number;
-}
-
 const steps = ["申請許可", "購入", "通知"];
 
-const CustomStepper = (props: Props) => {
+export const CustomStepper = (props: {activeStep: number}) => {
   return (
     <Stepper activeStep={props.activeStep} sx={{ margin: 2 }}>
       {steps.map((label, index) => {
@@ -22,5 +18,3 @@ const CustomStepper = (props: Props) => {
     </Stepper>
   );
 };
-
-export default CustomStepper;

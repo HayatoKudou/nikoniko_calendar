@@ -10,14 +10,14 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../api_client";
-import Done, { BookPurchaseDoneRequestErrors } from "../../../api/book/purchase_apply/done";
-import Refuse from "../../../api/book/purchase_apply/refuse";
-import { useChoseWorkspace } from "../../../store/choseWorkspace";
-import { useMe } from "../../../store/me";
-import styles from "../../../styles/components/purchase_applies/approval/index.module.scss";
-import ConfirmDialog from "../../parts/confirm_dialog";
-import Spinner from "../../parts/spinner";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../../../../api_client";
+import DoneAPI, { BookPurchaseDoneRequestErrors } from "../../../../../../api/book/purchase_apply/done";
+import Refuse from "../../../../../../api/book/purchase_apply/refuse";
+import { useChoseWorkspace } from "../../../../../../store/choseWorkspace";
+import { useMe } from "../../../../../../store/me";
+import styles from "./styles.module.scss";
+import ConfirmDialog from "../../../../../parts/confirm_dialog";
+import Spinner from "../../../../../parts/spinner";
 
 interface Props {
   bookImage: Blob | null;
@@ -26,7 +26,7 @@ interface Props {
   onClose: () => void;
 }
 
-const Step2 = (props: Props) => {
+export const Done = (props: Props) => {
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
   const { enqueueSnackbar } = useSnackbar();
@@ -60,7 +60,7 @@ const Step2 = (props: Props) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    Done(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
+    DoneAPI(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
       location: formValues.location,
       apiToken: me.apiToken,
     })
@@ -104,36 +104,36 @@ const Step2 = (props: Props) => {
       />
       <DialogContent>
         <Grid container>
-          <Grid item xs={4} className={styles.dialog__imageContainer}>
+          <Grid item xs={4} className={styles.done__imageContainer}>
             {props.bookImage && props.bookImage instanceof Blob ? (
-              <img className={styles.dialog__image} src={URL.createObjectURL(props.bookImage)} alt={"書籍画像"} />
+              <img className={styles.done__image} src={URL.createObjectURL(props.bookImage)} alt={"書籍画像"} />
             ) : (
               <ImageNotSupportedIcon fontSize="large" />
             )}
           </Grid>
           <Grid item xs={8}>
-            <Box className={styles.dialog__detailContainer}>
-              <Typography className={styles.dialog__detailItem}>申請者</Typography>
+            <Box className={styles.done__detailContainer}>
+              <Typography className={styles.done__detailItem}>申請者</Typography>
               <Typography>{props.purchaseApply.user.name}</Typography>
             </Box>
-            <Box className={styles.dialog__detailContainer}>
-              <Typography className={styles.dialog__detailItem}>価格</Typography>
+            <Box className={styles.done__detailContainer}>
+              <Typography className={styles.done__detailItem}>価格</Typography>
               <Typography>{"¥ " + props.purchaseApply.price}</Typography>
             </Box>
-            <Box className={styles.dialog__detailContainer}>
-              <Typography className={styles.dialog__detailItem}>タイトル</Typography>
+            <Box className={styles.done__detailContainer}>
+              <Typography className={styles.done__detailItem}>タイトル</Typography>
               <Typography>{props.purchaseApply.book.title}</Typography>
             </Box>
-            <Box className={styles.dialog__detailContainer}>
-              <Typography className={styles.dialog__detailItem}>URL</Typography>
+            <Box className={styles.done__detailContainer}>
+              <Typography className={styles.done__detailItem}>URL</Typography>
               {props.purchaseApply.book.url && (
-                <Link target="_blank" className={styles.dialog__detailUrl} href={props.purchaseApply.book.url}>
+                <Link target="_blank" className={styles.done__detailUrl} href={props.purchaseApply.book.url}>
                   {props.purchaseApply.book.url}
                 </Link>
               )}
             </Box>
-            <Box className={styles.dialog__detailContainer}>
-              <Typography className={styles.dialog__detailItem}>申請理由</Typography>
+            <Box className={styles.done__detailContainer}>
+              <Typography className={styles.done__detailItem}>申請理由</Typography>
               <Typography>{props.purchaseApply.reason}</Typography>
             </Box>
             <TextField
@@ -161,5 +161,3 @@ const Step2 = (props: Props) => {
     </>
   );
 };
-
-export default Step2;
