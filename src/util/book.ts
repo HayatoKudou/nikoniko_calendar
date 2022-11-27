@@ -39,6 +39,6 @@ export const bookPurchaseAcceptStep = (step: number) => {
     case 2:
       return "購入確認";
     case 3:
-      return "書籍追加通知";
+      return "追加のお知らせ";
   }
 };

@@ -767,6 +767,50 @@ export interface MeUpdateValidateErrorResponse {
 /**
  * 
  * @export
+ * @interface PurchaseNotificationRequest
+ */
+export interface PurchaseNotificationRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PurchaseNotificationRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PurchaseNotificationRequest
+     */
+    'message': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PurchaseNotificationRequest
+     */
+    'skip': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PurchaseNotificationValidateErrorResponse
+ */
+export interface PurchaseNotificationValidateErrorResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PurchaseNotificationValidateErrorResponse
+     */
+    'title'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PurchaseNotificationValidateErrorResponse
+     */
+    'message'?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UserCreateRequest
  */
 export interface UserCreateRequest {
@@ -1284,6 +1328,50 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 書籍追加のお知らせ
+         * @param {number} workspaceId 
+         * @param {number} bookId 
+         * @param {PurchaseNotificationRequest} [purchaseNotificationRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookIdPurchaseNotificationPost: async (workspaceId: number, bookId: number, purchaseNotificationRequest?: PurchaseNotificationRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workspaceId' is not null or undefined
+            assertParamExists('apiWorkspaceIdBookIdPurchaseNotificationPost', 'workspaceId', workspaceId)
+            // verify required parameter 'bookId' is not null or undefined
+            assertParamExists('apiWorkspaceIdBookIdPurchaseNotificationPost', 'bookId', bookId)
+            const localVarPath = `/api/{workspaceId}/{bookId}/purchase/notification`
+                .replace(`{${"workspaceId"}}`, encodeURIComponent(String(workspaceId)))
+                .replace(`{${"bookId"}}`, encodeURIComponent(String(bookId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(purchaseNotificationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1938,6 +2026,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary 書籍追加のお知らせ
+         * @param {number} workspaceId 
+         * @param {number} bookId 
+         * @param {PurchaseNotificationRequest} [purchaseNotificationRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId: number, bookId: number, purchaseNotificationRequest?: PurchaseNotificationRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId, bookId, purchaseNotificationRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary 書籍追加
          * @param {number} workspaceId 
          * @param {BookCreateRequest} [bookCreateRequest] 
@@ -2184,6 +2285,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary 書籍追加のお知らせ
+         * @param {number} workspaceId 
+         * @param {number} bookId 
+         * @param {PurchaseNotificationRequest} [purchaseNotificationRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId: number, bookId: number, purchaseNotificationRequest?: PurchaseNotificationRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId, bookId, purchaseNotificationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary 書籍追加
          * @param {number} workspaceId 
          * @param {BookCreateRequest} [bookCreateRequest] 
@@ -2423,6 +2536,20 @@ export class DefaultApi extends BaseAPI {
      */
     public apiWorkspaceIdBookIdHistoriesGet(workspaceId: number, bookId: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).apiWorkspaceIdBookIdHistoriesGet(workspaceId, bookId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 書籍追加のお知らせ
+     * @param {number} workspaceId 
+     * @param {number} bookId 
+     * @param {PurchaseNotificationRequest} [purchaseNotificationRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId: number, bookId: number, purchaseNotificationRequest?: PurchaseNotificationRequest, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiWorkspaceIdBookIdPurchaseNotificationPost(workspaceId, bookId, purchaseNotificationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

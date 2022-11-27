@@ -5,7 +5,7 @@ import * as React from "react";
 
 const steps = ["申請許可", "購入", "通知"];
 
-export const CustomStepper = (props: {activeStep: number}) => {
+export const CustomStepper = (props: { activeStep: number }) => {
   return (
     <Stepper activeStep={props.activeStep} sx={{ margin: 2 }}>
       {steps.map((label, index) => {

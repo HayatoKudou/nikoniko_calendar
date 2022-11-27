@@ -1,10 +1,12 @@
 .notification {
-  &__imageContainer{
+  &__imageContainer {
     text-align: center;
   }
   &__image {
     max-height: 300px;
     max-width: 250px;
     margin-bottom: 10px;
+  }
+  &__button {
   }
 }

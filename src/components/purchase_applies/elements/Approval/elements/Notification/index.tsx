@@ -8,14 +8,14 @@ import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
-import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner } from "../../../../../../../api_client";
-import NotificationAPI, { BookPurchaseNotificationRequestErrors } from "../../../../../../api/book/purchase_apply/notification";
+import { BookPurchaseAppliesListResponseBookPurchaseAppliesInner, PurchaseNotificationValidateErrorResponse } from "../../../../../../../api_client";
 import Refuse from "../../../../../../api/book/purchase_apply/refuse";
+import ApiClient from "../../../../../../lib/apiClient";
 import { useChoseWorkspace } from "../../../../../../store/choseWorkspace";
 import { useMe } from "../../../../../../store/me";
-import styles from "./styles.module.scss";
 import ConfirmDialog from "../../../../../parts/confirm_dialog";
 import Spinner from "../../../../../parts/spinner";
+import styles from "./styles.module.scss";
 
 interface Props {
   canNotification: boolean;
@@ -32,13 +32,14 @@ export const Notification = (props: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [openNotificationConfirm, setOpenNotificationConfirm] = React.useState<boolean>(false);
   const [openRefuseConfirm, setOpenRefuseConfirm] = React.useState<boolean>(false);
+  const [notificationSkipConfirm, setNotificationSkipConfirm] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState({
     title: `書籍追加のお知らせ`,
     message: `【タイトル】${props.purchaseApply.book.title}\n【本の置き場所】${props.purchaseApply.location}`,
   });
-  const [bookPurchaseNotificationRequestErrors, setBookPurchaseNotificationRequestErrors] = React.useState<
-    Partial<BookPurchaseNotificationRequestErrors>
-    >({});
+  const [bookPurchaseNotificationRequestErrors, setBookPurchaseNotificationRequestErrors] = React.useState<PurchaseNotificationValidateErrorResponse>(
+    {}
+  );
 
   if (loading) return <Spinner />;
 
@@ -59,28 +60,24 @@ export const Notification = (props: Props) => {
       });
   };
 
-  const handleSubmit = () => {
+  const handleNotification = (skip: boolean) => {
     setLoading(true);
-    NotificationAPI(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
-      title: formValues.title,
-      message: formValues.message,
-      apiToken: me.apiToken,
-    })
-      .then((res) => {
-        if (res.succeeded) {
-          enqueueSnackbar("通知しました", { variant: "success" });
-          setOpenNotificationConfirm(false);
-          props.onSuccess();
-          props.onClose();
-        } else {
-          enqueueSnackbar(res.errors.slack ? res.errors.slack : "通知に失敗しました", { variant: "error" });
-          setBookPurchaseNotificationRequestErrors(res.errors);
-        }
-        setLoading(false);
+    ApiClient(me.apiToken)
+      .apiWorkspaceIdBookIdPurchaseNotificationPost(choseWorkspace.workspaceId, props.purchaseApply.book.id, {
+        title: formValues.title,
+        message: formValues.message,
+        skip: skip,
       })
-      .catch(() => {
-        enqueueSnackbar(`通知に失敗しました`, { variant: "error" });
+      .then(() => {
         setLoading(false);
+        enqueueSnackbar(skip ? "通知に成功しました" : "通知をスキップしました", { variant: "success" });
+        props.onSuccess();
+        props.onClose();
+      })
+      .catch((res) => {
+        setLoading(false);
+        enqueueSnackbar(`エラーが発生しました`, { variant: "error" });
+        setBookPurchaseNotificationRequestErrors(res.response.data.errors);
       });
   };
 
@@ -97,13 +94,19 @@ export const Notification = (props: Props) => {
         message={"通知しますか？"}
         open={openNotificationConfirm}
         onClose={() => setOpenNotificationConfirm(false)}
-        handleSubmit={handleSubmit}
+        handleSubmit={() => handleNotification(true)}
       />
       <ConfirmDialog
         message={"本当に却下しますか？"}
         open={openRefuseConfirm}
         onClose={() => setOpenRefuseConfirm(false)}
         handleSubmit={handleRefuse}
+      />
+      <ConfirmDialog
+        message={"本当にスキップしますか？"}
+        open={notificationSkipConfirm}
+        onClose={() => setNotificationSkipConfirm(false)}
+        handleSubmit={() => handleNotification(false)}
       />
       <DialogContent>
         <Grid container>
@@ -155,13 +158,7 @@ export const Notification = (props: Props) => {
                   href="https://slack.com/oauth/v2/authorize?client_id=3812085668740.3835544940032&scope=incoming-webhook,users:read,users:read.email,chat:write&user_scope="
                   rel="noreferrer"
                 >
-                  <img
-                    alt="Add to Slack"
-                    height="40"
-                    width="139"
-                    src="https://platform.slack-edge.com/img/add_to_slack.png"
-                    srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-                  />
+                  <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" />
                 </a>
               </>
             )}
@@ -169,11 +166,14 @@ export const Notification = (props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpenRefuseConfirm(true)} variant="contained" sx={{ width: "100px" }} color={"error"}>
+        <Button className={styles.notification__button} onClick={() => setOpenRefuseConfirm(true)} variant="contained" color={"error"}>
           {"却下"}
         </Button>
+        <Button className={styles.notification__button} onClick={() => setNotificationSkipConfirm(true)} variant="contained">
+          {"スキップ"}
+        </Button>
         {props.canNotification && (
-          <Button onClick={() => setOpenNotificationConfirm(true)} variant="contained" sx={{ width: "100px" }}>
+          <Button className={styles.notification__button} onClick={() => setOpenNotificationConfirm(true)} variant="contained">
             {"通知"}
           </Button>
         )}

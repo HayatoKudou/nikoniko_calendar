@@ -2,10 +2,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import * as React from "react";
 import { base64ToBlob } from "../../../../util/image";
-import {CustomStepper} from "./elements/Stepper";
-import {Accept} from "./elements/Accept";
-import {Done} from "./elements/Done";
-import {Notification} from "./elements/Notification";
+import { Accept } from "./elements/Accept";
+import { Done } from "./elements/Done";
+import { Notification } from "./elements/Notification";
+import { CustomStepper } from "./elements/Stepper";
 
 interface Props {
   open: boolean;

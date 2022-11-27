@@ -8,7 +8,7 @@ import { useChoseWorkspace } from "../../store/choseWorkspace";
 import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import Spinner from "../parts/spinner";
-import {Approval} from "./elements/Approval";
+import { Approval } from "./elements/Approval";
 import { List } from "./elements/List";
 
 const PurchaseApplies = () => {

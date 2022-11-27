@@ -14,9 +14,9 @@ import AcceptAPI from "../../../../../../api/book/purchase_apply/accept";
 import Refuse from "../../../../../../api/book/purchase_apply/refuse";
 import { useChoseWorkspace } from "../../../../../../store/choseWorkspace";
 import { useMe } from "../../../../../../store/me";
-import styles from "./styles.module.scss";
 import ConfirmDialog from "../../../../../parts/confirm_dialog";
 import Spinner from "../../../../../parts/spinner";
+import styles from "./styles.module.scss";
 
 interface Props {
   bookImage: Blob | null;
