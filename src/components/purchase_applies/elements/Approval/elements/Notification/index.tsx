@@ -94,7 +94,7 @@ export const Notification = (props: Props) => {
         message={"通知しますか？"}
         open={openNotificationConfirm}
         onClose={() => setOpenNotificationConfirm(false)}
-        handleSubmit={() => handleNotification(true)}
+        handleSubmit={() => handleNotification(false)}
       />
       <ConfirmDialog
         message={"本当に却下しますか？"}
@@ -106,7 +106,7 @@ export const Notification = (props: Props) => {
         message={"本当にスキップしますか？"}
         open={notificationSkipConfirm}
         onClose={() => setNotificationSkipConfirm(false)}
-        handleSubmit={() => handleNotification(false)}
+        handleSubmit={() => handleNotification(true)}
       />
       <DialogContent>
         <Grid container>
