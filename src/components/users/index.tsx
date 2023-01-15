@@ -66,7 +66,7 @@ const Users = () => {
   const handleDeleteUser = () => {
     setLoading(true);
     ApiClient(me.apiToken)
-      .apiWorkspaceIdUserDelete(choseWorkspace.workspaceId, {
+      .apiWorkspaceIdWorkspaceUserDelete(choseWorkspace.workspaceId, {
         userIds: selectedUserIds,
       })
       .then(() => {

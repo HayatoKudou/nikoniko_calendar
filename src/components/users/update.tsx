@@ -123,6 +123,7 @@ const UpdateUser = (props: Props) => {
           onChange={handleChange}
           fullWidth
           variant="standard"
+          disabled={true}
         />
         <FormError errors={updateUserRequestErrors?.email} />
 

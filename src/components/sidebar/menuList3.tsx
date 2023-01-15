@@ -1,5 +1,4 @@
 import FeedbackIcon from "@mui/icons-material/Feedback";
-import HelpIcon from "@mui/icons-material/Help";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -66,13 +65,13 @@ const MenuList3 = (props: { open: boolean }) => {
           icon={<FeedbackIcon />}
           handleSelect={() => setDialogOpen(true)}
         />
-        <ListItemButton
-          open={props.open}
-          listItemText={"ヘルプ"}
-          selected={false}
-          icon={<HelpIcon />}
-          handleSelect={() => window.open("https://www.notion.so/Read-Worth-0cae3af1832d496da668d0c9e442749a", "_blank")}
-        />
+        {/*<ListItemButton*/}
+        {/*  open={props.open}*/}
+        {/*  listItemText={"ヘルプ"}*/}
+        {/*  selected={false}*/}
+        {/*  icon={<HelpIcon />}*/}
+        {/*  handleSelect={() => window.open("https://www.notion.so/Read-Worth-0cae3af1832d496da668d0c9e442749a", "_blank")}*/}
+        {/*/>*/}
       </List>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogTitle>フィードバック</DialogTitle>
