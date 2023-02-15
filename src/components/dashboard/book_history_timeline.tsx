@@ -7,7 +7,6 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useRecoilValue } from "recoil";
@@ -68,7 +67,7 @@ const BookHistoryTimeline = (props: { bookId: number }) => {
                     {bookHistories?.length != index + 1 && bookHistories?.length > 1 && <TimelineConnector />}
                   </TimelineSeparator>
                   <TimelineContent className={styles.bookHistoryTimeline__content}>
-                    <Typography>{historyActionName(history.actionName)}</Typography>
+                    <Box>{historyActionName(history.actionName)}</Box>
                   </TimelineContent>
                 </TimelineItem>
               ))}

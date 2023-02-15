@@ -16,8 +16,12 @@
   }
 
   &__content {
-    margin: auto;
-    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: fit-content;
+    min-width: 200px;
+    white-space: normal;
     font-size: 0.8rem;
   }
 }

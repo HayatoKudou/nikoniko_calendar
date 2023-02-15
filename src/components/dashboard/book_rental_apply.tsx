@@ -1,3 +1,4 @@
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,7 +15,6 @@ import { useMe } from "../../store/me";
 import ConfirmDialog from "../parts/confirm_dialog";
 import FormError from "../parts/form_error";
 import Spinner from "../parts/spinner";
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 
 interface Props {
   bookInfo: BooksResponseBooksInner;
@@ -110,7 +110,12 @@ const BookRentalApply = (props: Props) => {
             <FormError errors={bookRentalApplyRequestErrors.expected_return_date} />
           </Box>
         </LocalizationProvider>
-        <Button variant="contained" onClick={() => setOpenConfirm(true)} sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }} endIcon={<BookmarkAddIcon />}>
+        <Button
+          variant="contained"
+          onClick={() => setOpenConfirm(true)}
+          sx={{ margin: "16px 0px 16px auto", whiteSpace: "nowrap" }}
+          endIcon={<BookmarkAddIcon />}
+        >
           貸出
         </Button>
         <ConfirmDialog message={"本当に貸出しますか？"} open={openConfirm} onClose={() => setOpenConfirm(false)} handleSubmit={handleSubmit} />
