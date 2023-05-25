@@ -4,6 +4,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import StarIcon from "@mui/icons-material/Star";
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { ListItemIcon, Menu } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -23,11 +25,12 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
+import {useRecoilValue, useRecoilState} from "recoil";
 import { BookCategoryCreateValidateErrorResponse, BooksResponseBooksInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
+import {useFavoriteBooks} from "../../store/favoriteBooks";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
@@ -43,6 +46,7 @@ const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
   const me = useRecoilValue(useMe);
   const choseWorkspace = useRecoilValue(useChoseWorkspace);
+  const [favoriteBooks, setFavoriteBooks] = useRecoilState(useFavoriteBooks);
   const imageSize = useRecoilValue(useImageSize);
   const bookCardStyle = useRecoilValue(useBookCardStyle);
   const [, setBookCategory] = useRecoilState(useBookCategories);
@@ -148,6 +152,13 @@ const Dashboard = () => {
     }
   };
 
+  const sortFavorite = (sorted: Array<BooksResponseBooksInner>): Array<BooksResponseBooksInner> => {
+    return [
+      ...sorted.filter(item => favoriteBooks.includes(item.id)),
+      ...sorted.filter(item => !favoriteBooks.includes(item.id))
+    ];
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -210,6 +221,14 @@ const Dashboard = () => {
         setLoading(false);
         enqueueSnackbar("エラーが発生しました", { variant: "error" });
       });
+  };
+
+  const handleFavoriteBook = (bookId: number) => {
+    if(favoriteBooks.includes(bookId)){
+      setFavoriteBooks(favoriteBooks.filter((storedBookId: number) => storedBookId !== bookId));
+    } else {
+      setFavoriteBooks([...favoriteBooks, bookId]);
+    }
   };
 
   return (
@@ -290,7 +309,7 @@ const Dashboard = () => {
 
       {tabList.map((tab, index) => (
         <TabPanel value={openTabValue} index={tab.label} key={index}>
-          {bookSorted(bookCategoryFiltered()).map((book, index: number) => {
+          {sortFavorite(bookSorted(bookCategoryFiltered())).map((book, index: number) => {
             let rateAverage = 0;
             if (book.reviews.length > 0) {
               const rateSum = book.reviews
@@ -302,6 +321,13 @@ const Dashboard = () => {
             }
             return (
               <Card key={index} className={styles.dashboard__bookCard} sx={{ width: imageSize.width }}>
+                <IconButton className={styles.dashboard__bookCardFavorite} onClick={() => handleFavoriteBook(book.id)}>
+                  {favoriteBooks.includes(book.id) ? (
+                    <StarIcon fontSize={"medium"} stroke={"gray"} />
+                  ) : (
+                    <StarOutlineIcon fontSize={"medium"} stroke={"gray"} />
+                  )}
+                </IconButton>
                 <CardActionArea onClick={() => handleDetailBook(book)}>
                   {book.image ? (
                     <CardMedia

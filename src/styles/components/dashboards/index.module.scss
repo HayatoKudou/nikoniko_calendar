@@ -38,6 +38,15 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    position: relative;
+    &Favorite {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 0;
+      color: yellow;
+      z-index: 2;
+    }
     &NonImage {
       display: flex;
       justify-content: center;
