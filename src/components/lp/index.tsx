@@ -101,7 +101,7 @@ const Lp = () => {
 export async function getStaticProps() {
   return {
     props: {},
-  }
+  };
 }
 
 export default Lp;
