@@ -33,7 +33,7 @@ const Lp = () => {
     <Box>
       <Box className={styles.lp__image}>
         <Box className={styles.lp__imageContainer}>
-          <Image src={DashboardSampleImage}  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+          <Image src={DashboardSampleImage}  sizes="(max-width: 768px) 100vw, 50vw" />
         </Box>
         <Box className={styles.lp__content}>
           <Box className={styles.lp__contentTitle}>
@@ -97,11 +97,5 @@ const Lp = () => {
     </Box>
   );
 };
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
 
 export default Lp;
