@@ -1,0 +1,70 @@
+.lp {
+  &__image {
+    display: flex;
+    background: #455a64;
+    &Container {
+      width: 50%;
+    }
+  }
+  &__content {
+    width: 50%;
+    text-align: center;
+    &Title {
+      margin-top: 10%;
+      color: white;
+      &__main {
+        font-size: 25px;
+      }
+      &__sub {
+        margin-top: 16px;
+        font-size: 17px;
+      }
+    }
+    &Button {
+      margin-top: 10%;
+      box-shadow: none;
+    }
+  }
+  &__overview {
+    &Title {
+      margin: 40px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 30px;
+    }
+    &Title__sub {
+      margin: 40px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    &Paper {
+      display: flex;
+      gap: 12px;
+      margin: 12px 32px;
+      &Content {
+        padding: 16px;
+        width: 100%;
+      }
+      &Icon {
+        padding: 4px;
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+      &Title {
+        margin: 8px 0;
+        font-size: 17px;
+        font-weight: 700;
+      }
+      &Description {
+        font-size: 15px;
+      }
+    }
+  }
+  &__copyright {
+    text-align: right;
+    padding: 16px;
+  }
+}

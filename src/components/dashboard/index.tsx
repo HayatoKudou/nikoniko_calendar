@@ -5,7 +5,7 @@ import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { ListItemIcon, Menu } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -25,12 +25,12 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import {useRecoilValue, useRecoilState} from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { BookCategoryCreateValidateErrorResponse, BooksResponseBooksInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import { useBookCategories } from "../../store/book/categories";
 import { useChoseWorkspace } from "../../store/choseWorkspace";
-import {useFavoriteBooks} from "../../store/favoriteBooks";
+import { useFavoriteBooks } from "../../store/favoriteBooks";
 import { useMe } from "../../store/me";
 import { useBookCardStyle } from "../../store/styles/book_card_style";
 import { useImageSize } from "../../store/styles/image_size";
@@ -153,10 +153,7 @@ const Dashboard = () => {
   };
 
   const sortFavorite = (sorted: Array<BooksResponseBooksInner>): Array<BooksResponseBooksInner> => {
-    return [
-      ...sorted.filter(item => favoriteBooks.includes(item.id)),
-      ...sorted.filter(item => !favoriteBooks.includes(item.id))
-    ];
+    return [...sorted.filter((item) => favoriteBooks.includes(item.id)), ...sorted.filter((item) => !favoriteBooks.includes(item.id))];
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -224,7 +221,7 @@ const Dashboard = () => {
   };
 
   const handleFavoriteBook = (bookId: number) => {
-    if(favoriteBooks.includes(bookId)){
+    if (favoriteBooks.includes(bookId)) {
       setFavoriteBooks(favoriteBooks.filter((storedBookId: number) => storedBookId !== bookId));
     } else {
       setFavoriteBooks([...favoriteBooks, bookId]);

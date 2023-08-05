@@ -44,9 +44,6 @@ const Layout = ({ children }: any) => {
         router.push("/sign-in");
       }
       authenticatedAccount();
-      if (me.id && choseWorkspace.workspaceId && pathname === "/") {
-        router.push(`/dashboard`);
-      }
     }
   }, []);
 

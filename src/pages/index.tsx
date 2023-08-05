@@ -1,8 +1,8 @@
-import Layout from "../components/layout";
+import Lp from "../components/lp";
 import type { NextPage } from "next";
 
 const Index: NextPage = () => {
-  return <Layout />;
+  return <Lp />;
 };
 
 export default Index;
