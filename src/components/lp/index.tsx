@@ -33,7 +33,7 @@ const Lp = () => {
     <Box>
       <Box className={styles.lp__image}>
         <Box className={styles.lp__imageContainer}>
-          <Image src={DashboardSampleImage} />
+          <Image src={DashboardSampleImage}   width={830} height={430} />
         </Box>
         <Box className={styles.lp__content}>
           <Box className={styles.lp__contentTitle}>
