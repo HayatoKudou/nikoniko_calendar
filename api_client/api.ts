@@ -826,6 +826,19 @@ export interface PurchaseNotificationValidateErrorResponse {
 /**
  * 
  * @export
+ * @interface TotalsInner
+ */
+export interface TotalsInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof TotalsInner
+     */
+    'bookCount': string;
+}
+/**
+ * 
+ * @export
  * @interface UserCreateRequest
  */
 export interface UserCreateRequest {
@@ -1164,6 +1177,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
             // authentication Bearer required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 累計登録データ数
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTotalsGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/totals`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
 
     
@@ -1980,6 +2023,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary 累計登録データ数
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTotalsGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TotalsInner>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTotalsGet(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary 書籍カテゴリ削除
          * @param {number} workspaceId 
          * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest] 
@@ -2243,6 +2296,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary 累計登録データ数
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTotalsGet(options?: any): AxiosPromise<Array<TotalsInner>> {
+            return localVarFp.apiTotalsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary 書籍カテゴリ削除
          * @param {number} workspaceId 
          * @param {BookCategoryDeleteRequest} [bookCategoryDeleteRequest] 
@@ -2486,6 +2548,17 @@ export class DefaultApi extends BaseAPI {
      */
     public apiSlackWorkspaceIdConnectGet(workspaceId: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).apiSlackWorkspaceIdConnectGet(workspaceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 累計登録データ数
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiTotalsGet(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiTotalsGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

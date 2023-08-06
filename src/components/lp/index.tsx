@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import DashboardSampleImage from "./dashboard-sample.png";
 import styles from "./style.module.scss";
+import ApiClient from "../../lib/apiClient";
 
 const OverviewPaper = (props: { icon: any; title: string; description: string }) => {
   return (
@@ -27,7 +28,9 @@ const OverviewPaper = (props: { icon: any; title: string; description: string })
   );
 };
 
-const Lp = () => {
+const Lp = (props: any) => {
+  console.log("Lp");
+  console.log(props);
   const router = useRouter();
   return (
     <Box>
@@ -97,5 +100,22 @@ const Lp = () => {
     </Box>
   );
 };
+
+export async function getStaticProps() {
+  let data = {};
+  ApiClient("")
+    .apiTotalsGet()
+    .then((res) => {
+      data = res.data;
+      console.log("res")
+      console.log(res)
+    });
+
+  return {
+    props: {
+      data
+    },
+  }
+}
 
 export default Lp;
