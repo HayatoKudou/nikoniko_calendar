@@ -826,13 +826,13 @@ export interface PurchaseNotificationValidateErrorResponse {
 /**
  * 
  * @export
- * @interface TotalsInner
+ * @interface Totals
  */
-export interface TotalsInner {
+export interface Totals {
     /**
      * 
      * @type {string}
-     * @memberof TotalsInner
+     * @memberof Totals
      */
     'bookCount': string;
 }
@@ -2027,7 +2027,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTotalsGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TotalsInner>>> {
+        async apiTotalsGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Totals>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTotalsGet(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2300,7 +2300,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTotalsGet(options?: any): AxiosPromise<Array<TotalsInner>> {
+        apiTotalsGet(options?: any): AxiosPromise<Totals> {
             return localVarFp.apiTotalsGet(options).then((request) => request(axios, basePath));
         },
         /**

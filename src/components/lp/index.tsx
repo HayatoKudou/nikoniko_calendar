@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
-import { TotalsInner } from "../../../api_client";
+import { Totals } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import DashboardSampleImage from "./dashboard-sample.png";
 import styles from "./style.module.scss";
@@ -30,9 +30,17 @@ const OverviewPaper = (props: { icon: any; title: string; description: string })
   );
 };
 
-const Lp = (props: { totals?: TotalsInner }) => {
-  console.log("Lp");
-  console.log(props.totals);
+const Lp = () => {
+  const [data, setData] = React.useState<Totals>();
+  React.useEffect(() => {
+    ApiClient("")
+      .apiTotalsGet()
+      .then((res) => {
+        setData(res.data);
+      });
+  }, []);
+  console.log(data);
+
   const router = useRouter();
   return (
     <Box>
@@ -53,6 +61,11 @@ const Lp = (props: { totals?: TotalsInner }) => {
           </Button>
         </Box>
       </Box>
+
+      <Box>
+        累計登録書籍数：{data?.bookCount}
+      </Box>
+
       <Box>
         <Typography variant={"h2"} className={styles.lp__overviewTitle}>
           Read Worth にできること
@@ -102,22 +115,5 @@ const Lp = (props: { totals?: TotalsInner }) => {
     </Box>
   );
 };
-
-export async function getStaticProps() {
-  const data = await ApiClient("")
-    .apiTotalsGet()
-    .then((res) => {
-      return res.data;
-    });
-
-  console.log("res");
-  console.log(data);
-
-  return {
-    props: {
-      totals: data,
-    },
-  };
-}
 
 export default Lp;

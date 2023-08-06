@@ -1273,12 +1273,11 @@ components:
             type: string
             example: "2022/08/01"
     totals:
-      type: array
-      items:
-        type: object
-        required:
-          - bookCount
-        properties:
-          bookCount:
-            type: string
-            example: "1000"
+      type: object
+      required:
+        - bookCount
+      properties:
+        bookCount:
+          type: string
+          example: "1000"
+
