@@ -831,10 +831,16 @@ export interface PurchaseNotificationValidateErrorResponse {
 export interface Totals {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof Totals
      */
-    'bookCount': string;
+    'userCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Totals
+     */
+    'bookCount': number;
 }
 /**
  * 

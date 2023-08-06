@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React from "react";
+import * as React from "react";
 import { useSetRecoilState } from "recoil";
 import Spinner from "../components/parts/spinner";
 import { useChoseWorkspace } from "../store/choseWorkspace";

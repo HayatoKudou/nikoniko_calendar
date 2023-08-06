@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import * as React from "react";
 import { Totals } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import DashboardSampleImage from "./dashboard-sample.png";
@@ -31,6 +31,7 @@ const OverviewPaper = (props: { icon: any; title: string; description: string })
 };
 
 const Lp = () => {
+  const router = useRouter();
   const [data, setData] = React.useState<Totals>();
   React.useEffect(() => {
     ApiClient("")
@@ -39,9 +40,7 @@ const Lp = () => {
         setData(res.data);
       });
   }, []);
-  console.log(data);
 
-  const router = useRouter();
   return (
     <Box>
       <Box className={styles.lp__image}>
@@ -62,9 +61,14 @@ const Lp = () => {
         </Box>
       </Box>
 
-      <Box>
-        累計登録書籍数：{data?.bookCount}
-      </Box>
+      <Paper variant="outlined" className={styles.lp__totals}>
+        <Box className={styles.lp__totalsContent}>
+          【累計アカウント登録数：<Box className={styles.lp__totalsContentUnit}>{data?.userCount}</Box> 人】
+        </Box>
+        <Box className={styles.lp__totalsContent}>
+          【累計書籍登録数：<Box className={styles.lp__totalsContentUnit}>{data?.bookCount}</Box> 冊】
+        </Box>
+      </Paper>
 
       <Box>
         <Typography variant={"h2"} className={styles.lp__overviewTitle}>

@@ -1275,9 +1275,13 @@ components:
     totals:
       type: object
       required:
+        - userCount
         - bookCount
       properties:
+        userCount:
+          type: integer
+          example: 1000
         bookCount:
-          type: string
-          example: "1000"
+          type: integer
+          example: 1000
 
