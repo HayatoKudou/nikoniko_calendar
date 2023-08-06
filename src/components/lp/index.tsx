@@ -10,6 +10,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import React from "react";
+import { TotalsInner } from "../../../api_client";
 import ApiClient from "../../lib/apiClient";
 import DashboardSampleImage from "./dashboard-sample.png";
 import styles from "./style.module.scss";
@@ -28,9 +30,9 @@ const OverviewPaper = (props: { icon: any; title: string; description: string })
   );
 };
 
-const Lp = (props: any) => {
+const Lp = (props: { totals?: TotalsInner }) => {
   console.log("Lp");
-  console.log(props);
+  console.log(props.totals);
   const router = useRouter();
   return (
     <Box>
@@ -102,18 +104,18 @@ const Lp = (props: any) => {
 };
 
 export async function getStaticProps() {
-  let data = {};
-  ApiClient("")
+  const data = await ApiClient("")
     .apiTotalsGet()
     .then((res) => {
-      data = res.data;
-      console.log("res");
-      console.log(res);
+      return res.data;
     });
+
+  console.log("res");
+  console.log(data);
 
   return {
     props: {
-      data,
+      totals: data,
     },
   };
 }
