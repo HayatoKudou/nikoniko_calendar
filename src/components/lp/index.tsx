@@ -10,9 +10,9 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import ApiClient from "../../lib/apiClient";
 import DashboardSampleImage from "./dashboard-sample.png";
 import styles from "./style.module.scss";
-import ApiClient from "../../lib/apiClient";
 
 const OverviewPaper = (props: { icon: any; title: string; description: string }) => {
   return (
@@ -36,7 +36,7 @@ const Lp = (props: any) => {
     <Box>
       <Box className={styles.lp__image}>
         <Box className={styles.lp__imageContainer}>
-          <Image src={DashboardSampleImage}  sizes="33vw" />
+          <Image src={DashboardSampleImage} sizes="33vw" />
         </Box>
         <Box className={styles.lp__content}>
           <Box className={styles.lp__contentTitle}>
@@ -107,15 +107,15 @@ export async function getStaticProps() {
     .apiTotalsGet()
     .then((res) => {
       data = res.data;
-      console.log("res")
-      console.log(res)
+      console.log("res");
+      console.log(res);
     });
 
   return {
     props: {
-      data
+      data,
     },
-  }
+  };
 }
 
 export default Lp;
