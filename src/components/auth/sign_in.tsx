@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import ApiClient from "../../lib/apiClient";
 import { useMe } from "../../store/me";
 import Spinner from "../parts/spinner";
+import {Alert} from "@mui/material";
+import styles from "./styles.module.scss";
 
 const SignIn = () => {
   const router = useRouter();
@@ -30,15 +32,9 @@ const SignIn = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginTop: 10,
-      }}
-    >
-      <Button variant="outlined" onClick={handleSignInGoogle}>
+    <Box className={styles.auth}>
+      <Alert severity="error">申し訳ございません。サービス一時停止中です。</Alert>
+      <Button variant="outlined" onClick={handleSignInGoogle} disabled>
         Google連携
       </Button>
     </Box>
